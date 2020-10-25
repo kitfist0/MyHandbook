@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.Handbook.DayNight" parent="Theme.Handbook.Dark"/>
+
+    <style name="Theme.Handbook.Dark" parent="Theme.Handbook">
+        <item name="colorPrimary">@color/handbook_blue_200</item>
+        <item name="colorPrimaryVariant">@color/handbook_blue_300</item>
+        <item name="colorSecondary">@color/handbook_orange_300</item>
+        <item name="colorSecondaryVariant">@color/handbook_orange_300</item>
+
+        <item name="android:colorBackground">@color/handbook_black_900</item>
+        <item name="colorSurface">@color/handbook_black_800</item>
+        <item name="colorPrimarySurfaceVariant">?attr/colorSurface</item>
+        <item name="colorError">@color/handbook_red_200</item>
+
+        <item name="colorOnPrimary">@color/handbook_black_900</item>
+        <item name="colorOnSecondary">@color/handbook_black_900</item>
+        <item name="colorOnBackground">@color/handbook_white_50</item>
+        <item name="colorOnSurface">@color/handbook_white_50</item>
+        <item name="colorOnError">@color/handbook_black_900</item>
+
+        <item name="scrimBackground">@color/handbook_black_900_alpha_087</item>
+        <item name="android:statusBarColor">@color/handbook_black_900_alpha_060</item>
+
+        <item name="elevationOverlayEnabled">true</item>
+
+        <!--System/Platform attributes-->
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">false</item>
+    </style>
+
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ShapeAppearance.Handbook.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/handbook_small_component_corner_radius</item>
+    </style>
+
+    <style name="ShapeAppearance.Handbook.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/handbook_medium_component_corner_radius</item>
+    </style>
+
+    <style name="ShapeAppearance.Handbook.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/handbook_large_component_corner_radius</item>
+    </style>
+
+    <dimen name="handbook_small_component_corner_radius">24dp</dimen>
+    <dimen name="handbook_medium_component_corner_radius">0dp</dimen>
+    <dimen name="handbook_large_component_corner_radius">12dp</dimen>
+
+</resources>
