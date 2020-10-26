@@ -1,7 +1,9 @@
 package my.handbook.ui.search
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
@@ -17,6 +19,7 @@ class SearchViewModel @ViewModelInject constructor(
     fun onSearchRequestChanged(searchString: String) {
         viewModelScope.coroutineContext.cancelChildren()
         viewModelScope.launch(Dispatchers.IO) {
+            Thread.sleep(300L)
             val results = repository.getSearchResults(searchString)
             searchResults.postValue(results)
         }

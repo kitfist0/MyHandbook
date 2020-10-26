@@ -1,5 +1,6 @@
 package my.handbook.util
 
+import android.graphics.drawable.Animatable
 import android.os.Build
 import android.text.Html
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.WindowInsets
+import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
@@ -25,6 +27,19 @@ fun TextView.bindTextSnippet(snippet: String) {
         Html.fromHtml(snippet, Html.FROM_HTML_MODE_LEGACY)
     } else {
         Html.fromHtml(snippet)
+    }
+}
+
+@BindingAdapter("loadingAnimation")
+fun EditText.bindLoadingAnimation(loading: Boolean) {
+    val drawable = compoundDrawablesRelative[2]
+    val anim = drawable as Animatable
+    if (loading) {
+        anim.start()
+        drawable.alpha = 255
+    } else {
+        anim.stop()
+        drawable.alpha = 0
     }
 }
 
