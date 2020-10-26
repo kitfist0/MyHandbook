@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import my.handbook.data.db.entity.SearchResult
 import my.handbook.data.repository.ParagraphRepository
@@ -19,7 +20,7 @@ class SearchViewModel @ViewModelInject constructor(
     fun onSearchRequestChanged(searchString: String) {
         viewModelScope.coroutineContext.cancelChildren()
         viewModelScope.launch(Dispatchers.IO) {
-            Thread.sleep(300L)
+            delay(300L)
             val results = repository.getSearchResults(searchString)
             searchResults.postValue(results)
         }

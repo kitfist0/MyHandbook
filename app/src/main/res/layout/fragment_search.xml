@@ -40,7 +40,6 @@
                     android:hint="@string/search"
                     android:imeOptions="flagNoExtractUi|actionSearch"
                     android:inputType="textNoSuggestions"
-                    android:drawablePadding="4dp"
                     android:drawableEnd="@drawable/avd_progress_circular"
                     app:loadingAnimation="@{loading}"/>
 
