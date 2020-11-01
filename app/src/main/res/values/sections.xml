@@ -1,0 +1,16 @@
+<resources>
+
+    <string-array name="section_colors">
+        <item>#009688</item>
+        <item>#2196F3</item>
+        <item>#966BE1</item>
+        <item>#4CAF50</item>
+        <item>#9F8967</item>
+        <item>#E3BC4C</item>
+        <item>#EA5549</item>
+        <item>#8A8A8A</item>
+    </string-array>
+
+    <string-array name="section_names"/>
+
+</resources>

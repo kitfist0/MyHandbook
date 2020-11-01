@@ -10,14 +10,12 @@ import android.view.ViewGroup
 import android.view.WindowInsets
 import android.widget.EditText
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 
 @BindingAdapter("sectionText")
-fun TextView.bindSectionText(section: String?) {
-    val color = ContextCompat.getColor(context, section.getSectionColorRes())
-    setTextColor(color)
-    setText(section.getSectionStringRes())
+fun TextView.bindSectionText(section: Int?) {
+    setTextColor(context.resources.getSectionColorRes(section))
+    text = context.resources.getSectionNameStringRes(section)
 }
 
 @Suppress("DEPRECATION")

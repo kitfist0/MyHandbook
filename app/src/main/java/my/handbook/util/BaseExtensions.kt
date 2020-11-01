@@ -1,6 +1,8 @@
 package my.handbook.util
 
 import android.content.SharedPreferences
+import android.content.res.Resources
+import android.graphics.Color
 import my.handbook.BuildConfig
 import my.handbook.R
 
@@ -12,16 +14,23 @@ fun SharedPreferences.dbRecreationRequired(): Boolean =
         true
     }
 
-fun String?.getSectionColorRes(): Int = when(this) {
-    "ag" -> R.color.section_ag
-    "ma" -> R.color.section_ma
-    "pt" -> R.color.section_pt
-    else -> android.R.color.transparent
-}
+fun Resources.getSectionColorRes(section: Int?) = section?.sectionNumberToIndex()
+    ?.let {
+        val colors = getStringArray(R.array.section_colors)
+        Color.parseColor(colors[it % colors.size])
+    }
+    ?: Color.TRANSPARENT
 
-fun String?.getSectionStringRes(): Int = when(this) {
-    "ag" -> R.string.section_ag
-    "ma" -> R.string.section_ma
-    "pt" -> R.string.section_pt
-    else -> R.string.section_other
-}
+fun Resources.getSectionNameStringRes(section: Int?): String = section?.sectionNumberToIndex()
+    ?.let {
+        val names = getStringArray(R.array.section_names)
+        if (it >= names.size) {
+            getString(R.string.default_section_name).format(section)
+        } else {
+            names[it]
+        }
+    }
+    ?: ""
+
+private fun Int.sectionNumberToIndex() = this - 1
+

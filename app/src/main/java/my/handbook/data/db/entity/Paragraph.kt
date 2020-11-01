@@ -8,6 +8,6 @@ data class Paragraph(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     val file: String,
-    val section: String,
+    val section: Int,
     val text: String
 )

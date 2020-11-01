@@ -9,7 +9,7 @@ data class Article(
     val id: Long,
     val title: String,
     val file: String,
-    val section: String,
+    val section: Int,
     val summary: String,
     var favorite: Boolean = false
 )

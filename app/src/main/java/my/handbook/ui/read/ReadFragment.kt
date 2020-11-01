@@ -6,9 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
-import android.widget.Toast
 import androidx.navigation.fragment.navArgs
+import androidx.webkit.WebSettingsCompat
+import androidx.webkit.WebViewFeature
 import my.handbook.R
+import my.handbook.util.isDarkThemeEnabled
 
 class ReadFragment : Fragment() {
 
@@ -24,17 +26,15 @@ class ReadFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val webView = view.findViewById<WebView>(R.id.web_view)
-        webView.settings.apply {
-            defaultFontSize = 16
-        }
-        webView.loadUrl("file:///android_asset/${args.fileName}")
-
-        var text = args.searchResult
-        if (text.isNotEmpty()) {
-            text = text.replace("<b>","")
-            text = text.replace("</b>","")
-            Toast.makeText(requireContext(), "findAllAsync: $text", Toast.LENGTH_SHORT).show()
-            webView.findAllAsync(text)
+        webView.apply {
+            loadUrl("file:///android_asset/html/${args.fileName}")
+            val text = args.searchResult
+            if (text.isNotEmpty()) {
+                findAllAsync(text.replace("<[^>]*>".toRegex(),""))
+            }
+            if (context.isDarkThemeEnabled() && WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                WebSettingsCompat.setForceDark(settings, WebSettingsCompat.FORCE_DARK_ON)
+            }
         }
     }
 }

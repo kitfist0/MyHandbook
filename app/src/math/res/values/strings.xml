@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="app_name">MathHelper</string>
+    <string name="search">Поиск</string>
+    <string name="fab_search_content_description">Поиск в приложении</string>
+
+    <string name="section_1">Мат. анализ</string>
+    <string name="section_2">Ан. геометрия</string>
+    <string name="section_3">Теор. вероятностей</string>
+
+</resources>

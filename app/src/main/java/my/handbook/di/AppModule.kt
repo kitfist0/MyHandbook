@@ -34,7 +34,7 @@ object AppModule {
             if (preferences.dbRecreationRequired()) {
                 fallbackToDestructiveMigration()
             }
-            createFromAsset(BuildConfig.ACTUAL_DB_FILE_NAME)
+            createFromAsset("database/${BuildConfig.ACTUAL_DB_FILE_NAME}")
             addCallback(object : RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)

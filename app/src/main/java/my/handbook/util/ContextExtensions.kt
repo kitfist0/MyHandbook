@@ -3,6 +3,8 @@ package my.handbook.util
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.res.Configuration
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.graphics.Color
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -35,6 +37,11 @@ fun Context.themeInterpolator(@AttrRes attr: Int): Interpolator {
             it.getResourceId(0, android.R.interpolator.fast_out_slow_in)
         }
     )
+}
+
+fun Context.isDarkThemeEnabled(): Boolean {
+    return resources.configuration.uiMode and
+            Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
 }
 
 fun Context.hideKeyboard(view: View) {

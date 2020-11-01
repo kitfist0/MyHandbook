@@ -46,13 +46,12 @@
                     android:layout_marginStart="@dimen/grid_2"
                     android:layout_marginEnd="@dimen/grid_2"
                     android:maxLines="1"
-                    android:text="@{item.section}"
                     app:layout_constraintEnd_toStartOf="@+id/image_view"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:sectionText="@{item.section}"
-                    tools:text="@string/section_pt"
-                    tools:textColor="@color/section_pt"/>
+                    tools:text="@string/section_2"
+                    tools:textColor="?attr/colorPrimary"/>
 
                 <TextView
                     android:id="@+id/title_text_view"

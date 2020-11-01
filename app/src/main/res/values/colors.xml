@@ -37,8 +37,4 @@
     <!--or automatically applying a translucent background (3-button mode).-->
     <color name="nav_bar">@color/handbook_black_900_alpha_020</color>
 
-    <color name="section_ma">#009688</color>
-    <color name="section_pt">#966BE1</color>
-    <color name="section_ag">#2196F3</color>
-
 </resources>

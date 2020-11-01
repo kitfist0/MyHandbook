@@ -9,10 +9,10 @@ import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import my.handbook.data.db.entity.SearchResult
-import my.handbook.data.repository.ParagraphRepository
+import my.handbook.data.repository.BaseParagraphRepository
 
 class SearchViewModel @ViewModelInject constructor(
-    private val repository: ParagraphRepository
+    private val repository: BaseParagraphRepository
 ) : ViewModel() {
 
     val searchResults = MutableLiveData<List<SearchResult>>()

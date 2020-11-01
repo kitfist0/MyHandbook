@@ -1,12 +1,8 @@
 <resources>
 
     <string name="app_name">MyHandbook</string>
-    <string name="search">Поиск</string>
-    <string name="fab_search_content_description">Поиск в приложении</string>
-    <string name="action_settings">Настройки</string>
-    <string name="section_ag">Ан. геометрия</string>
-    <string name="section_ma">Мат. анализ</string>
-    <string name="section_pt">Теор. вероятностей</string>
-    <string name="section_other">Другое</string>
+    <string name="search">Search</string>
+    <string name="fab_search_content_description">Search paragraph</string>
+    <string name="default_section_name">Section#%s</string>
 
 </resources>
