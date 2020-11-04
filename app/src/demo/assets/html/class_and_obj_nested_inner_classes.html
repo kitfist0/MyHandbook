@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Nested and Inner Classes</title>
+</head>
+<body>
+
+<h1 class="typo-header typo-h1" id="nested-and-inner-classes">Nested and Inner Classes</h1>
+<p class="typo-para">Classes can be nested in other classes:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class Outer {
+    private val bar: Int = 1
+    class Nested {
+        fun foo() = 2
+    }
+}
+
+val demo = Outer.Nested().foo() // == 2
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="inner-classes">Inner classes</h2>
+<p class="typo-para">A nested class marked as <em class="keyword">inner</em> can access the members of its outer class. Inner classes carry a reference to an object of an outer class:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class Outer {
+    private val bar: Int = 1
+    inner class Inner {
+        fun foo() = bar
+    }
+}
+
+val demo = Outer().Inner().foo() // == 1
+</code></pre>
+</div>
+<p class="typo-para">See Qualified <em class="keyword">this</em> expressions to learn about disambiguation of <em class="keyword">this</em> in inner classes.</p>
+<h2 class="typo-header typo-h2" id="anonymous-inner-classes">Anonymous inner classes</h2>
+<p class="typo-para">Anonymous inner class instances are created using an object expression:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">window.addMouseListener(object : MouseAdapter() {
+
+    override fun mouseClicked(e: MouseEvent) { ... }
+
+    override fun mouseEntered(e: MouseEvent) { ... }
+})
+</code></pre>
+</div>
+<p class="typo-para"><em>Note</em>: on the JVM, if the object is an instance of a functional Java interface (i.e. a Java interface with a single abstract method), you can create it using a lambda expression prefixed with the type of the interface:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val listener = ActionListener { println("clicked") }
+</code></pre>
+</div>
+
+<p><br><br></p>
+</body>
+</html>

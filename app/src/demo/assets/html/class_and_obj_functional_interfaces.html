@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Functional (SAM) interfaces</title>
+</head>
+<body>
+
+<h1 class="typo-header typo-h1" id="functional-sam-interfaces">Functional (SAM) interfaces</h1>
+<p class="typo-para">An interface with only one abstract method is called a <em>functional interface</em>, or a <em>Single Abstract Method (SAM) interface</em>. The functional interface can have several non-abstract members but only one abstract member.</p>
+<p class="typo-para">To declare a functional interface in Kotlin, use the <code>fun</code> modifier.</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun interface KRunnable {
+   fun invoke()
+}
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="sam-conversions">SAM conversions</h2>
+<p class="typo-para">For functional interfaces, you can use SAM conversions that help make your code more concise and readable by using lambda expressions.</p>
+<p class="typo-para">Instead of creating a class that implements a functional interface manually, you can use a lambda expression. With a SAM conversion, Kotlin can convert any lambda expression whose signature matches the signature of the interface's single method into an instance of a class that implements the interface.</p>
+<p class="typo-para">For example, consider the following Kotlin functional interface:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun interface IntPredicate {
+   fun accept(i: Int): Boolean
+}
+</code></pre>
+</div>
+<p class="typo-para">If you don't use a SAM conversion, you will need to write code like this:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">// Creating an instance of a class
+val isEven = object : IntPredicate {
+   override fun accept(i: Int): Boolean {
+       return i % 2 == 0
+   }
+}
+</code></pre>
+</div>
+<p class="typo-para">By leveraging Kotlin's SAM conversion, you can write the following equivalent code instead:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">// Creating an instance using lambda
+val isEven = IntPredicate { it % 2 == 0 }
+</code></pre>
+</div>
+<p class="typo-para">A short lambda expression replaces all the unnecessary code.</p>
+<div class="sample" data-min-compiler-version="1.4-M1" theme="idea">
+<pre><code class="language-kotlin">fun interface IntPredicate {
+   fun accept(i: Int): Boolean
+}
+
+val isEven = IntPredicate { it % 2 == 0 }
+
+fun main() {
+   println("Is 7 even? - ${isEven.accept(7)}")
+}
+</code></pre>
+</div>
+<p class="typo-para">You can also use SAM conversions for Java interfaces.</p>
+<h2 class="typo-header typo-h2" id="functional-interfaces-vs-type-aliases">Functional interfaces vs. type aliases</h2>
+<p class="typo-para">Functional interfaces and type aliases serve different purposes. Type aliases are just names for existing types – they don't create a new type, while functional interfaces do.</p>
+<p class="typo-para">Type aliases can have only one member, while functional interfaces can have multiple non-abstract members and one abstract member. Functional interfaces can also implement and extend other interfaces.</p>
+<p class="typo-para">Considering the above, functional interfaces are more flexible and provide more capabilities than type aliases.</p>
+
+<p><br><br></p>
+</body>
+</html>

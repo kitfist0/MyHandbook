@@ -1,0 +1,355 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Delegated Properties</title>
+</head>
+<body>
+
+<h1 class="typo-header typo-h1" id="delegated-properties">Delegated Properties</h1>
+<p class="typo-para">There are certain common kinds of properties, that, though we can implement them manually every time we need them, would be very nice to implement once and for all, and put into a library. Examples include:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">lazy properties: the value gets computed only upon first access;</li>
+    <li class="typo-list__item">observable properties: listeners get notified about changes to this property;</li>
+    <li class="typo-list__item">storing properties in a map, instead of a separate field for each property.</li>
+</ul>
+<p class="typo-para">To cover these (and other) cases, Kotlin supports <em>delegated properties</em>:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class Example {
+    var p: String by Delegate()
+}
+</code></pre>
+</div>
+<p class="typo-para">The syntax is: <code>val/var &lt;property name&gt;: &lt;Type&gt; by &lt;expression&gt;</code>. The expression after <em class="keyword">by</em> is the <em>delegate</em>, because <code>get()</code> (and <code>set()</code>) corresponding to the property will be delegated to its <code>getValue()</code> and <code>setValue()</code> methods. Property delegates don’t have to implement any interface, but they have to provide a <code>getValue()</code> function (and <code>setValue()</code> — for <em class="keyword">var</em>s). For example:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">import kotlin.reflect.KProperty
+
+class Delegate {
+    operator fun getValue(thisRef: Any?, property: KProperty&lt;*&gt;): String {
+        return "$thisRef, thank you for delegating '${property.name}' to me!"
+    }
+
+    operator fun setValue(thisRef: Any?, property: KProperty&lt;*&gt;, value: String) {
+        println("$value has been assigned to '${property.name}' in $thisRef.")
+    }
+}
+</code></pre>
+</div>
+<p class="typo-para">When we read from <code>p</code> that delegates to an instance of <code>Delegate</code>, the <code>getValue()</code> function from <code>Delegate</code> is called, so that its first parameter is the object we read <code>p</code> from and the second parameter holds a description of <code>p</code> itself (e.g. you can take its name). For example:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val e = Example()
+println(e.p)
+</code></pre>
+</div>
+<p class="typo-para">This prints:</p>
+<pre><code>Example@33a17727, thank you for delegating ‘p’ to me!
+</code></pre>
+<p class="typo-para">Similarly, when we assign to <code>p</code>, the <code>setValue()</code> function is called. The first two parameters are the same, and the third holds the value being assigned:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">e.p = "NEW"
+</code></pre>
+</div>
+<p class="typo-para">This prints</p>
+<pre><code>NEW has been assigned to ‘p’ in Example@33a17727.
+</code></pre>
+<p class="typo-para">The specification of the requirements to the delegated object can be found below.</p>
+<p class="typo-para">Note that since Kotlin 1.1 you can declare a delegated property inside a function or code block, it shouldn't necessarily be a member of a class. Below you can find an example.</p>
+<h2 class="typo-header typo-h2" id="standard-delegates">Standard delegates</h2>
+<p class="typo-para">The Kotlin standard library provides factory methods for several useful kinds of delegates.</p>
+<h3 class="typo-header typo-h3" id="lazy">Lazy</h3>
+<p class="typo-para"><a class="typo-link" href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/lazy.html"><code>lazy()</code></a> is a function that takes a lambda and returns an instance of <code>Lazy&lt;T&gt;</code> which can serve as a delegate for implementing a lazy property: the first call to <code>get()</code> executes the lambda passed to <code>lazy()</code> and remembers the result, subsequent calls to <code>get()</code> simply return the remembered result.</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">val lazyValue: String by lazy {
+    println("computed!")
+    "Hello"
+}
+
+fun main() {
+    println(lazyValue)
+    println(lazyValue)
+}
+</code></pre>
+</div>
+<p class="typo-para">By default, the evaluation of lazy properties is <strong class="typo-strong">synchronized</strong>: the value is computed only in one thread, and all threads will see the same value. If the synchronization of initialization delegate is not required, so that multiple threads can execute it simultaneously, pass <code>LazyThreadSafetyMode.PUBLICATION</code> as a parameter to the <code>lazy()</code> function. And if you're sure that the initialization will always happen on the same thread as the one where you use the property, you can use <code>LazyThreadSafetyMode.NONE</code>: it doesn't incur any thread-safety guarantees and the related overhead.</p>
+<h3 class="typo-header typo-h3" id="observable">Observable</h3>
+<p class="typo-para"><a class="typo-link" href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-delegates/observable.html"><code>Delegates.observable()</code></a>takes two arguments: the initial value and a handler for modifications. The handler is called every time we assign to the property (<em>after</em> the assignment has been performed). It has three parameters: a property being assigned to, the old value and the new one:</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">import kotlin.properties.Delegates
+
+class User {
+    var name: String by Delegates.observable("&lt;no name&gt;") {
+        prop, old, new -&gt;
+        println("$old -&gt; $new")
+    }
+}
+
+fun main() {
+    val user = User()
+    user.name = "first"
+    user.name = "second"
+}
+</code></pre>
+</div>
+<p class="typo-para">If you want to intercept assignments and "veto" them, use <a class="typo-link" href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-delegates/vetoable.html"><code>vetoable()</code></a> instead of <code>observable()</code>. The handler passed to the <code>vetoable</code> is called <em>before</em> the assignment of a new property value has been performed.</p>
+<h2 class="typo-header typo-h2" id="delegating-to-another-property">Delegating to another property</h2>
+<p class="typo-para">Since Kotlin 1.4, a property can delegate its getter and setter to another property. Such delegation is available for both top-level and class properties (member and extension). The delegate property can be:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">a top-level property</li>
+    <li class="typo-list__item">a member or an extension property of the same class</li>
+    <li class="typo-list__item">a member or an extension property of another class</li>
+</ul>
+<p class="typo-para">To delegate a property to another property, use the proper <code>::</code> qualifier in the delegate name, for example, <code>this::delegate</code> or<code>MyClass::delegate</code>.</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">var topLevelInt: Int = 0
+
+class ClassWithDelegate(val anotherClassInt: Int)
+//sampleStart
+class MyClass(var memberInt: Int, val anotherClassInstance: ClassWithDelegate) {
+    var delegatedToMember: Int by this::memberInt
+    var delegatedToTopLevel: Int by ::topLevelInt
+
+    val delegatedToAnotherClass: Int by anotherClassInstance::anotherClassInt
+}
+var MyClass.extDelegated: Int by ::topLevelInt
+//sampleEnd
+</code></pre>
+</div>
+<p class="typo-para">This may be useful, for example, when you want to rename a property in a backward-compatible way: you introduce a new property, annotate the old one with the <code>@Deprecated</code> annotation, and delegate its implementation.</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">class MyClass {
+   var newName: Int = 0
+   @Deprecated("Use 'newName' instead", ReplaceWith("newName"))
+   var oldName: Int by this::newName
+}
+
+fun main() {
+   val myClass = MyClass()
+   // Notification: 'oldName: Int' is deprecated.
+   // Use 'newName' instead
+   myClass.oldName = 42
+   println(myClass.newName) // 42
+}
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="storing-properties-in-a-map">Storing properties in a map</h2>
+<p class="typo-para">One common use case is storing the values of properties in a map. This comes up often in applications like parsing JSON or doing other “dynamic” things. In this case, you can use the map instance itself as the delegate for a delegated property.</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class User(val map: Map&lt;String, Any?&gt;) {
+    val name: String by map
+    val age: Int     by map
+}
+</code></pre>
+</div>
+<p class="typo-para">In this example, the constructor takes a map:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val user = User(mapOf(
+    "name" to "John Doe",
+    "age"  to 25
+))
+</code></pre>
+</div>
+<p class="typo-para">Delegated properties take values from this map (by the string keys –– names of properties):</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">class User(val map: Map&lt;String, Any?&gt;) {
+    val name: String by map
+    val age: Int     by map
+}
+
+fun main() {
+    val user = User(mapOf(
+        "name" to "John Doe",
+        "age"  to 25
+    ))
+//sampleStart
+    println(user.name) // Prints "John Doe"
+    println(user.age)  // Prints 25
+//sampleEnd
+}
+</code></pre>
+</div>
+<p class="typo-para">This works also for <em class="keyword">var</em>’s properties if you use a <code>MutableMap</code> instead of read-only <code>Map</code>:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class MutableUser(val map: MutableMap&lt;String, Any?&gt;) {
+    var name: String by map
+    var age: Int     by map
+}
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="local-delegated-properties">Local delegated properties</h2>
+<p class="typo-para">You can declare local variables as delegated properties. For instance, you can make a local variable lazy:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun example(computeFoo: () -&gt; Foo) {
+    val memoizedFoo by lazy(computeFoo)
+
+    if (someCondition &amp;&amp; memoizedFoo.isValid()) {
+        memoizedFoo.doSomething()
+    }
+}
+</code></pre>
+</div>
+<p class="typo-para">The <code>memoizedFoo</code> variable will be computed on the first access only. If <code>someCondition</code> fails, the variable won't be computed at all.</p>
+<h2 class="typo-header typo-h2" id="property-delegate-requirements">Property delegate requirements</h2>
+<p class="typo-para">Here we summarize requirements to delegate objects.</p>
+<p class="typo-para">For a <strong class="typo-strong">read-only</strong> property (<em class="keyword">val</em>), a delegate has to provide an operator function <code>getValue()</code> with the following parameters:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item"><code>thisRef</code> — must be the same or a supertype of the <em>property owner</em> (for extension properties — the type being extended).</li>
+    <li class="typo-list__item"><code>property</code> — must be of type <code>KProperty&lt;*&gt;</code> or its supertype.</li>
+</ul>
+<p class="typo-para"><code>getValue()</code> must return the same type as the property (or its subtype).</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class Resource
+
+class Owner {
+    val valResource: Resource by ResourceDelegate()
+}
+
+class ResourceDelegate {
+    operator fun getValue(thisRef: Owner, property: KProperty&lt;*&gt;): Resource {
+        return Resource()
+    }
+}
+</code></pre>
+</div>
+<p class="typo-para">For a <strong class="typo-strong">mutable</strong> property (<em class="keyword">var</em>), a delegate has to additionally provide an operator function <code>setValue()</code>with the following parameters:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item"><code>thisRef</code> — must be the same or a supertype of the <em>property owner</em> (for extension properties — the type being extended).</li>
+    <li class="typo-list__item"><code>property</code> — must be of type <code>KProperty&lt;*&gt;</code> or its supertype.</li>
+    <li class="typo-list__item"><code>value</code> — must be of the same type as the property (or its supertype).</li>
+</ul>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class Resource
+
+class Owner {
+    var varResource: Resource by ResourceDelegate()
+}
+
+class ResourceDelegate(private var resource: Resource = Resource()) {
+    operator fun getValue(thisRef: Owner, property: KProperty&lt;*&gt;): Resource {
+        return resource
+    }
+    operator fun setValue(thisRef: Owner, property: KProperty&lt;*&gt;, value: Any?) {
+        if (value is Resource) {
+            resource = value
+        }
+    }
+}
+</code></pre>
+</div>
+<p class="typo-para"><code>getValue()</code> and/or <code>setValue()</code> functions may be provided either as member functions of the delegate class or extension functions. The latter is handy when you need to delegate property to an object which doesn't originally provide these functions. Both of the functions need to be marked with the <code>operator</code> keyword.</p>
+<p class="typo-para">You can create delegates as anonymous objects without creating new classes using the interfaces <code>ReadOnlyProperty</code>and <code>ReadWriteProperty</code> from the Kotlin standard library. They provide the required methods: <code>getValue()</code> is declared in <code>ReadOnlyProperty</code>; <code>ReadWriteProperty</code>extends it and adds <code>setValue()</code>. Thus, you can pass a <code>ReadWriteProperty</code> whenever a <code>ReadOnlyProperty</code> is expected.</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun resourceDelegate(): ReadWriteProperty&lt;Any?, Int&gt; =
+    object : ReadWriteProperty&lt;Any?, Int&gt; {
+        var curValue = 0
+        override fun getValue(thisRef: Any?, property: KProperty&lt;*&gt;): Int = curValue
+        override fun setValue(thisRef: Any?, property: KProperty&lt;*&gt;, value: Int) {
+            curValue = value
+        }
+    }
+
+val readOnly: Int by resourceDelegate()  // ReadWriteProperty as val
+var readWrite: Int by resourceDelegate()
+</code></pre>
+</div>
+<h3 class="typo-header typo-h3" id="translation-rules">Translation rules</h3>
+<p class="typo-para">Under the hood, for every delegated property the Kotlin compiler generates an auxiliary property and delegates to it. For instance, for the property <code>prop</code> the hidden property <code>prop$delegate</code> is generated, and the code of the accessors simply delegates to this additional property:</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class C {
+    var prop: Type by MyDelegate()
+}
+
+// this code is generated by the compiler instead:
+class C {
+    private val prop$delegate = MyDelegate()
+    var prop: Type
+        get() = prop$delegate.getValue(this, this::prop)
+        set(value: Type) = prop$delegate.setValue(this, this::prop, value)
+}
+</code></pre>
+</div>
+<p class="typo-para">The Kotlin compiler provides all the necessary information about <code>prop</code> in the arguments: the first argument <code>this</code> refers to an instance of the outer class <code>C</code> and <code>this::prop</code> is a reflection object of the <code>KProperty</code> type describing <code>prop</code> itself.</p>
+<p class="typo-para">Note that the syntax <code>this::prop</code> to refer a bound callable reference in the code directly has only been available since Kotlin 1.1.</p>
+<h3 class="typo-header typo-h3" id="providing-a-delegate">Providing a delegate</h3>
+<p class="typo-para">By defining the <code>provideDelegate</code> operator you can extend the logic of creating the object to which the property implementation is delegated. If the object used on the right-hand side of <code>by</code> defines <code>provideDelegate</code> as a member or extension function, that function will be called to create the property delegate instance.</p>
+<p class="typo-para">One of the possible use cases of <code>provideDelegate</code> is to check the consistency of the property upon its initialization.</p>
+<p class="typo-para">For example, if you want to check the property name before binding, you can write something like this:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class ResourceDelegate&lt;T&gt; : ReadOnlyProperty&lt;MyUI, T&gt; {
+    override fun getValue(thisRef: MyUI, property: KProperty&lt;*&gt;): T { ... }
+}
+
+class ResourceLoader&lt;T&gt;(id: ResourceID&lt;T&gt;) {
+    operator fun provideDelegate(
+            thisRef: MyUI,
+            prop: KProperty&lt;*&gt;
+    ): ReadOnlyProperty&lt;MyUI, T&gt; {
+        checkProperty(thisRef, prop.name)
+        // create delegate
+        return ResourceDelegate()
+    }
+
+    private fun checkProperty(thisRef: MyUI, name: String) { ... }
+}
+
+class MyUI {
+    fun &lt;T&gt; bindResource(id: ResourceID&lt;T&gt;): ResourceLoader&lt;T&gt; { ... }
+
+    val image by bindResource(ResourceID.image_id)
+    val text by bindResource(ResourceID.text_id)
+}
+</code></pre>
+</div>
+<p class="typo-para">The parameters of <code>provideDelegate</code> are the same as for <code>getValue</code>:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item"><code>thisRef</code> — must be the same or a supertype of the <em>property owner</em> (for extension properties — the type being extended);</li>
+    <li class="typo-list__item"><code>property</code> — must be of type <code>KProperty&lt;*&gt;</code> or its supertype.</li>
+</ul>
+<p class="typo-para">The <code>provideDelegate</code> method is called for each property during the creation of the <code>MyUI</code> instance, and it performs the necessary validation right away.</p>
+<p class="typo-para">Without this ability to intercept the binding between the property and its delegate, to achieve the same functionality you'd have to pass the property name explicitly, which isn't very convenient:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">// Checking the property name without "provideDelegate" functionality
+class MyUI {
+    val image by bindResource(ResourceID.image_id, "image")
+    val text by bindResource(ResourceID.text_id, "text")
+}
+
+fun &lt;T&gt; MyUI.bindResource(
+        id: ResourceID&lt;T&gt;,
+        propertyName: String
+): ReadOnlyProperty&lt;MyUI, T&gt; {
+   checkProperty(this, propertyName)
+   // create delegate
+}
+</code></pre>
+</div>
+<p class="typo-para">In the generated code, the <code>provideDelegate</code> method is called to initialize the auxiliary <code>prop$delegate</code> property. Compare the generated code for the property declaration <code>val prop: Type by MyDelegate()</code> with the generated code above (when the <code>provideDelegate</code> method is not present):</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class C {
+    var prop: Type by MyDelegate()
+}
+
+// this code is generated by the compiler
+// when the 'provideDelegate' function is available:
+class C {
+    // calling "provideDelegate" to create the additional "delegate" property
+    private val prop$delegate = MyDelegate().provideDelegate(this, this::prop)
+    var prop: Type
+        get() = prop$delegate.getValue(this, this::prop)
+        set(value: Type) = prop$delegate.setValue(this, this::prop, value)
+}
+</code></pre>
+</div>
+<p class="typo-para">Note that the <code>provideDelegate</code> method affects only the creation of the auxiliary property and doesn't affect the code generated for getter or setter.</p>
+<p class="typo-para">With the <code>PropertyDelegateProvider</code> interface from the standard library, you can create delegate providers without creating new classes.</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val provider = PropertyDelegateProvider { thisRef: Any?, property -&gt;
+    ReadOnlyProperty&lt;Any?, Int&gt; {_, property -&gt; 42 }
+}
+
+val delegate: Int by provider
+</code></pre>
+</div>
+
+<p><br><br></p>
+</body>
+</html>

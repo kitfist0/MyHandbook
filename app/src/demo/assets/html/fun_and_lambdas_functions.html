@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Functions</title>
+</head>
+<body>
+
+<h1 class="typo-header typo-h1" id="functions">Functions</h1>
+<h2 class="typo-header typo-h2" id="function-declarations">Function declarations</h2>
+<p class="typo-para">Functions in Kotlin are declared using the <code>fun</code> keyword:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun double(x: Int): Int {
+    return 2 * x
+}
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="function-usage">Function usage</h2>
+<p class="typo-para">Calling functions uses the traditional approach:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val result = double(2)
+</code></pre>
+</div>
+<p class="typo-para">Calling member functions uses the dot notation:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">Stream().read() // create instance of class Stream and call read()
+</code></pre>
+</div>
+<h3 class="typo-header typo-h3" id="parameters">Parameters</h3>
+<p class="typo-para">Function parameters are defined using Pascal notation, i.e. <em>name</em>: <em>type</em>. Parameters are separated using commas. Each parameter must be explicitly typed:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun powerOf(number: Int, exponent: Int) { /*...*/ }
+</code></pre>
+</div>
+<p class="typo-para">You can use a trailing comma when you declare function parameters:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun powerOf(
+    number: Int,
+    exponent: Int, // trailing comma
+) { /*...*/ }
+</code></pre>
+</div>
+<h3 class="typo-header typo-h3" id="default-arguments">Default arguments</h3>
+<p class="typo-para">Function parameters can have default values, which are used when you skip the corresponding argument. This reduces a number of overloads compared to other languages:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun read(
+    b: Array&lt;Byte&gt;,
+    off: Int = 0,
+    len: Int = b.size,
+) { /*...*/ }
+</code></pre>
+</div>
+<p class="typo-para">A default value is defined using the <code>=</code> after the type.</p>
+<p class="typo-para">Overriding methods always use the same default parameter values as the base method. When overriding a method with default parameter values, the default parameter values must be omitted from the signature:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">open class A {
+    open fun foo(i: Int = 10) { /*...*/ }
+}
+
+class B : A() {
+    override fun foo(i: Int) { /*...*/ }  // No default value is allowed
+}
+</code></pre>
+</div>
+<p class="typo-para">If a default parameter precedes a parameter with no default value, the default value can only be used by calling the function with named arguments:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun foo(
+    bar: Int = 0,
+    baz: Int,
+) { /*...*/ }
+
+foo(baz = 1) // The default value bar = 0 is used
+</code></pre>
+</div>
+<p class="typo-para">If the last argument after default parameters is a lambda, you can pass it either as a named argument or outside the parentheses:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun foo(
+    bar: Int = 0,
+    baz: Int = 1,
+    qux: () -&gt; Unit,
+) { /*...*/ }
+
+foo(1) { println("hello") }     // Uses the default value baz = 1
+foo(qux = { println("hello") }) // Uses both default values bar = 0 and baz = 1
+foo { println("hello") }        // Uses both default values bar = 0 and baz = 1
+</code></pre>
+</div>
+<h3 class="typo-header typo-h3" id="named-arguments">Named arguments</h3>
+<p class="typo-para">When calling a function, you can name one or more of its arguments. This may be helpful when a function has a large number of arguments, and it's difficult to associate a value with an argument, especially if it's a boolean or <code>null</code> value.</p>
+<p class="typo-para">When you use named arguments in a function call, you can freely change the order they are listed in, and if you want to use their default values you can just leave them out altogether.</p>
+<p class="typo-para">Consider the following function <code>reformat()</code> that has 4 arguments with default values.</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun reformat(
+    str: String,
+    normalizeCase: Boolean = true,
+    upperCaseFirstLetter: Boolean = true,
+    divideByCamelHumps: Boolean = false,
+    wordSeparator: Char = ' ',
+) {
+/*...*/
+}
+</code></pre>
+</div>
+<p class="typo-para">When calling this function, you don’t have to name all its arguments:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">reformat(
+    'String!',
+    false,
+    upperCaseFirstLetter = false,
+    divideByCamelHumps = true,
+    '_'
+)
+</code></pre>
+</div>
+<p class="typo-para">You can skip all arguments with default values:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">reformat('This is a long String!')
+</code></pre>
+</div>
+<p class="typo-para">You can skip some arguments with default values. However, after the first skipped argument, you must name all subsequent arguments:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">reformat('This is a short String!', upperCaseFirstLetter = false, wordSeparator = '_')
+</code></pre>
+</div>
+<p class="typo-para">You can pass a variable number of arguments (<code>vararg</code>) with names using the<code>spread</code> operator:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun foo(vararg strings: String) { /*...*/ }
+
+foo(strings = *arrayOf("a", "b", "c"))
+</code></pre>
+</div>
+<blockquote class="note typo-quote">
+    <p class="typo-para"><strong class="typo-strong">On the JVM</strong>: You can't use the named argument syntax when calling Java functions because Java bytecode does not always preserve names of function parameters.</p>
+</blockquote>
+<h3 class="typo-header typo-h3" id="unit-returning-functions">Unit-returning functions</h3>
+<p class="typo-para">If a function does not return any useful value, its return type is <code>Unit</code>. <code>Unit</code> is a type with only one value - <code>Unit</code>. This value does not have to be returned explicitly:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun printHello(name: String?): Unit {
+    if (name != null)
+        println("Hello $name")
+    else
+        println("Hi there!")
+    // `return Unit` or `return` is optional
+}
+</code></pre>
+</div>
+<p class="typo-para">The <code>Unit</code> return type declaration is also optional. The above code is equivalent to:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun printHello(name: String?) { ... }
+</code></pre>
+</div>
+<h3 class="typo-header typo-h3" id="single-expression-functions">Single-expression functions</h3>
+<p class="typo-para">When a function returns a single expression, the curly braces can be omitted and the body is specified after a <strong class="typo-strong">=</strong> symbol:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun double(x: Int): Int = x * 2
+</code></pre>
+</div>
+<p class="typo-para">Explicitly declaring the return type is optional when this can be inferred by the compiler:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun double(x: Int) = x * 2
+</code></pre>
+</div>
+<h3 class="typo-header typo-h3" id="explicit-return-types">Explicit return types</h3>
+<p class="typo-para">Functions with block body must always specify return types explicitly, unless it's intended for them to return <code>Unit</code>, in which case it is optional. Kotlin does not infer return types for functions with block bodies because such functions may have complex control flow in the body, and the return type will be non-obvious to the reader (and sometimes even for the compiler).</p>
+<h3 class="typo-header typo-h3" id="variable-number-of-arguments-varargs">Variable number of arguments (Varargs)</h3>
+<p class="typo-para">A parameter of a function (normally the last one) may be marked with <code>vararg</code> modifier:</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun &lt;T&gt; asList(vararg ts: T): List&lt;T&gt; {
+    val result = ArrayList&lt;T&gt;()
+    for (t in ts) // ts is an Array
+        result.add(t)
+    return result
+}
+</code></pre>
+</div>
+<p class="typo-para">allowing a variable number of arguments to be passed to the function:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val list = asList(1, 2, 3)
+</code></pre>
+</div>
+<p class="typo-para">Inside a function a <code>vararg</code>-parameter of type <code>T</code> is visible as an array of <code>T</code>, i.e. the <code>ts</code> variable in the example above has type <code>Array&lt;out T&gt;</code>.</p>
+<p class="typo-para">Only one parameter may be marked as <code>vararg</code>. If a <code>vararg</code> parameter is not the last one in the list, values for the following parameters can be passed using the named argument syntax, or, if the parameter has a function type, by passing a lambda outside parentheses.</p>
+<p class="typo-para">When we call a <code>vararg</code>-function, we can pass arguments one-by-one, e.g. <code>asList(1, 2, 3)</code>, or, if we already have an array and want to pass its contents to the function, we use the <strong class="typo-strong">spread</strong> operator (prefix the array with <code>*</code>):</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val a = arrayOf(1, 2, 3)
+val list = asList(-1, 0, *a, 4)
+</code></pre>
+</div>
+<h3 class="typo-header typo-h3" id="infix-notation">Infix notation</h3>
+<p class="typo-para">Functions marked with the <em class="keyword">infix</em> keyword can also be called using the infix notation (omitting the dot and the parentheses for the call). Infix functions must satisfy the following requirements:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">They must be member functions or extension functions;</li>
+    <li class="typo-list__item">They must have a single parameter;</li>
+    <li class="typo-list__item">The parameter must not accept variable number of arguments and must have no default value.</li>
+</ul>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">infix fun Int.shl(x: Int): Int { ... }
+
+// calling the function using the infix notation
+1 shl 2
+
+// is the same as
+1.shl(2)
+</code></pre>
+</div>
+<blockquote class="note typo-quote">
+    <p class="typo-para">Infix function calls have lower precedence than the arithmetic operators, type casts, and the <code>rangeTo</code> operator.
+        The following expressions are equivalent:</p>
+    <ul class="typo-list typo-list_type_simple">
+        <li class="typo-list__item"><code>1 shl 2 + 3</code> is equivalent to <code>1 shl (2 + 3)</code></li>
+        <li class="typo-list__item"><code>0 until n * 2</code> is equivalent to <code>0 until (n * 2)</code></li>
+        <li class="typo-list__item"><code>xs union ys as Set&lt;*&gt;</code> is equivalent to <code>xs union (ys as Set&lt;*&gt;)</code></li>
+    </ul>
+    <p class="typo-para">On the other hand, infix function call's precedence is higher than that of the boolean operators <code>&amp;&amp;</code> and <code>||</code>, <code>is</code>- and <code>in</code>-checks, and some other operators. These expressions are equivalent as well:</p>
+    <ul class="typo-list typo-list_type_simple">
+        <li class="typo-list__item"><code>a &amp;&amp; b xor c</code> is equivalent to <code>a &amp;&amp; (b xor c)</code></li>
+        <li class="typo-list__item"><code>a xor b in c</code> is equivalent to <code>(a xor b) in c</code></li>
+    </ul>
+    <p class="typo-para">See the Grammar reference for the complete operators precedence hierarchy.</p>
+</blockquote>
+<p class="typo-para">Note that infix functions always require both the receiver and the parameter to be specified. When you're calling a method on the current receiver using the infix notation, you need to use <code>this</code> explicitly; unlike regular method calls, it cannot be omitted. This is required to ensure unambiguous parsing.</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class MyStringCollection {
+    infix fun add(s: String) { /*...*/ }
+
+    fun build() {
+        this add "abc"   // Correct
+        add("abc")       // Correct
+        //add "abc"        // Incorrect: the receiver must be specified
+    }
+}
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="function-scope">Function scope</h2>
+<p class="typo-para">In Kotlin functions can be declared at top level in a file, meaning you do not need to create a class to hold a function, which you are required to do in languages such as Java, C# or Scala. In addition to top level functions, Kotlin functions can also be declared local, as member functions and extension functions.</p>
+<h3 class="typo-header typo-h3" id="local-functions">Local functions</h3>
+<p class="typo-para">Kotlin supports local functions, i.e. a function inside another function:</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun dfs(graph: Graph) {
+    fun dfs(current: Vertex, visited: MutableSet&lt;Vertex&gt;) {
+        if (!visited.add(current)) return
+        for (v in current.neighbors)
+            dfs(v, visited)
+    }
+
+    dfs(graph.vertices[0], HashSet())
+}
+</code></pre>
+</div>
+<p class="typo-para">Local function can access local variables of outer functions (i.e. the closure), so in the case above, the <em>visited</em> can be a local variable:</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun dfs(graph: Graph) {
+    val visited = HashSet&lt;Vertex&gt;()
+    fun dfs(current: Vertex) {
+        if (!visited.add(current)) return
+        for (v in current.neighbors)
+            dfs(v)
+    }
+
+    dfs(graph.vertices[0])
+}
+</code></pre>
+</div>
+<h3 class="typo-header typo-h3" id="member-functions">Member functions</h3>
+<p class="typo-para">A member function is a function that is defined inside a class or object:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class Sample {
+    fun foo() { print("Foo") }
+}
+</code></pre>
+</div>
+<p class="typo-para">Member functions are called with dot notation:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">Sample().foo() // creates instance of class Sample and calls foo
+</code></pre>
+</div>
+<p class="typo-para">For more information on classes and overriding members see Classes and Inheritance.</p>
+<h2 class="typo-header typo-h2" id="generic-functions">Generic functions</h2>
+<p class="typo-para">Functions can have generic parameters which are specified using angle brackets before the function name:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun &lt;T&gt; singletonList(item: T): List&lt;T&gt; { /*...*/ }
+</code></pre>
+</div>
+<p class="typo-para">For more information on generic functions see Generics.</p>
+<h2 class="typo-header typo-h2" id="inline-functions">Inline functions</h2>
+<p class="typo-para">Inline functions are explained here.</p>
+<h2 class="typo-header typo-h2" id="extension-functions">Extension functions</h2>
+<p class="typo-para">Extension functions are explained in their own section.</p>
+<h2 class="typo-header typo-h2" id="higher-order-functions-and-lambdas">Higher-order functions and lambdas</h2>
+<p class="typo-para">Higher-Order functions and Lambdas are explained in their own section.</p>
+<h2 class="typo-header typo-h2" id="tail-recursive-functions">Tail recursive functions</h2>
+<p class="typo-para">Kotlin supports a style of functional programming known as <a class="typo-link" href="https://en.wikipedia.org/wiki/Tail_call">tail recursion</a>. This allows some algorithms that would normally be written using loops to instead be written using a recursive function, but without the risk of stack overflow. When a function is marked with the <code>tailrec</code> modifier and meets the required form, the compiler optimizes out the recursion, leaving behind a fast and efficient loop based version instead:</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val eps = 1E-10 // "good enough", could be 10^-15
+
+tailrec fun findFixPoint(x: Double = 1.0): Double
+        = if (Math.abs(x - Math.cos(x)) &lt; eps) x else findFixPoint(Math.cos(x))
+</code></pre>
+</div>
+<p class="typo-para">This code calculates the fixpoint of cosine, which is a mathematical constant. It simply calls Math.cos repeatedly starting at 1.0 until the result doesn't change any more, yielding a result of 0.7390851332151611 for the specified <code>eps</code> precision. The resulting code is equivalent to this more traditional style:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val eps = 1E-10 // "good enough", could be 10^-15
+
+private fun findFixPoint(): Double {
+    var x = 1.0
+    while (true) {
+        val y = Math.cos(x)
+        if (Math.abs(x - y) &lt; eps) return x
+        x = Math.cos(x)
+    }
+}
+</code></pre>
+</div>
+<p class="typo-para">To be eligible for the <code>tailrec</code> modifier, a function must call itself as the last operation it performs. You cannot use tail recursion when there is more code after the recursive call, and you cannot use it within try/catch/finally blocks. Currently, tail recursion is supported by Kotlin for JVM and Kotlin/Native.</p>
+
+<p><br><br></p>
+</body>
+</html>

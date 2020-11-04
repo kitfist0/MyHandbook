@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Properties and Fields</title>
+</head>
+<body>
+
+<h1 class="typo-header typo-h1" id="properties-and-fields">Properties and Fields</h1>
+<h2 class="typo-header typo-h2" id="declaring-properties">Declaring Properties</h2>
+<p class="typo-para">Properties in Kotlin classes can be declared either as mutable using the <em class="keyword">var</em> keyword, or as read-only using the <em class="keyword">val</em> keyword.</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class Address {
+    var name: String = "Holmes, Sherlock"
+    var street: String = "Baker"
+    var city: String = "London"
+    var state: String? = null
+    var zip: String = "123456"
+}
+</code></pre>
+</div>
+<p class="typo-para">To use a property, simply refer to it by name:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun copyAddress(address: Address): Address {
+    val result = Address() // there's no 'new' keyword in Kotlin
+    result.name = address.name // accessors are called
+    result.street = address.street
+    // ...
+    return result
+}
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="getters-and-setters">Getters and Setters</h2>
+<p class="typo-para">The full syntax for declaring a property is</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">var &lt;propertyName&gt;[: &lt;PropertyType&gt;] [= &lt;property_initializer&gt;]
+    [&lt;getter&gt;]
+    [&lt;setter&gt;]
+</code></pre>
+</div>
+<p class="typo-para">The initializer, getter and setter are optional. Property type is optional if it can be inferred from the initializer (or from the getter return type, as shown below).</p>
+<p class="typo-para">Examples:</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">var allByDefault: Int? // error: explicit initializer required, default getter and setter implied
+var initialized = 1 // has type Int, default getter and setter
+</code></pre>
+</div>
+<p class="typo-para">The full syntax of a read-only property declaration differs from a mutable one in two ways: it starts with <code>val</code> instead of <code>var</code> and does not allow a setter:</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val simple: Int? // has type Int, default getter, must be initialized in constructor
+val inferredType = 1 // has type Int and a default getter
+</code></pre>
+</div>
+<p class="typo-para">We can define custom accessors for a property. If we define a custom getter, it will be called every time we access the property (this allows us to implement a computed property). Here's an example of a custom getter:</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val isEmpty: Boolean
+    get() = this.size == 0
+</code></pre>
+</div>
+<p class="typo-para">If we define a custom setter, it will be called every time we assign a value to the property. A custom setter looks like this:</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">var stringRepresentation: String
+    get() = this.toString()
+    set(value) {
+        setDataFromString(value) // parses the string and assigns values to other properties
+    }
+</code></pre>
+</div>
+<p class="typo-para">By convention, the name of the setter parameter is <code>value</code>, but you can choose a different name if you prefer.</p>
+<p class="typo-para">Since Kotlin 1.1, you can omit the property type if it can be inferred from the getter:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val isEmpty get() = this.size == 0  // has type Boolean
+</code></pre>
+</div>
+<p class="typo-para">If you need to change the visibility of an accessor or to annotate it, but don't need to change the default implementation, you can define the accessor without defining its body:</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">var setterVisibility: String = "abc"
+    private set // the setter is private and has the default implementation
+
+var setterWithAnnotation: Any? = null
+    @Inject set // annotate the setter with Inject
+</code></pre>
+</div>
+<h3 class="typo-header typo-h3" id="backing-fields">Backing Fields</h3>
+<p class="typo-para">Fields cannot be declared directly in Kotlin classes. However, when a property needs a backing field, Kotlin provides it automatically. This backing field can be referenced in the accessors using the <code>field</code> identifier:</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">var counter = 0 // Note: the initializer assigns the backing field directly
+    set(value) {
+        if (value &gt;= 0) field = value
+    }
+</code></pre>
+</div>
+<p class="typo-para">The <code>field</code> identifier can only be used in the accessors of the property.</p>
+<p class="typo-para">A backing field will be generated for a property if it uses the default implementation of at least one of the accessors, or if a custom accessor references it through the <code>field</code> identifier.</p>
+<p class="typo-para">For example, in the following case there will be no backing field:</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val isEmpty: Boolean
+    get() = this.size == 0
+</code></pre>
+</div>
+<h3 class="typo-header typo-h3" id="backing-properties">Backing Properties</h3>
+<p class="typo-para">If you want to do something that does not fit into this "implicit backing field" scheme, you can always fall back to having a <em>backing property</em>:</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">private var _table: Map&lt;String, Int&gt;? = null
+public val table: Map&lt;String, Int&gt;
+    get() {
+        if (_table == null) {
+            _table = HashMap() // Type parameters are inferred
+        }
+        return _table ?: throw AssertionError("Set to null by another thread")
+    }
+</code></pre>
+</div>
+<blockquote class="typo-quote">
+    <p class="typo-para"><strong class="typo-strong">On the JVM</strong>: The access to private properties with default getters and setters is optimized so no function call overhead is introduced in this case.</p>
+</blockquote>
+<h2 class="typo-header typo-h2" id="compile-time-constants">Compile-Time Constants</h2>
+<p class="typo-para">If the value of a read-only property is known at the compile time, mark it as a <em>compile time constant</em> using the <em class="keyword">const</em> modifier. Such properties need to fulfil the following requirements:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">Top-level, or member of an <em class="keyword">object</em> declaration or a <em class="keyword">companion object</em>.</li>
+    <li class="typo-list__item">Initialized with a value of type <code>String</code> or a primitive type</li>
+    <li class="typo-list__item">No custom getter</li>
+</ul>
+<p class="typo-para">Such properties can be used in annotations:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">const val SUBSYSTEM_DEPRECATED: String = "This subsystem is deprecated"
+
+@Deprecated(SUBSYSTEM_DEPRECATED) fun foo() { ... }
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="late-initialized-properties-and-variables">Late-Initialized Properties and Variables</h2>
+<p class="typo-para">Normally, properties declared as having a non-null type must be initialized in the constructor. However, fairly often this is not convenient. For example, properties can be initialized through dependency injection, or in the setup method of a unit test. In this case, you cannot supply a non-null initializer in the constructor, but you still want to avoid null checks when referencing the property inside the body of a class.</p>
+<p class="typo-para">To handle this case, you can mark the property with the <code>lateinit</code> modifier:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">public class MyTest {
+    lateinit var subject: TestSubject
+
+    @SetUp fun setup() {
+        subject = TestSubject()
+    }
+
+    @Test fun test() {
+        subject.method()  // dereference directly
+    }
+}
+</code></pre>
+</div>
+<p class="typo-para">The modifier can be used on <code>var</code> properties declared inside the body of a class (not in the primary constructor, and only when the property does not have a custom getter or setter) and, since Kotlin 1.2, for top-level properties and local variables. The type of the property or variable must be non-null, and it must not be a primitive type.</p>
+<p class="typo-para">Accessing a <code>lateinit</code> property before it has been initialized throws a special exception that clearly identifies the property being accessed and the fact that it hasn't been initialized.</p>
+<h3 class="typo-header typo-h3" id="checking-whether-a-lateinit-var-is-initialized-since-12">Checking whether a lateinit var is initialized (since 1.2)</h3>
+<p class="typo-para">To check whether a <code>lateinit var</code> has already been initialized, use <code>.isInitialized</code> on the reference to that property:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">if (foo::bar.isInitialized) {
+    println(foo.bar)
+}
+</code></pre>
+</div>
+<p class="typo-para">This check is only available for the properties that are lexically accessible, i.e. declared in the same type or in one of the outer types, or at top level in the same file.</p>
+<h2 class="typo-header typo-h2" id="overriding-properties">Overriding Properties</h2>
+<p class="typo-para">See Overriding Properties</p>
+<h2 class="typo-header typo-h2" id="delegated-properties">Delegated Properties</h2>
+<p class="typo-para">The most common kind of properties simply reads from (and maybe writes to) a backing field. On the other hand, with custom getters and setters one can implement any behaviour of a property. Somewhere in between, there are certain common patterns of how a property may work. A few examples: lazy values, reading from a map by a given key, accessing a database, notifying listener on access, etc.</p>
+<p class="typo-para">Such common behaviours can be implemented as libraries using <em>delegated properties</em>.</p>
+
+<p><br><br></p>
+</body>
+</html>

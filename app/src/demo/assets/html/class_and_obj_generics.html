@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Generics</title>
+</head>
+<body>
+
+<h1 class="typo-header typo-h1" id="generics">Generics</h1>
+<p class="typo-para">As in Java, classes in Kotlin may have type parameters:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class Box&lt;T&gt;(t: T) {
+    var value = t
+}
+</code></pre>
+</div>
+<p class="typo-para">In general, to create an instance of such a class, we need to provide the type arguments:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val box: Box&lt;Int&gt; = Box&lt;Int&gt;(1)
+</code></pre>
+</div>
+<p class="typo-para">But if the parameters may be inferred, e.g. from the constructor arguments or by some other means, one is allowed to omit the type arguments:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val box = Box(1) // 1 has type Int, so the compiler figures out that we are talking about Box&lt;Int&gt;
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="variance">Variance</h2>
+<p class="typo-para">One of the most tricky parts of Java's type system is wildcard types (see <a class="typo-link" href="http://www.angelikalanger.com/GenericsFAQ/JavaGenericsFAQ.html">Java Generics FAQ</a>). And Kotlin doesn't have any. Instead, it has two other things: declaration-site variance and type projections.</p>
+<p class="typo-para">First, let's think about why Java needs those mysterious wildcards. The problem is explained in <a class="typo-link" href="http://www.oracle.com/technetwork/java/effectivejava-136174.html">Effective Java, 3rd Edition</a>, Item 31: <em>Use bounded wildcards to increase API flexibility</em>. First, generic types in Java are <strong class="typo-strong">invariant</strong>, meaning that <code>List&lt;String&gt;</code> is <strong class="typo-strong">not</strong> a subtype of <code>List&lt;Object&gt;</code>. Why so? If List was not <strong class="typo-strong">invariant</strong>, it would have been no better than Java's arrays, since the following code would have compiled and caused an exception at runtime:</p>
+<div class="sample" mode="java" theme="idea">
+<pre><code class="language-java">// Java
+List&lt;String&gt; strs = new ArrayList&lt;String&gt;();
+List&lt;Object&gt; objs = strs; // !!! A compile-time error here saves us from a runtime exception later
+objs.add(1); // Here we put an Integer into a list of Strings
+String s = strs.get(0); // !!! ClassCastException: Cannot cast Integer to String
+</code></pre>
+</div>
+<p class="typo-para">So, Java prohibits such things in order to guarantee run-time safety. But this has some implications. For example, consider the <code>addAll()</code> method from <code>Collection</code>interface. What's the signature of this method? Intuitively, we'd put it this way:</p>
+<div class="sample" mode="java" theme="idea">
+<pre><code class="language-java">// Java
+interface Collection&lt;E&gt; ... {
+  void addAll(Collection&lt;E&gt; items);
+}
+</code></pre>
+</div>
+<p class="typo-para">But then, we can't do the following simple thing (which is perfectly safe):</p>
+<div class="sample" mode="java" theme="idea">
+<pre><code class="language-java">// Java
+void copyAll(Collection&lt;Object&gt; to, Collection&lt;String&gt; from) {
+  to.addAll(from);
+  // !!! Would not compile with the naive declaration of addAll:
+  // Collection&lt;String&gt; is not a subtype of Collection&lt;Object&gt;
+}
+</code></pre>
+</div>
+<p class="typo-para">(In Java, we learned this lesson the hard way, see <a class="typo-link" href="http://www.oracle.com/technetwork/java/effectivejava-136174.html">Effective Java, 3rd Edition</a>, Item 28: <em>Prefer lists to arrays</em>)</p>
+<p class="typo-para">That's why the actual signature of <code>addAll()</code> is the following:</p>
+<div class="sample" mode="java" theme="idea">
+<pre><code class="language-java">// Java
+interface Collection&lt;E&gt; ... {
+  void addAll(Collection&lt;? extends E&gt; items);
+}
+</code></pre>
+</div>
+<p class="typo-para">The <strong class="typo-strong">wildcard type argument</strong> <code>? extends E</code> indicates that this method accepts a collection of objects of <code>E</code> <em>or some subtype of</em> <code>E</code>, not just <code>E</code> itself. This means that we can safely <strong class="typo-strong">read</strong> <code>E</code>'s from items (elements of this collection are instances of a subclass of E), but <strong class="typo-strong">cannot write</strong> to it since we do not know what objects comply to that unknown subtype of <code>E</code>. In return for this limitation, we have the desired behaviour: <code>Collection&lt;String&gt;</code> <em>is</em> a subtype of <code>Collection&lt;? extends Object&gt;</code>. In "clever words", the wildcard with an <strong class="typo-strong">extends</strong>-bound (<strong class="typo-strong">upper</strong> bound) makes the type <strong class="typo-strong">covariant</strong>.</p>
+<p class="typo-para">The key to understanding why this trick works is rather simple: if you can only <strong class="typo-strong">take</strong> items from a collection, then using a collection of <code>String</code>s and reading <code>Object</code>s from it is fine. Conversely, if you can only <em>put</em> items into the collection, it's OK to take a collection of<code>Object</code>s and put <code>String</code>s into it: in Java we have <code>List&lt;? super String&gt;</code> a <strong class="typo-strong">supertype</strong> of <code>List&lt;Object&gt;</code>.</p>
+<p class="typo-para">The latter is called <strong class="typo-strong">contravariance</strong>, and you can only call methods that take String as an argument on <code>List&lt;? super String&gt;</code>(e.g., you can call <code>add(String)</code> or <code>set(int, String)</code>), while if you call something that returns <code>T</code> in <code>List&lt;T&gt;</code>, you don't get a <code>String</code>, but an <code>Object</code>.</p>
+<p class="typo-para">Joshua Bloch calls those objects you only <strong class="typo-strong">read</strong> from <strong class="typo-strong">Producers</strong>, and those you only <strong class="typo-strong">write</strong> to <strong class="typo-strong">Consumers</strong>. He recommends: "<em>For maximum flexibility, use wildcard types on input parameters that represent producers or consumers</em>", and proposes the following mnemonic:</p>
+<p class="typo-para"><em>PECS stands for Producer-Extends, Consumer-Super.</em></p>
+<p class="typo-para"><em>NOTE</em>: if you use a producer-object, say, <code>List&lt;? extends Foo&gt;</code>, you are not allowed to call <code>add()</code> or <code>set()</code> on this object, but this does not mean that this object is <strong class="typo-strong">immutable</strong>: for example, nothing prevents you from calling <code>clear()</code> to remove all items from the list, since <code>clear()</code>does not take any parameters at all. The only thing guaranteed by wildcards (or other types of variance) is <strong class="typo-strong">type safety</strong>. Immutability is a completely different story.</p>
+<h3 class="typo-header typo-h3" id="declaration-site-variance">Declaration-site variance</h3>
+<p class="typo-para">Suppose we have a generic interface <code>Source&lt;T&gt;</code> that does not have any methods that take <code>T</code> as a parameter, only methods that return <code>T</code>:</p>
+<div class="sample" mode="java" theme="idea">
+<pre><code class="language-java">// Java
+interface Source&lt;T&gt; {
+  T nextT();
+}
+</code></pre>
+</div>
+<p class="typo-para">Then, it would be perfectly safe to store a reference to an instance of <code>Source&lt;String&gt;</code> in a variable of type <code>Source&lt;Object&gt;</code> – there are no consumer-methods to call. But Java does not know this, and still prohibits it:</p>
+<div class="sample" mode="java" theme="idea">
+<pre><code class="language-java">// Java
+void demo(Source&lt;String&gt; strs) {
+  Source&lt;Object&gt; objects = strs; // !!! Not allowed in Java
+  // ...
+}
+</code></pre>
+</div>
+<p class="typo-para">To fix this, we have to declare objects of type <code>Source&lt;? extends Object&gt;</code>, which is sort of meaningless, because we can call all the same methods on such a variable as before, so there's no value added by the more complex type. But the compiler does not know that.</p>
+<p class="typo-para">In Kotlin, there is a way to explain this sort of thing to the compiler. This is called <strong class="typo-strong">declaration-site variance</strong>: we can annotate the <strong class="typo-strong">type parameter</strong> <code>T</code> of Source to make sure that it is only <strong class="typo-strong">returned</strong> (produced) from members of <code>Source&lt;T&gt;</code>, and never consumed. To do this we provide the <strong class="typo-strong">out</strong> modifier:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">interface Source&lt;out T&gt; {
+    fun nextT(): T
+}
+
+fun demo(strs: Source&lt;String&gt;) {
+    val objects: Source&lt;Any&gt; = strs // This is OK, since T is an out-parameter
+    // ...
+}
+</code></pre>
+</div>
+<p class="typo-para">The general rule is: when a type parameter <code>T</code> of a class <code>C</code> is declared <strong class="typo-strong">out</strong>, it may occur only in <strong class="typo-strong">out</strong>-position in the members of <code>C</code>, but in return <code>C&lt;Base&gt;</code> can safely be a supertype of <code>C&lt;Derived&gt;</code>.</p>
+<p class="typo-para">In "clever words" they say that the class <code>C</code> is <strong class="typo-strong">covariant</strong> in the parameter <code>T</code>, or that <code>T</code> is a <strong class="typo-strong">covariant</strong> type parameter. You can think of <code>C</code> as being a <strong class="typo-strong">producer</strong> of <code>T</code>'s, and NOT a <strong class="typo-strong">consumer</strong> of <code>T</code>'s.</p>
+<p class="typo-para">The <strong class="typo-strong">out</strong> modifier is called a <strong class="typo-strong">variance annotation</strong>, and  since it is provided at the type parameter declaration site, we talk about <strong class="typo-strong">declaration-site variance</strong>. This is in contrast with Java's <strong class="typo-strong">use-site variance</strong> where wildcards in the type usages make the types covariant.</p>
+<p class="typo-para">In addition to <strong class="typo-strong">out</strong>, Kotlin provides a complementary variance annotation: <strong class="typo-strong">in</strong>. It makes a type parameter <strong class="typo-strong">contravariant</strong>: it can only be consumed and never produced. A good example of a contravariant type is <code>Comparable</code>:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">interface Comparable&lt;in T&gt; {
+    operator fun compareTo(other: T): Int
+}
+
+fun demo(x: Comparable&lt;Number&gt;) {
+    x.compareTo(1.0) // 1.0 has type Double, which is a subtype of Number
+    // Thus, we can assign x to a variable of type Comparable&lt;Double&gt;
+    val y: Comparable&lt;Double&gt; = x // OK!
+}
+</code></pre>
+</div>
+<p class="typo-para">We believe that the words <strong class="typo-strong">in</strong> and <strong class="typo-strong">out</strong> are self-explaining (as they were successfully used in C# for quite some time already), thus the mnemonic mentioned above is not really needed, and one can rephrase it for a higher purpose:</p>
+<p class="typo-para"><strong class="typo-strong"><a class="typo-link" href="http://en.wikipedia.org/wiki/Existentialism">The Existential</a> Transformation: Consumer in, Producer out!</strong> :-)</p>
+<h2 class="typo-header typo-h2" id="type-projections">Type projections</h2>
+<h3 class="typo-header typo-h3" id="use-site-variance-type-projections">Use-site variance: Type projections</h3>
+<p class="typo-para">It is very convenient to declare a type parameter T as <em>out</em> and avoid trouble with subtyping on the use site, but some classes <strong class="typo-strong">can't</strong> actually be restricted to only return <code>T</code>'s! A good example of this is Array:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class Array&lt;T&gt;(val size: Int) {
+    fun get(index: Int): T { ... }
+    fun set(index: Int, value: T) { ... }
+}
+</code></pre>
+</div>
+<p class="typo-para">This class cannot be either co- or contravariant in <code>T</code>. And this imposes certain inflexibilities. Consider the following function:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun copy(from: Array&lt;Any&gt;, to: Array&lt;Any&gt;) {
+    assert(from.size == to.size)
+    for (i in from.indices)
+        to[i] = from[i]
+}
+</code></pre>
+</div>
+<p class="typo-para">This function is supposed to copy items from one array to another. Let's try to apply it in practice:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val ints: Array&lt;Int&gt; = arrayOf(1, 2, 3)
+val any = Array&lt;Any&gt;(3) { "" }
+copy(ints, any)
+//   ^ type is Array&lt;Int&gt; but Array&lt;Any&gt; was expected
+</code></pre>
+</div>
+<p class="typo-para">Here we run into the same familiar problem: <code>Array&lt;T&gt;</code> is <strong class="typo-strong">invariant</strong> in <code>T</code>, thus neither of <code>Array&lt;Int&gt;</code> and <code>Array&lt;Any&gt;</code>is a subtype of the other. Why? Again, because copy <strong class="typo-strong">might</strong> be doing bad things, i.e. it might attempt to <strong class="typo-strong">write</strong>, say, a String to <code>from</code>, and if we actually passed an array of <code>Int</code> there, a <code>ClassCastException</code> would have been thrown sometime later.</p>
+<p class="typo-para">Then, the only thing we want to ensure is that <code>copy()</code> does not do any bad things. We want to prohibit it from <strong class="typo-strong">writing</strong> to <code>from</code>, and we can:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun copy(from: Array&lt;out Any&gt;, to: Array&lt;Any&gt;) { ... }
+</code></pre>
+</div>
+<p class="typo-para">What has happened here is called <strong class="typo-strong">type projection</strong>: we said that <code>from</code> is not simply an array, but a restricted (<strong class="typo-strong">projected</strong>) one: we can only call those methods that return the type parameter<code>T</code>, in this case it means that we can only call <code>get()</code>. This is our approach to <strong class="typo-strong">use-site variance</strong>, and corresponds to Java's <code>Array&lt;? extends Object&gt;</code>, but in a slightly simpler way.</p>
+<p class="typo-para">You can project a type with <strong class="typo-strong">in</strong> as well:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun fill(dest: Array&lt;in String&gt;, value: String) { ... }
+</code></pre>
+</div>
+<p class="typo-para"><code>Array&lt;in String&gt;</code> corresponds to Java's <code>Array&lt;? super String&gt;</code>, i.e. you can pass an array of <code>CharSequence</code> or an array of <code>Object</code> to the <code>fill()</code> function.</p>
+<h3 class="typo-header typo-h3" id="star-projections">Star-projections</h3>
+<p class="typo-para">Sometimes you want to say that you know nothing about the type argument, but still want to use it in a safe way. The safe way here is to define such a projection of the generic type, that every concrete instantiation of that generic type would be a subtype of that projection.</p>
+<p class="typo-para">Kotlin provides so called <strong class="typo-strong">star-projection</strong> syntax for this:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">For <code>Foo&lt;out T : TUpper&gt;</code>, where <code>T</code> is a covariant type parameter with the upper bound <code>TUpper</code>, <code>Foo&lt;*&gt;</code> is equivalent to <code>Foo&lt;out TUpper&gt;</code>. It means that when the <code>T</code> is unknown you can safely <em>read</em> values of <code>TUpper</code> from <code>Foo&lt;*&gt;</code>.</li>
+    <li class="typo-list__item">For <code>Foo&lt;in T&gt;</code>, where <code>T</code> is a contravariant type parameter, <code>Foo&lt;*&gt;</code> is equivalent to <code>Foo&lt;in Nothing&gt;</code>. It means there is nothing you can <em>write</em> to <code>Foo&lt;*&gt;</code> in a safe way when <code>T</code> is unknown.</li>
+    <li class="typo-list__item">For <code>Foo&lt;T : TUpper&gt;</code>, where <code>T</code> is an invariant type parameter with the upper bound <code>TUpper</code>, <code>Foo&lt;*&gt;</code> is equivalent to <code>Foo&lt;out TUpper&gt;</code> for reading values and to <code>Foo&lt;in Nothing&gt;</code> for writing values.</li>
+</ul>
+<p class="typo-para">If a generic type has several type parameters each of them can be projected independently.
+    For example, if the type is declared as <code>interface Function&lt;in T, out U&gt;</code> we can imagine the following star-projections:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item"><code>Function&lt;*, String&gt;</code> means <code>Function&lt;in Nothing, String&gt;</code>;</li>
+    <li class="typo-list__item"><code>Function&lt;Int, *&gt;</code> means <code>Function&lt;Int, out Any?&gt;</code>;</li>
+    <li class="typo-list__item"><code>Function&lt;*, *&gt;</code> means <code>Function&lt;in Nothing, out Any?&gt;</code>.</li>
+</ul>
+<p class="typo-para"><em>Note</em>: star-projections are very much like Java's raw types, but safe.</p>
+<h2 class="typo-header typo-h2" id="generic-functions">Generic functions</h2>
+<p class="typo-para">Not only classes can have type parameters. Functions can, too. Type parameters are placed <strong class="typo-strong">before</strong> the name of the function:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun &lt;T&gt; singletonList(item: T): List&lt;T&gt; {
+    // ...
+}
+
+fun &lt;T&gt; T.basicToString(): String {  // extension function
+    // ...
+}
+</code></pre>
+</div>
+<p class="typo-para">To call a generic function, specify the type arguments at the call site <strong class="typo-strong">after</strong> the name of the function:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val l = singletonList&lt;Int&gt;(1)
+</code></pre>
+</div>
+<p class="typo-para">Type arguments can be omitted if they can be inferred from the context, so the following example works as well:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val l = singletonList(1)
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="generic-constraints">Generic constraints</h2>
+<p class="typo-para">The set of all possible types that can be substituted for a given type parameter may be restricted by <strong class="typo-strong">generic constraints</strong>.</p>
+<h3 class="typo-header typo-h3" id="upper-bounds">Upper bounds</h3>
+<p class="typo-para">The most common type of constraint is an <strong class="typo-strong">upper bound</strong> that corresponds to Java's <em>extends</em> keyword:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun &lt;T : Comparable&lt;T&gt;&gt; sort(list: List&lt;T&gt;) {  ... }
+</code></pre>
+</div>
+<p class="typo-para">The type specified after a colon is the <strong class="typo-strong">upper bound</strong>: only a subtype of <code>Comparable&lt;T&gt;</code> may be substituted for <code>T</code>. For example:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">sort(listOf(1, 2, 3)) // OK. Int is a subtype of Comparable&lt;Int&gt;
+sort(listOf(HashMap&lt;Int, String&gt;())) // Error: HashMap&lt;Int, String&gt; is not a subtype of Comparable&lt;HashMap&lt;Int, String&gt;&gt;
+</code></pre>
+</div>
+<p class="typo-para">The default upper bound (if none specified) is <code>Any?</code>. Only one upper bound can be specified inside the angle brackets. If the same type parameter needs more than one upper bound, we need a separate <strong class="typo-strong">where</strong>-clause:</p>
+<div auto-indent="false" class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun &lt;T&gt; copyWhenGreater(list: List&lt;T&gt;, threshold: T): List&lt;String&gt;
+    where T : CharSequence,
+          T : Comparable&lt;T&gt; {
+    return list.filter { it &gt; threshold }.map { it.toString() }
+}
+</code></pre>
+</div>
+<p class="typo-para">The passed type must satisfy all conditions of the <code>where</code> clause simultaneously. In the above example, the <code>T</code> type must implement <em>both</em> <code>CharSequence</code> and <code>Comparable</code>.</p>
+<h2 class="typo-header typo-h2" id="type-erasure">Type erasure</h2>
+<p class="typo-para">The type safety checks that Kotlin performs for generic declaration usages are only done at compile time. At runtime, the instances of generic types do not hold any information about their actual type arguments. The type information is said to be <em>erased</em>. For example, the instances of <code>Foo&lt;Bar&gt;</code> and <code>Foo&lt;Baz?&gt;</code> are erased to just <code>Foo&lt;*&gt;</code>.</p>
+<p class="typo-para">Therefore, there is no general way to check whether an instance of a generic type was created with certain type arguments at runtime, and the compiler prohibits such <em class="keyword">is</em>-checks.</p>
+<p class="typo-para">Type casts to generic types with concrete type arguments, e.g. <code>foo as List&lt;String&gt;</code>, cannot be checked at runtime.<br/>These unchecked casts can be used when type safety is implied by the high-level program logic but cannot be inferred directly by the compiler. The compiler issues a warning on unchecked casts, and at runtime, only the non-generic part is checked (equivalent to <code>foo as List&lt;*&gt;</code>).</p>
+<p class="typo-para">The type arguments of generic function calls are also only checked at compile time. Inside the function bodies, the type parameters cannot be used for type checks, and type casts to type parameters (<code>foo as T</code>) are unchecked. However, reified type parameters of inline functions are substituted by the actual type arguments in the inlined function body at the call sites and thus can be used for type checks and casts, with the same restrictions for instances of generic types as described above.</p>
+
+<p><br><br></p>
+</body>
+</html>

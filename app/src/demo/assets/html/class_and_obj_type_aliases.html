@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Type aliases</title>
+</head>
+<body>
+
+<h2 class="typo-header typo-h2" id="type-aliases">Type aliases</h2>
+<p class="typo-para">Type aliases provide alternative names for existing types. If the type name is too long you can introduce a different shorter name and use the new one instead.</p>
+<p class="typo-para">It's useful to shorten long generic types. For instance, it's often tempting to shrink collection types:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">typealias NodeSet = Set&lt;Network.Node&gt;
+
+typealias FileTable&lt;K&gt; = MutableMap&lt;K, MutableList&lt;File&gt;&gt;
+</code></pre>
+</div>
+<p class="typo-para">You can provide different aliases for function types:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">typealias MyHandler = (Int, String, Any) -&gt; Unit
+
+typealias Predicate&lt;T&gt; = (T) -&gt; Boolean
+</code></pre>
+</div>
+<p class="typo-para">You can have new names for inner and nested classes:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class A {
+    inner class Inner
+}
+class B {
+    inner class Inner
+}
+
+typealias AInner = A.Inner
+typealias BInner = B.Inner
+</code></pre>
+</div>
+<p class="typo-para">Type aliases do not introduce new types. They are equivalent to the corresponding underlying types. When you add <code>typealias Predicate&lt;T&gt;</code> and use <code>Predicate&lt;Int&gt;</code> in your code, the Kotlin compiler always expands it to <code>(Int) -&gt; Boolean</code>. Thus you can pass a variable of your type whenever a general function type is required and vice versa:</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">typealias Predicate&lt;T&gt; = (T) -&gt; Boolean
+
+fun foo(p: Predicate&lt;Int&gt;) = p(42)
+
+fun main() {
+    val f: (Int) -&gt; Boolean = { it &gt; 0 }
+    println(foo(f)) // prints "true"
+
+    val p: Predicate&lt;Int&gt; = { it &gt; 0 }
+    println(listOf(1, -2).filter(p)) // prints "[1]"
+}
+</code></pre>
+</div>
+
+<p><br><br></p>
+</body>
+</html>

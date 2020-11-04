@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Visibility Modifiers</title>
+</head>
+<body>
+
+<h1 class="typo-header typo-h1" id="visibility-modifiers">Visibility Modifiers</h1>
+<p class="typo-para">Classes, objects, interfaces, constructors, functions, properties and their setters can have <em>visibility modifiers</em>. (Getters always have the same visibility as the property.) There are four visibility modifiers in Kotlin: <code>private</code>, <code>protected</code>, <code>internal</code> and <code>public</code>. The default visibility, used if there is no explicit modifier, is <code>public</code>.</p>
+<p class="typo-para">On this page, you'll learn how the modifiers apply to different types of declaring scopes.</p>
+<h2 class="typo-header typo-h2" id="packages">Packages</h2>
+<p class="typo-para">Functions, properties and classes, objects and interfaces can be declared on the "top-level", i.e. directly inside a package:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">// file name: example.kt
+package foo
+
+fun baz() { ... }
+class Bar { ... }
+</code></pre>
+</div>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">If you do not specify any visibility modifier, <code>public</code> is used by default, which means that your declarations will be visible everywhere;</li>
+    <li class="typo-list__item">If you mark a declaration <code>private</code>, it will only be visible inside the file containing the declaration;</li>
+    <li class="typo-list__item">If you mark it <code>internal</code>, it is visible everywhere in the same module;</li>
+    <li class="typo-list__item"><code>protected</code> is not available for top-level declarations.</li>
+</ul>
+<p class="typo-para">Note: to use a visible top-level declaration from another package, you should still import it.</p>
+<p class="typo-para">Examples:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">// file name: example.kt
+package foo
+
+private fun foo() { ... } // visible inside example.kt
+
+public var bar: Int = 5 // property is visible everywhere
+    private set         // setter is visible only in example.kt
+
+internal val baz = 6    // visible inside the same module
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="classes-and-interfaces">Classes and Interfaces</h2>
+<p class="typo-para">For members declared inside a class:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item"><code>private</code> means visible inside this class only (including all its members);</li>
+    <li class="typo-list__item"><code>protected</code> — same as <code>private</code> + visible in subclasses too;</li>
+    <li class="typo-list__item"><code>internal</code> — any client <em>inside this module</em> who sees the declaring class sees its <code>internal</code> members;</li>
+    <li class="typo-list__item"><code>public</code> — any client who sees the declaring class sees its <code>public</code> members.</li>
+</ul>
+<p class="typo-para">Note that in Kotlin, outer class does not see private members of its inner classes.</p>
+<p class="typo-para">If you override a <code>protected</code> member and do not specify the visibility explicitly, the overriding member will also have <code>protected</code> visibility.</p>
+<p class="typo-para">Examples:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">open class Outer {
+    private val a = 1
+    protected open val b = 2
+    internal val c = 3
+    val d = 4  // public by default
+
+    protected class Nested {
+        public val e: Int = 5
+    }
+}
+
+class Subclass : Outer() {
+    // a is not visible
+    // b, c and d are visible
+    // Nested and e are visible
+
+    override val b = 5   // 'b' is protected
+}
+
+class Unrelated(o: Outer) {
+    // o.a, o.b are not visible
+    // o.c and o.d are visible (same module)
+    // Outer.Nested is not visible, and Nested::e is not visible either
+}
+</code></pre>
+</div>
+<h3 class="typo-header typo-h3" id="constructors">Constructors</h3>
+<p class="typo-para">To specify a visibility of the primary constructor of a class, use the following syntax (note that you need to add an explicit <em class="keyword">constructor</em> keyword):</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class C private constructor(a: Int) { ... }
+</code></pre>
+</div>
+<p class="typo-para">Here the constructor is private. By default, all constructors are <code>public</code>, which effectively amounts to them being visible everywhere where the class is visible (i.e. a constructor of an <code>internal</code> class is only visible within the same module).</p>
+<h3 class="typo-header typo-h3" id="local-declarations">Local declarations</h3>
+<p class="typo-para">Local variables, functions and classes can not have visibility modifiers.</p>
+<h2 class="typo-header typo-h2" id="modules">Modules</h2>
+<p class="typo-para">The <code>internal</code> visibility modifier means that the member is visible within the same module. More specifically, a module is a set of Kotlin files compiled together:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">an IntelliJ IDEA module;</li>
+    <li class="typo-list__item">a Maven project;</li>
+    <li class="typo-list__item">a Gradle source set (with the exception that the <code>test</code> source set can access the internal declarations of <code>main</code>);</li>
+    <li class="typo-list__item">a set of files compiled with one invocation of the <code>&lt;kotlinc&gt;</code> Ant task.</li>
+</ul>
+
+<p><br><br></p>
+</body>
+</html>

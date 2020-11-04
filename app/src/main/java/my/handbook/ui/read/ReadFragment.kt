@@ -30,7 +30,7 @@ class ReadFragment : Fragment() {
             loadUrl("file:///android_asset/html/${args.fileName}")
             val text = args.searchResult
             if (text.isNotEmpty()) {
-                findAllAsync(text.replace("<[^>]*>".toRegex(),""))
+                findAllAsync(text)
             }
             if (context.isDarkThemeEnabled() && WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
                 WebSettingsCompat.setForceDark(settings, WebSettingsCompat.FORCE_DARK_ON)

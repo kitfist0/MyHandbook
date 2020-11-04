@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Interfaces</title>
+</head>
+<body>
+
+<h1 class="typo-header typo-h1" id="interfaces">Interfaces</h1>
+<p class="typo-para">Interfaces in Kotlin can contain declarations of abstract methods, as well as method implementations. What makes them different from abstract classes is that interfaces cannot store state. They can have properties but these need to be abstract or to provide accessor implementations.</p>
+<p class="typo-para">An interface is defined using the keyword <em class="keyword">interface</em></p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">interface MyInterface {
+    fun bar()
+    fun foo() {
+      // optional body
+    }
+}
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="implementing-interfaces">Implementing Interfaces</h2>
+<p class="typo-para">A class or object can implement one or more interfaces</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class Child : MyInterface {
+    override fun bar() {
+        // body
+    }
+}
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="properties-in-interfaces">Properties in Interfaces</h2>
+<p class="typo-para">You can declare properties in interfaces. A property declared in an interface can either be abstract, or it can provide implementations for accessors. Properties declared in interfaces can't have backing fields, and therefore accessors declared in interfaces can't reference them.</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">interface MyInterface {
+    val prop: Int // abstract
+
+    val propertyWithImplementation: String
+        get() = "foo"
+
+    fun foo() {
+        print(prop)
+    }
+}
+
+class Child : MyInterface {
+    override val prop: Int = 29
+}
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="interfaces-inheritance">Interfaces Inheritance</h2>
+<p class="typo-para">An interface can derive from other interfaces and thus both provide implementations for their members and declare new functions and properties. Quite naturally, classes implementing such an interface are only required to define the missing implementations:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">interface Named {
+    val name: String
+}
+
+interface Person : Named {
+    val firstName: String
+    val lastName: String
+
+    override val name: String get() = "$firstName $lastName"
+}
+
+data class Employee(
+    // implementing 'name' is not required
+    override val firstName: String,
+    override val lastName: String,
+    val position: Position
+) : Person
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="resolving-overriding-conflicts">Resolving overriding conflicts</h2>
+<p class="typo-para">When we declare many types in our supertype list, it may appear that we inherit more than one implementation of the same method. For example</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">interface A {
+    fun foo() { print("A") }
+    fun bar()
+}
+
+interface B {
+    fun foo() { print("B") }
+    fun bar() { print("bar") }
+}
+
+class C : A {
+    override fun bar() { print("bar") }
+}
+
+class D : A, B {
+    override fun foo() {
+        super&lt;A&gt;.foo()
+        super&lt;B&gt;.foo()
+    }
+
+    override fun bar() {
+        super&lt;B&gt;.bar()
+    }
+}
+</code></pre>
+</div>
+<p class="typo-para">Interfaces <em>A</em> and <em>B</em> both declare functions <em>foo()</em> and <em>bar()</em>. Both of them implement <em>foo()</em>, but only <em>B</em> implements <em>bar()</em> (<em>bar()</em> is not marked abstract in <em>A</em>, because this is the default for interfaces, if the function has no body). Now, if we derive a concrete class <em>C</em> from <em>A</em>, we, obviously, have to override <em>bar()</em> and provide an implementation.</p>
+<p class="typo-para">However, if we derive <em>D</em> from <em>A</em> and <em>B</em>, we need to implement all the methods which we have inherited from multiple interfaces, and to specify how exactly <em>D</em> should implement them. This rule applies both to methods for which we've inherited a single implementation (<em>bar()</em>) and multiple implementations (<em>foo()</em>).</p>
+
+<p><br><br></p>
+</body>
+</html>

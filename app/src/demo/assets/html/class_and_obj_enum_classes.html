@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Enum Classes</title>
+</head>
+<body>
+
+<h1 class="typo-header typo-h1" id="enum-classes">Enum Classes</h1>
+<p class="typo-para">The most basic usage of enum classes is implementing type-safe enums:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">enum class Direction {
+    NORTH, SOUTH, WEST, EAST
+}
+</code></pre>
+</div>
+<p class="typo-para">Each enum constant is an object. Enum constants are separated with commas.</p>
+<h2 class="typo-header typo-h2" id="initialization">Initialization</h2>
+<p class="typo-para">Since each enum is an instance of the enum class, they can be initialized as:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">enum class Color(val rgb: Int) {
+        RED(0xFF0000),
+        GREEN(0x00FF00),
+        BLUE(0x0000FF)
+}
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="anonymous-classes">Anonymous Classes</h2>
+<p class="typo-para">Enum constants can also declare their own anonymous classes with their corresponding methods, as well as overriding base methods.</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">enum class ProtocolState {
+    WAITING {
+        override fun signal() = TALKING
+    },
+
+    TALKING {
+        override fun signal() = WAITING
+    };
+
+    abstract fun signal(): ProtocolState
+}
+</code></pre>
+</div>
+<p class="typo-para">If the enum class defines any members, separate the enum constant definitions from the member definitions with a semicolon.</p>
+<p class="typo-para">Enum entries cannot contain nested types other than inner classes (deprecated in Kotlin 1.2).</p>
+<h2 class="typo-header typo-h2" id="implementing-interfaces-in-enum-classes">Implementing Interfaces in Enum Classes</h2>
+<p class="typo-para">An enum class may implement an interface (but not derive from a class), providing either a single interface members implementation for all of the entries, or separate ones for each entry within its anonymous class. This is done by adding the interfaces to the enum class declaration as follows:</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">import java.util.function.BinaryOperator
+import java.util.function.IntBinaryOperator
+
+//sampleStart
+enum class IntArithmetics : BinaryOperator&lt;Int&gt;, IntBinaryOperator {
+    PLUS {
+        override fun apply(t: Int, u: Int): Int = t + u
+    },
+    TIMES {
+        override fun apply(t: Int, u: Int): Int = t * u
+    };
+
+    override fun applyAsInt(t: Int, u: Int) = apply(t, u)
+}
+//sampleEnd
+
+fun main() {
+    val a = 13
+    val b = 31
+    for (f in IntArithmetics.values()) {
+        println("$f($a, $b) = ${f.apply(a, b)}")
+    }
+}
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="working-with-enum-constants">Working with Enum Constants</h2>
+<p class="typo-para">Enum classes in Kotlin have synthetic methods allowing to list the defined enum constants and to get an enum constant by its name. The signatures of these methods are as follows (assuming the name of the enum class is <code>EnumClass</code>):</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">EnumClass.valueOf(value: String): EnumClass
+EnumClass.values(): Array&lt;EnumClass&gt;
+</code></pre>
+</div>
+<p class="typo-para">The <code>valueOf()</code> method throws an <code>IllegalArgumentException</code> if the specified name does not match any of the enum constants defined in the class.</p>
+<p class="typo-para">Since Kotlin 1.1, it's possible to access the constants in an enum class in a generic way, using the <code>enumValues&lt;T&gt;()</code> and <code>enumValueOf&lt;T&gt;()</code> functions:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">enum class RGB { RED, GREEN, BLUE }
+
+inline fun &lt;reified T : Enum&lt;T&gt;&gt; printAllValues() {
+    print(enumValues&lt;T&gt;().joinToString { it.name })
+}
+
+printAllValues&lt;RGB&gt;() // prints RED, GREEN, BLUE
+</code></pre>
+</div>
+<p class="typo-para">Every enum constant has properties to obtain its name and position in the enum class declaration:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val name: String
+val ordinal: Int
+</code></pre>
+</div>
+<p class="typo-para">The enum constants also implement the Comparable interface, with the natural order being the order in which they are defined in the enum class.</p>
+
+<p><br><br></p>
+</body>
+</html>

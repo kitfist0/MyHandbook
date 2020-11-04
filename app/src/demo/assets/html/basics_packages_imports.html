@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Packages and Imports</title>
+</head>
+<body>
+
+<h1 class="typo-header typo-h1" id="packages">Packages</h1>
+<p class="typo-para">A source file may start with a package declaration:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">package org.example
+
+fun printMessage() { /*...*/ }
+class Message { /*...*/ }
+
+// ...
+</code></pre>
+</div>
+<p class="typo-para">All the contents (such as classes and functions) of the source file are contained by the package declared. So, in the example above, the full name of <code>printMessage()</code> is <code>org.example.printMessage</code>, and the full name of <code>Message</code> is <code>org.example.Message</code>.</p>
+<p class="typo-para">If the package is not specified, the contents of such a file belong to the default package that has no name.</p>
+<h2 class="typo-header typo-h2" id="default-imports">Default Imports</h2>
+<p class="typo-para">A number of packages are imported into every Kotlin file by default:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">kotlin.*</li>
+    <li class="typo-list__item">kotlin.annotation.*</li>
+    <li class="typo-list__item">kotlin.collections.*</li>
+    <li class="typo-list__item">kotlin.comparisons.*  (since 1.1)</li>
+    <li class="typo-list__item">kotlin.io.*</li>
+    <li class="typo-list__item">kotlin.ranges.*</li>
+    <li class="typo-list__item">kotlin.sequences.*</li>
+    <li class="typo-list__item">kotlin.text.*</li>
+</ul>
+<p class="typo-para">Additional packages are imported depending on the target platform:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">JVM:
+        <ul class="typo-list typo-list_type_simple">
+            <li class="typo-list__item">java.lang.*</li>
+            <li class="typo-list__item">kotlin.jvm.*</li>
+        </ul>
+    </li>
+    <li class="typo-list__item">JS:
+        <ul class="typo-list typo-list_type_simple">
+            <li class="typo-list__item">kotlin.js.*</li>
+        </ul>
+    </li>
+</ul>
+<h2 class="typo-header typo-h2" id="imports">Imports</h2>
+<p class="typo-para">Apart from the default imports, each file may contain its own import directives. Syntax for imports is described in the grammar.</p>
+<p class="typo-para">We can import either a single name, e.g.</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">import org.example.Message // Message is now accessible without qualification
+</code></pre>
+</div>
+<p class="typo-para">or all the accessible contents of a scope (package, class, object etc):</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">import org.example.* // everything in 'org.example' becomes accessible
+</code></pre>
+</div>
+<p class="typo-para">If there is a name clash, we can disambiguate by using <em class="keyword">as</em> keyword to locally rename the clashing entity:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">import org.example.Message // Message is accessible
+import org.test.Message as testMessage // testMessage stands for 'org.test.Message'
+</code></pre>
+</div>
+<p class="typo-para">The <code>import</code> keyword is not restricted to importing classes; you can also use it to import other declarations:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">top-level functions and properties;</li>
+    <li class="typo-list__item">functions and properties declared in object declarations;</li>
+    <li class="typo-list__item">enum constants.</li>
+</ul>
+<h2 class="typo-header typo-h2" id="visibility-of-top-level-declarations">Visibility of Top-level Declarations</h2>
+<p class="typo-para">If a top-level declaration is marked <em class="keyword">private</em>, it is private to the file it's declared in (see Visibility Modifiers).</p>
+
+<p><br><br></p>
+</body>
+</html>

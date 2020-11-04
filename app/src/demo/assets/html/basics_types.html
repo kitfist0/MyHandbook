@@ -1,0 +1,496 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Basic Types</title>
+</head>
+<body>
+
+<h1 class="typo-header typo-h1" id="basic-types">Basic Types</h1>
+<p class="typo-para">In Kotlin, everything is an object in the sense that we can call member functions and properties on any variable. Some of the types can have a special internal representation - for example, numbers, characters and booleans can be represented as primitive values at runtime - but to the user they look like ordinary classes. In this section we describe the basic types used in Kotlin: numbers, characters, booleans, arrays, and strings.</p>
+<h2 class="typo-header typo-h2" id="numbers">Numbers</h2>
+<p class="typo-para">Kotlin provides a set of built-in types that represent numbers.<br/>For integer numbers, there are four types with different sizes and, hence, value ranges.</p>
+<table class="typo-table">
+    <thead>
+    <tr class="typo-table__row">
+        <th>Type</th>
+        <th>Size (bits)</th>
+        <th>Min value</th>
+        <th>Max value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="typo-table__row">
+        <td class="typo-table__column">Byte</td>
+        <td class="typo-table__column">8</td>
+        <td class="typo-table__column">-128</td>
+        <td class="typo-table__column">127</td>
+    </tr>
+    <tr class="typo-table__row">
+        <td class="typo-table__column">Short</td>
+        <td class="typo-table__column">16</td>
+        <td class="typo-table__column">-32768</td>
+        <td class="typo-table__column">32767</td>
+    </tr>
+    <tr class="typo-table__row">
+        <td class="typo-table__column">Int</td>
+        <td class="typo-table__column">32</td>
+        <td class="typo-table__column">-2,147,483,648 (-2<sup>31</sup>)</td>
+        <td class="typo-table__column">2,147,483,647 (2<sup>31</sup> - 1)</td>
+    </tr>
+    <tr class="typo-table__row">
+        <td class="typo-table__column">Long</td>
+        <td class="typo-table__column">64</td>
+        <td class="typo-table__column">-9,223,372,036,854,775,808 (-2<sup>63</sup>)</td>
+        <td class="typo-table__column">9,223,372,036,854,775,807 (2<sup>63</sup> - 1)</td>
+    </tr>
+    </tbody>
+</table>
+<p class="typo-para">All variables initialized with integer values not exceeding the maximum value of <code>Int</code>have the inferred type <code>Int</code>. If the initial value exceeds this value, then the type is <code>Long</code>. To specify the <code>Long</code> value explicitly, append the suffix <code>L</code> to the value.</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val one = 1 // Int
+val threeBillion = 3000000000 // Long
+val oneLong = 1L // Long
+val oneByte: Byte = 1
+</code></pre>
+</div>
+<p class="typo-para">For floating-point numbers, Kotlin provides types <code>Float</code> and <code>Double</code>. According to the <a class="typo-link" href="https://en.wikipedia.org/wiki/IEEE_754">IEEE 754 standard</a>, floating point types differ by their <em>decimal place</em>, that is, how many decimal digits they can store.<code>Float</code> reflects the IEEE 754 <em>single precision</em>, while <code>Double</code> provides <em>double precision</em>.</p>
+<table class="typo-table">
+    <thead>
+    <tr class="typo-table__row">
+        <th>Type</th>
+        <th>Size (bits)</th>
+        <th>Significant bits</th>
+        <th>Exponent bits</th>
+        <th>Decimal digits</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="typo-table__row">
+        <td class="typo-table__column">Float</td>
+        <td class="typo-table__column">32</td>
+        <td class="typo-table__column">24</td>
+        <td class="typo-table__column">8</td>
+        <td class="typo-table__column">6-7</td>
+    </tr>
+    <tr class="typo-table__row">
+        <td class="typo-table__column">Double</td>
+        <td class="typo-table__column">64</td>
+        <td class="typo-table__column">53</td>
+        <td class="typo-table__column">11</td>
+        <td class="typo-table__column">15-16</td>
+    </tr>
+    </tbody>
+</table>
+<p class="typo-para">For variables initialized with fractional numbers, the compiler infers the <code>Double</code> type. To explicitly specify the <code>Float</code> type for a value, add the suffix <code>f</code> or <code>F</code>. If such a value contains more than 6-7 decimal digits, it will be rounded.</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val pi = 3.14 // Double
+val e = 2.7182818284 // Double
+val eFloat = 2.7182818284f // Float, actual value is 2.7182817
+</code></pre>
+</div>
+<p class="typo-para">Note that unlike some other languages, there are no implicit widening conversions for numbers in Kotlin. For example, a function with a <code>Double</code> parameter can be called only on <code>Double</code> values, but not <code>Float</code>,<code>Int</code>, or other numeric values.</p>
+<div class="sample" data-min-compiler-version="1.3" theme="idea">
+<pre><code class="language-kotlin">fun main() {
+    fun printDouble(d: Double) { print(d) }
+
+    val i = 1
+    val d = 1.1
+    val f = 1.1f
+
+    printDouble(d)
+//    printDouble(i) // Error: Type mismatch
+//    printDouble(f) // Error: Type mismatch
+}
+</code></pre>
+</div>
+<p class="typo-para">To convert numeric values to different types, use Explicit conversions.</p>
+<h3 class="typo-header typo-h3" id="literal-constants">Literal constants</h3>
+<p class="typo-para">There are the following kinds of literal constants for integral values:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">Decimals: <code>123</code>
+        <ul class="typo-list typo-list_type_simple">
+            <li class="typo-list__item">Longs are tagged by a capital <code>L</code>: <code>123L</code></li>
+        </ul>
+    </li>
+    <li class="typo-list__item">Hexadecimals: <code>0x0F</code></li>
+    <li class="typo-list__item">Binaries: <code>0b00001011</code></li>
+</ul>
+<p class="typo-para">NOTE: Octal literals are not supported.</p>
+<p class="typo-para">Kotlin also supports a conventional notation for floating-point numbers:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">Doubles by default: <code>123.5</code>, <code>123.5e10</code></li>
+    <li class="typo-list__item">Floats are tagged by <code>f</code> or <code>F</code>: <code>123.5f</code></li>
+</ul>
+<h3 class="typo-header typo-h3" id="underscores-in-numeric-literals-since-11">Underscores in numeric literals (since 1.1)</h3>
+<p class="typo-para">You can use underscores to make number constants more readable:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val oneMillion = 1_000_000
+val creditCardNumber = 1234_5678_9012_3456L
+val socialSecurityNumber = 999_99_9999L
+val hexBytes = 0xFF_EC_DE_5E
+val bytes = 0b11010010_01101001_10010100_10010010
+</code></pre>
+</div>
+<h3 class="typo-header typo-h3" id="representation">Representation</h3>
+<p class="typo-para">On the Java platform, numbers are physically stored as JVM primitive types, unless we need a nullable number reference (e.g. <code>Int?</code>) or generics are involved. In the latter cases numbers are boxed.</p>
+<p class="typo-para">Note that boxing of numbers does not necessarily preserve identity:</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">fun main() {
+//sampleStart
+    val a: Int = 100
+    val boxedA: Int? = a
+    val anotherBoxedA: Int? = a
+
+    val b: Int = 10000
+    val boxedB: Int? = b
+    val anotherBoxedB: Int? = b
+
+    println(boxedA === anotherBoxedA) // true
+    println(boxedB === anotherBoxedB) // false
+//sampleEnd
+}
+</code></pre>
+</div>
+<p class="typo-para">On the other hand, it preserves equality:</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">fun main() {
+//sampleStart
+    val a: Int = 10000
+    println(a == a) // Prints 'true'
+    val boxedA: Int? = a
+    val anotherBoxedA: Int? = a
+    println(boxedA == anotherBoxedA) // Prints 'true'
+//sampleEnd
+}
+</code></pre>
+</div>
+<h3 class="typo-header typo-h3" id="explicit-conversions">Explicit conversions</h3>
+<p class="typo-para">Due to different representations, smaller types are not subtypes of bigger ones. If they were, we would have troubles of the following sort:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">// Hypothetical code, does not actually compile:
+val a: Int? = 1 // A boxed Int (java.lang.Integer)
+val b: Long? = a // implicit conversion yields a boxed Long (java.lang.Long)
+print(b == a) // Surprise! This prints "false" as Long's equals() checks whether the other is Long as well
+</code></pre>
+</div>
+<p class="typo-para">So equality would have been lost silently all over the place, not to mention identity.</p>
+<p class="typo-para">As a consequence, smaller types are NOT implicitly converted to bigger types. This means that we cannot assign a value of type <code>Byte</code> to an <code>Int</code> variable without an explicit conversion</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">fun main() {
+//sampleStart
+    val b: Byte = 1 // OK, literals are checked statically
+    val i: Int = b // ERROR
+//sampleEnd
+}
+</code></pre>
+</div>
+<p class="typo-para">We can use explicit conversions to widen numbers</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">fun main() {
+    val b: Byte = 1
+//sampleStart
+    val i: Int = b.toInt() // OK: explicitly widened
+    print(i)
+//sampleEnd
+}
+</code></pre>
+</div>
+<p class="typo-para">Every number type supports the following conversions:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item"><code>toByte(): Byte</code></li>
+    <li class="typo-list__item"><code>toShort(): Short</code></li>
+    <li class="typo-list__item"><code>toInt(): Int</code></li>
+    <li class="typo-list__item"><code>toLong(): Long</code></li>
+    <li class="typo-list__item"><code>toFloat(): Float</code></li>
+    <li class="typo-list__item"><code>toDouble(): Double</code></li>
+    <li class="typo-list__item"><code>toChar(): Char</code></li>
+</ul>
+<p class="typo-para">Absence of implicit conversions is rarely noticeable because the type is inferred from the context, and arithmetical operations are overloaded for appropriate conversions, for example</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val l = 1L + 3 // Long + Int =&gt; Long
+</code></pre>
+</div>
+<h3 class="typo-header typo-h3" id="operations">Operations</h3>
+<p class="typo-para">Kotlin supports the standard set of arithmetical operations over numbers (<code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code>), which are declared as members of appropriate classes (but the compiler optimizes the calls down to the corresponding instructions). See Operator overloading.</p>
+<h4 class="typo-header typo-h4" id="division-of-integers">Division of integers</h4>
+<p class="typo-para">Note that division between integers always returns an integer. Any fractional part is discarded. For example:</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">fun main() {
+//sampleStart
+    val x = 5 / 2
+    //println(x == 2.5) // ERROR: Operator '==' cannot be applied to 'Int' and 'Double'
+    println(x == 2)
+//sampleEnd
+}
+</code></pre>
+</div>
+<p class="typo-para">This is true for a division between any two integer types.</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">fun main() {
+//sampleStart
+    val x = 5L / 2
+    println(x == 2L)
+//sampleEnd
+}
+</code></pre>
+</div>
+<p class="typo-para">To return a floating-point type, explicitly convert one of the arguments to a floating-point type.</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">fun main() {
+//sampleStart
+    val x = 5 / 2.toDouble()
+    println(x == 2.5)
+//sampleEnd
+}
+</code></pre>
+</div>
+<h4 class="typo-header typo-h4" id="bitwise-operations">Bitwise operations</h4>
+<p class="typo-para">As for bitwise operations, there're no special characters for them, but just named functions that can be called in infix form, for example:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val x = (1 shl 2) and 0x000FF000
+</code></pre>
+</div>
+<p class="typo-para">Here is the complete list of bitwise operations (available for <code>Int</code> and <code>Long</code> only):</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item"><code>shl(bits)</code> – signed shift left</li>
+    <li class="typo-list__item"><code>shr(bits)</code> – signed shift right</li>
+    <li class="typo-list__item"><code>ushr(bits)</code> – unsigned shift right</li>
+    <li class="typo-list__item"><code>and(bits)</code> – bitwise <strong class="typo-strong">and</strong></li>
+    <li class="typo-list__item"><code>or(bits)</code> – bitwise <strong class="typo-strong">or</strong></li>
+    <li class="typo-list__item"><code>xor(bits)</code> – bitwise <strong class="typo-strong">xor</strong></li>
+    <li class="typo-list__item"><code>inv()</code> – bitwise inversion</li>
+</ul>
+<h3 class="typo-header typo-h3" id="floating-point-numbers-comparison">Floating point numbers comparison</h3>
+<p class="typo-para">The operations on floating point numbers discussed in this section are:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">Equality checks: <code>a == b</code> and <code>a != b</code></li>
+    <li class="typo-list__item">Comparison operators: <code>a &lt; b</code>, <code>a &gt; b</code>, <code>a &lt;= b</code>, <code>a &gt;= b</code></li>
+    <li class="typo-list__item">Range instantiation and range checks: <code>a..b</code>, <code>x in a..b</code>, <code>x !in a..b</code></li>
+</ul>
+<p class="typo-para">When the operands <code>a</code> and <code>b</code> are statically known to be <code>Float</code> or <code>Double</code> or their nullable counterparts (the type is declared or inferred or is a result of a smart cast), the operations on the numbers and the range that they form follow the IEEE 754 Standard for Floating-Point Arithmetic.</p>
+<p class="typo-para">However, to support generic use cases and provide total ordering, when the operands are <strong class="typo-strong">not</strong> statically typed as floating point numbers (e.g. <code>Any</code>, <code>Comparable&lt;...&gt;</code>, a type parameter), the operations use the<code>equals</code> and <code>compareTo</code> implementations for <code>Float</code> and <code>Double</code>, which disagree with the standard, so that:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item"><code>NaN</code> is considered equal to itself</li>
+    <li class="typo-list__item"><code>NaN</code> is considered greater than any other element including <code>POSITIVE_INFINITY</code></li>
+    <li class="typo-list__item"><code>-0.0</code> is considered less than <code>0.0</code></li>
+</ul>
+<h2 class="typo-header typo-h2" id="characters">Characters</h2>
+<p class="typo-para">Characters are represented by the type <code>Char</code>. They can not be treated directly as numbers</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun check(c: Char) {
+    if (c == 1) { // ERROR: incompatible types
+        // ...
+    }
+}
+</code></pre>
+</div>
+<p class="typo-para">Character literals go in single quotes: <code>'1'</code>. Special characters can be escaped using a backslash. The following escape sequences are supported: <code>\t</code>, <code>\b</code>, <code>\n</code>, <code>\r</code>, <code>\'</code>, <code>\"</code>, <code>\\</code> and <code>\$</code>. To encode any other character, use the Unicode escape sequence syntax: <code>'\uFF00'</code>.</p>
+<p class="typo-para">We can explicitly convert a character to an <code>Int</code> number:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun decimalDigitValue(c: Char): Int {
+    if (c !in '0'..'9')
+        throw IllegalArgumentException("Out of range")
+    return c.toInt() - '0'.toInt() // Explicit conversions to numbers
+}
+</code></pre>
+</div>
+<p class="typo-para">Like numbers, characters are boxed when a nullable reference is needed. Identity is not preserved by the boxing operation.</p>
+<h2 class="typo-header typo-h2" id="booleans">Booleans</h2>
+<p class="typo-para">The type <code>Boolean</code> represents booleans, and has two values: <em class="keyword">true</em> and <em class="keyword">false</em>.</p>
+<p class="typo-para">Booleans are boxed if a nullable reference is needed.</p>
+<p class="typo-para">Built-in operations on booleans include</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item"><code>||</code> – lazy disjunction</li>
+    <li class="typo-list__item"><code>&amp;&amp;</code> – lazy conjunction</li>
+    <li class="typo-list__item"><code>!</code> - negation</li>
+</ul>
+<h2 class="typo-header typo-h2" id="arrays">Arrays</h2>
+<p class="typo-para">Arrays in Kotlin are represented by the <code>Array</code> class, that has <code>get</code> and <code>set</code> functions (that turn into <code>[]</code> by operator overloading conventions), and <code>size</code> property, along with a few other useful member functions:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">class Array&lt;T&gt; private constructor() {
+    val size: Int
+    operator fun get(index: Int): T
+    operator fun set(index: Int, value: T): Unit
+
+    operator fun iterator(): Iterator&lt;T&gt;
+    // ...
+}
+</code></pre>
+</div>
+<p class="typo-para">To create an array, we can use a library function <code>arrayOf()</code> and pass the item values to it, so that <code>arrayOf(1, 2, 3)</code> creates an array <code>[1, 2, 3]</code>. Alternatively, the <code>arrayOfNulls()</code> library function can be used to create an array of a given size filled with null elements.</p>
+<p class="typo-para">Another option is to use the <code>Array</code> constructor that takes the array size and the function that can return the initial value of each array element given its index:</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">fun main() {
+//sampleStart
+    // Creates an Array&lt;String&gt; with values ["0", "1", "4", "9", "16"]
+    val asc = Array(5) { i -&gt; (i * i).toString() }
+    asc.forEach { println(it) }
+//sampleEnd
+}
+</code></pre>
+</div>
+<p class="typo-para">As we said above, the <code>[]</code> operation stands for calls to member functions <code>get()</code> and <code>set()</code>.</p>
+<p class="typo-para">Arrays in Kotlin are <em>invariant</em>. This means that Kotlin does not let us assign an <code>Array&lt;String&gt;</code> to an <code>Array&lt;Any&gt;</code>, which prevents a possible runtime failure (but you can use <code>Array&lt;out Any&gt;</code>, see Type Projections).</p>
+<h3 class="typo-header typo-h3" id="primitive-type-arrays">Primitive type arrays</h3>
+<p class="typo-para">Kotlin also has specialized classes to represent arrays of primitive types without boxing overhead: <code>ByteArray</code>,<code>ShortArray</code>, <code>IntArray</code> and so on. These classes have no inheritance relation to the <code>Array</code> class, but they have the same set of methods and properties. Each of them also has a corresponding factory function:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val x: IntArray = intArrayOf(1, 2, 3)
+x[0] = x[1] + x[2]
+</code></pre>
+</div>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">// Array of int of size 5 with values [0, 0, 0, 0, 0]
+val arr = IntArray(5)
+
+// e.g. initialise the values in the array with a constant
+// Array of int of size 5 with values [42, 42, 42, 42, 42]
+val arr = IntArray(5) { 42 }
+
+// e.g. initialise the values in the array using a lambda
+// Array of int of size 5 with values [0, 1, 2, 3, 4] (values initialised to their index value)
+var arr = IntArray(5) { it * 1 }
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="unsigned-integers">Unsigned integers</h2>
+<blockquote class="note typo-quote">
+    <p class="typo-para">Unsigned types are available only since Kotlin 1.3 and currently in Beta. See details below</p>
+</blockquote>
+<p class="typo-para">Kotlin introduces following types for unsigned integers:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item"><code>kotlin.UByte</code>: an unsigned 8-bit integer, ranges from 0 to 255</li>
+    <li class="typo-list__item"><code>kotlin.UShort</code>: an unsigned 16-bit integer, ranges from 0 to 65535</li>
+    <li class="typo-list__item"><code>kotlin.UInt</code>: an unsigned 32-bit integer, ranges from 0 to 2^32 - 1</li>
+    <li class="typo-list__item"><code>kotlin.ULong</code>: an unsigned 64-bit integer, ranges from 0 to 2^64 - 1</li>
+</ul>
+<p class="typo-para">Unsigned types support most of the operations of their signed counterparts.</p>
+<blockquote class="note typo-quote">
+    <p class="typo-para">Note that changing type from unsigned type to signed counterpart (and vice versa) is a <em>binary incompatible</em> change</p>
+</blockquote>
+<p class="typo-para">Unsigned types are implemented using another feature that's not yet stable, namely inline classes.</p>
+<h3 class="typo-header typo-h3" id="specialized-classes">Specialized classes</h3>
+<p class="typo-para">Same as for primitives, each of unsigned type has corresponding type that represents array, specialized for that unsigned type:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item"><code>kotlin.UByteArray</code>: an array of unsigned bytes</li>
+    <li class="typo-list__item"><code>kotlin.UShortArray</code>: an array of unsigned shorts</li>
+    <li class="typo-list__item"><code>kotlin.UIntArray</code>: an array of unsigned ints</li>
+    <li class="typo-list__item"><code>kotlin.ULongArray</code>: an array of unsigned longs</li>
+</ul>
+<p class="typo-para">Same as for signed integer arrays, they provide similar API to <code>Array</code> class without boxing overhead.</p>
+<p class="typo-para">Also, ranges and progressions supported for <code>UInt</code> and <code>ULong</code> by classes <code>kotlin.ranges.UIntRange</code>, <code>kotlin.ranges.UIntProgression</code>, <code>kotlin.ranges.ULongRange</code>, <code>kotlin.ranges.ULongProgression</code></p>
+<h3 class="typo-header typo-h3" id="literals">Literals</h3>
+<p class="typo-para">To make unsigned integers easier to use, Kotlin provides an ability to tag an integer literal with a suffix indicating a specific unsigned type (similarly to Float/Long):</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">suffixes <code>u</code> and <code>U</code> tag literal as unsigned. Exact type will be determined based on the expected type. If no expected type is provided, <code>UInt</code> or <code>ULong</code> will be chosen based on the size of literal</li>
+</ul>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val b: UByte = 1u  // UByte, expected type provided
+val s: UShort = 1u // UShort, expected type provided
+val l: ULong = 1u  // ULong, expected type provided
+
+val a1 = 42u // UInt: no expected type provided, constant fits in UInt
+val a2 = 0xFFFF_FFFF_FFFFu // ULong: no expected type provided, constant doesn't fit in UInt
+</code></pre>
+</div>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">suffixes <code>uL</code> and <code>UL</code> explicitly tag literal as unsigned long.</li>
+</ul>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val a = 1UL // ULong, even though no expected type provided and constant fits into UInt
+</code></pre>
+</div>
+<h3 class="typo-header typo-h3" id="beta-status-of-unsigned-integers">Beta status of unsigned integers</h3>
+<p class="typo-para">The design of unsigned types is in Beta, meaning that its compatibility is best-effort only and not guaranteed. When using unsigned arithmetics in Kotlin 1.3+, a warning will be reported, indicating that this feature has not been released as stable. To remove the warning, you have to opt in for usage of unsigned types.</p>
+<p class="typo-para">There are two possible ways to opt-in for unsigned types: with requiring an opt-in for your API, or without doing that.</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">To propagate the opt-in requirement, annotate declarations that use unsigned integers with <code>@ExperimentalUnsignedTypes</code>.</li>
+    <li class="typo-list__item">To opt-in without propagating, either annotate declarations with <code>@OptIn(ExperimentalUnsignedTypes::class)</code> or pass <code>-Xopt-in=kotlin.ExperimentalUnsignedTypes</code> to the compiler.</li>
+</ul>
+<p class="typo-para">It's up to you to decide if your clients have to explicitly opt-in into usage of your API, but bear in mind that unsigned types are not a stable feature, so API which uses them can be broken by changes in the language.</p>
+<p class="typo-para">See also the Opt-in Requirements API <a class="typo-link" href="https://github.com/Kotlin/KEEP/blob/master/proposals/experimental.md">KEEP</a> for technical details.</p>
+<h3 class="typo-header typo-h3" id="further-discussion">Further discussion</h3>
+<p class="typo-para">See <a class="typo-link" href="https://github.com/Kotlin/KEEP/blob/master/proposals/unsigned-types.md">language proposal for unsigned types</a> for technical details and further discussion.</p>
+<h2 class="typo-header typo-h2" id="strings">Strings</h2>
+<p class="typo-para">Strings are represented by the type <code>String</code>. Strings are immutable.
+    Elements of a string are characters that can be accessed by the indexing operation: <code>s[i]</code>.
+    A string can be iterated over with a <em class="keyword">for</em>-loop:</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">fun main() {
+val str = "abcd"
+//sampleStart
+for (c in str) {
+    println(c)
+}
+//sampleEnd
+}
+</code></pre>
+</div>
+<p class="typo-para">You can concatenate strings using the <code>+</code> operator. This also works for concatenating strings with values of other types, as long as the first element in the expression is a string:</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">fun main() {
+//sampleStart
+val s = "abc" + 1
+println(s + "def")
+//sampleEnd
+}
+</code></pre>
+</div>
+<p class="typo-para">Note that in most cases using string templates or raw strings is preferable to string concatenation.</p>
+<h3 class="typo-header typo-h3" id="string-literals">String literals</h3>
+<p class="typo-para">Kotlin has two types of string literals: escaped strings that may have escaped characters in them and raw strings that can contain newlines and arbitrary text. Here's an example of an escaped string:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val s = "Hello, world!\n"
+</code></pre>
+</div>
+<p class="typo-para">Escaping is done in the conventional way, with a backslash. See Characters above for the list of supported escape sequences.</p>
+<p class="typo-para">A raw string is delimited by a triple quote (<code>"""</code>), contains no escaping and can contain newlines and any other characters:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val text = """
+    for (c in "foo")
+        print(c)
+"""
+</code></pre>
+</div>
+<p class="typo-para">You can remove leading whitespace with <a class="typo-link" href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/trim-margin.html"><code>trimMargin()</code></a> function:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val text = """
+    |Tell me and I forget.
+    |Teach me and I remember.
+    |Involve me and I learn.
+    |(Benjamin Franklin)
+    """.trimMargin()
+</code></pre>
+</div>
+<p class="typo-para">By default <code>|</code> is used as margin prefix, but you can choose another character and pass it as a parameter, like <code>trimMargin("&gt;")</code>.</p>
+<h3 class="typo-header typo-h3" id="string-templates">String templates</h3>
+<p class="typo-para">String literals may contain template expressions, i.e. pieces of code that are evaluated and whose results are concatenated into the string. A template expression starts with a dollar sign ($) and consists of either a simple name:</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">fun main() {
+//sampleStart
+    val i = 10
+    println("i = $i") // prints "i = 10"
+//sampleEnd
+}
+</code></pre>
+</div>
+<p class="typo-para">or an arbitrary expression in curly braces:</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">fun main() {
+//sampleStart
+    val s = "abc"
+    println("$s.length is ${s.length}") // prints "abc.length is 3"
+//sampleEnd
+}
+</code></pre>
+</div>
+<p class="typo-para">Templates are supported both inside raw strings and inside escaped strings. If you need to represent a literal <code>$</code> character in a raw string (which doesn't support backslash escaping), you can use the following syntax:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val price = """
+${'$'}9.99
+"""
+</code></pre>
+</div>
+
+<p><br><br></p>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Data Classes</title>
+</head>
+<body>
+
+<h1 class="typo-header typo-h1" id="data-classes">Data Classes</h1>
+<p class="typo-para">We frequently create classes whose main purpose is to hold data. In such a class some standard functionality and utility functions are often mechanically derivable from the data. In Kotlin, this is called a <em>data class</em> and is marked as <code>data</code>:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">data class User(val name: String, val age: Int)
+</code></pre>
+</div>
+<p class="typo-para">The compiler automatically derives the following members from all properties declared in the primary constructor:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item"><code>equals()</code>/<code>hashCode()</code> pair;</li>
+    <li class="typo-list__item"><code>toString()</code> of the form <code>"User(name=John, age=42)"</code>;</li>
+    <li class="typo-list__item"><code>componentN()</code> functions corresponding to the properties in their order of declaration;</li>
+    <li class="typo-list__item"><code>copy()</code> function (see below).</li>
+</ul>
+<p class="typo-para">To ensure consistency and meaningful behavior of the generated code, data classes have to fulfill the following requirements:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">The primary constructor needs to have at least one parameter;</li>
+    <li class="typo-list__item">All primary constructor parameters need to be marked as <code>val</code> or <code>var</code>;</li>
+    <li class="typo-list__item">Data classes cannot be abstract, open, sealed or inner;</li>
+    <li class="typo-list__item">(before 1.1) Data classes may only implement interfaces.</li>
+</ul>
+<p class="typo-para">Additionally, the members generation follows these rules with regard to the members inheritance:</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">If there are explicit implementations of <code>equals()</code>, <code>hashCode()</code> or <code>toString()</code> in the data class body or<em class="keyword">final</em> implementations in a superclass, then these functions are not generated, and the existing implementations are used;</li>
+    <li class="typo-list__item">If a supertype has the <code>componentN()</code> functions that are <em class="keyword">open</em> and return compatible types, the corresponding functions are generated for the data class and override those of the supertype. If the functions of the supertype cannot be overridden due to incompatible signatures or being final, an error is reported;</li>
+    <li class="typo-list__item">Deriving a data class from a type that already has a <code>copy(...)</code> function with a matching signature is deprecated in Kotlin 1.2 and is prohibited in Kotlin 1.3.</li>
+    <li class="typo-list__item">Providing explicit implementations for the <code>componentN()</code> and <code>copy()</code> functions is not allowed.</li>
+</ul>
+<p class="typo-para">Since 1.1, data classes may extend other classes (see Sealed classes for examples).</p>
+<p class="typo-para">On the JVM, if the generated class needs to have a parameterless constructor, default values for all properties have to be specified (see Constructors).</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">data class User(val name: String = "", val age: Int = 0)
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="properties-declared-in-the-class-body">Properties Declared in the Class Body</h2>
+<p class="typo-para">Note that the compiler only uses the properties defined inside the primary constructor for the automatically generated functions. To exclude a property from the generated implementations, declare it inside the class body:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">data class Person(val name: String) {
+    var age: Int = 0
+}
+</code></pre>
+</div>
+<p class="typo-para">Only the property <code>name</code> will be used inside the <code>toString()</code>, <code>equals()</code>, <code>hashCode()</code>, and <code>copy()</code> implementations, and there will only be one component function <code>component1()</code>. While two <code>Person</code> objects can have different ages, they will be treated as equal.</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">data class Person(val name: String) {
+    var age: Int = 0
+}
+fun main() {
+//sampleStart
+    val person1 = Person("John")
+    val person2 = Person("John")
+    person1.age = 10
+    person2.age = 20
+//sampleEnd
+    println("person1 == person2: ${person1 == person2}")
+    println("person1 with age ${person1.age}: ${person1}")
+    println("person2 with age ${person2.age}: ${person2}")
+}
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="copying">Copying</h2>
+<p class="typo-para">It's often the case that we need to copy an object altering <em>some</em> of its properties, but keeping the rest unchanged. This is what <code>copy()</code> function is generated for. For the <code>User</code> class above, its implementation would be as follows:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun copy(name: String = this.name, age: Int = this.age) = User(name, age)
+</code></pre>
+</div>
+<p class="typo-para">This allows us to write:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val jack = User(name = "Jack", age = 1)
+val olderJack = jack.copy(age = 2)
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="data-classes-and-destructuring-declarations">Data Classes and Destructuring Declarations</h2>
+<p class="typo-para"><em>Component functions</em> generated for data classes enable their use in destructuring declarations:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val jane = User("Jane", 35)
+val (name, age) = jane
+println("$name, $age years of age") // prints "Jane, 35 years of age"
+</code></pre>
+</div>
+<h2 class="typo-header typo-h2" id="standard-data-classes">Standard Data Classes</h2>
+<p class="typo-para">The standard library provides <code>Pair</code> and <code>Triple</code>. In most cases, though, named data classes are a better design choice, because they make the code more readable by providing meaningful names for properties.</p>
+
+<p><br><br></p>
+</body>
+</html>

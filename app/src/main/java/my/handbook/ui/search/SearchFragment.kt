@@ -53,8 +53,9 @@ class SearchFragment : Fragment(), SearchResultAdapter.SearchResultAdapterListen
     }
 
     override fun onSearchResultClicked(cardView: View, file: String, text: String) {
+        val searchResultText = text.replace("<b>", "").replace("</b>", "")
         findNavController().navigate(
-            SearchFragmentDirections.actionSearchFragmentToReadFragment(file, text)
+            SearchFragmentDirections.actionSearchFragmentToReadFragment(file, searchResultText)
         )
     }
 

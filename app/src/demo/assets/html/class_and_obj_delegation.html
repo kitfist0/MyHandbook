@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Delegation</title>
+</head>
+<body>
+
+<h1 class="typo-header typo-h1" id="delegation">Delegation</h1>
+<h2 class="typo-header typo-h2" id="property-delegation">Property Delegation</h2>
+<p class="typo-para">Delegated properties are described on a separate page: Delegated Properties.</p>
+<h2 class="typo-header typo-h2" id="implementation-by-delegation">Implementation by Delegation</h2>
+<p class="typo-para">The <a class="typo-link" href="https://en.wikipedia.org/wiki/Delegation_pattern">Delegation pattern</a> has proven to be a good alternative to implementation inheritance, and Kotlin supports it natively requiring zero boilerplate code. A class <code>Derived</code> can implement an interface <code>Base</code> by delegating all of its public members to a specified object:</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">interface Base {
+    fun print()
+}
+
+class BaseImpl(val x: Int) : Base {
+    override fun print() { print(x) }
+}
+
+class Derived(b: Base) : Base by b
+
+fun main() {
+    val b = BaseImpl(10)
+    Derived(b).print()
+}
+</code></pre>
+</div>
+<p class="typo-para">The <em class="keyword">by</em>-clause in the supertype list for <code>Derived</code> indicates that <code>b</code> will be stored internally in objects of <code>Derived</code> and the compiler will generate all the methods of <code>Base</code> that forward to <code>b</code>.</p>
+<h3 class="typo-header typo-h3" id="overriding-a-member-of-an-interface-implemented-by-delegation">Overriding a member of an interface implemented by delegation</h3>
+<p class="typo-para">Overrides work as you might expect: the compiler will use your <code>override</code>implementations instead of those in the delegate object. If we were to add <code>override fun printMessage() { print("abc") }</code> to<code>Derived</code>, the program would print "abc" instead of "10" when <code>printMessage</code> is called:</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">interface Base {
+    fun printMessage()
+    fun printMessageLine()
+}
+
+class BaseImpl(val x: Int) : Base {
+    override fun printMessage() { print(x) }
+    override fun printMessageLine() { println(x) }
+}
+
+class Derived(b: Base) : Base by b {
+    override fun printMessage() { print("abc") }
+}
+
+fun main() {
+    val b = BaseImpl(10)
+    Derived(b).printMessage()
+    Derived(b).printMessageLine()
+}
+</code></pre>
+</div>
+<p class="typo-para">Note, however, that members overridden in this way do not get called from the members of the delegate object, which can only access its own implementations of the interface members:</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">interface Base {
+    val message: String
+    fun print()
+}
+
+class BaseImpl(val x: Int) : Base {
+    override val message = "BaseImpl: x = $x"
+    override fun print() { println(message) }
+}
+
+class Derived(b: Base) : Base by b {
+    // This property is not accessed from b's implementation of `print`
+    override val message = "Message of Derived"
+}
+
+fun main() {
+    val b = BaseImpl(10)
+    val derived = Derived(b)
+    derived.print()
+    println(derived.message)
+}
+</code></pre>
+</div>
+
+<p><br><br></p>
+</body>
+</html>

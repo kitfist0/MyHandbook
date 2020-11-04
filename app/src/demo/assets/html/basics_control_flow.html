@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Control Flow: if, when, for, while</title>
+</head>
+<body>
+
+<h1 class="typo-header typo-h1" id="control-flow-if-when-for-while">Control Flow: if, when, for, while</h1>
+<h2 class="typo-header typo-h2" id="if-expression">If Expression</h2>
+<p class="typo-para">In Kotlin, <em class="keyword">if</em> is an expression, i.e. it returns a value. Therefore there is no ternary operator (condition ? then : else), because ordinary <em class="keyword">if</em> works fine in this role.</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">// Traditional usage
+var max = a
+if (a &lt; b) max = b
+
+// With else
+var max: Int
+if (a &gt; b) {
+    max = a
+} else {
+    max = b
+}
+
+// As expression
+val max = if (a &gt; b) a else b
+</code></pre>
+</div>
+<p class="typo-para"><em class="keyword">if</em> branches can be blocks, and the last expression is the value of a block:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">val max = if (a &gt; b) {
+    print("Choose a")
+    a
+} else {
+    print("Choose b")
+    b
+}
+</code></pre>
+</div>
+<p class="typo-para">If you're using <em class="keyword">if</em> as an expression rather than a statement (for example, returning its value or assigning it to a variable), the expression is required to have an <code>else</code> branch.</p>
+<p class="typo-para">See the grammar for <em class="keyword">if</em>.</p>
+<h2 class="typo-header typo-h2" id="when-expression">When Expression</h2>
+<p class="typo-para">The <em class="keyword">when</em> expression replaces the switch statement in C-like languages. In the simplest form it looks like this</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">when (x) {
+    1 -&gt; print("x == 1")
+    2 -&gt; print("x == 2")
+    else -&gt; { // Note the block
+        print("x is neither 1 nor 2")
+    }
+}
+</code></pre>
+</div>
+<p class="typo-para"><em class="keyword">when</em> matches its argument against all branches sequentially until some branch condition is satisfied.<em class="keyword">when</em> can be used either as an expression or as a statement. If it is used as an expression, the value of the satisfied branch becomes the value of the overall expression. If it is used as a statement, the values of individual branches are ignored. (Just like with <em class="keyword">if</em>, each branch can be a block, and its value is the value of the last expression in the block.)</p>
+<p class="typo-para">The <em class="keyword">else</em> branch is evaluated if none of the other branch conditions are satisfied. If <em class="keyword">when</em> is used as an expression, the <em class="keyword">else</em> branch is mandatory, unless the compiler can prove that all possible cases are covered with branch conditions (as, for example, with <em class="keyword">enum</em> class entries and <em class="keyword">sealed</em> class subtypes).</p>
+<p class="typo-para">If many cases should be handled in the same way, the branch conditions may be combined with a comma:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">when (x) {
+    0, 1 -&gt; print("x == 0 or x == 1")
+    else -&gt; print("otherwise")
+}
+</code></pre>
+</div>
+<p class="typo-para">We can use arbitrary expressions (not only constants) as branch conditions</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">when (x) {
+    parseInt(s) -&gt; print("s encodes x")
+    else -&gt; print("s does not encode x")
+}
+</code></pre>
+</div>
+<p class="typo-para">We can also check a value for being <em class="keyword">in</em> or <em class="keyword">!in</em> a range or a collection:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">when (x) {
+    in 1..10 -&gt; print("x is in the range")
+    in validNumbers -&gt; print("x is valid")
+    !in 10..20 -&gt; print("x is outside the range")
+    else -&gt; print("none of the above")
+}
+</code></pre>
+</div>
+<p class="typo-para">Another possibility is to check that a value <em class="keyword">is</em> or <em class="keyword">!is</em> of a particular type. Note that, due to smart casts, you can access the methods and properties of the type without any extra checks.</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun hasPrefix(x: Any) = when(x) {
+    is String -&gt; x.startsWith("prefix")
+    else -&gt; false
+}
+</code></pre>
+</div>
+<p class="typo-para"><em class="keyword">when</em> can also be used as a replacement for an <em class="keyword">if</em>-<em class="keyword">else</em> <em class="keyword">if</em> chain. If no argument is supplied, the branch conditions are simply boolean expressions, and a branch is executed when its condition is true:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">when {
+    x.isOdd() -&gt; print("x is odd")
+    y.isEven() -&gt; print("y is even")
+    else -&gt; print("x+y is even.")
+}
+</code></pre>
+</div>
+<p class="typo-para">Since Kotlin 1.3, it is possible to capture <em class="keyword">when</em> subject in a variable using following syntax:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun Request.getBody() =
+        when (val response = executeRequest()) {
+            is Success -&gt; response.body
+            is HttpError -&gt; throw HttpException(response.status)
+        }
+</code></pre>
+</div>
+<p class="typo-para">Scope of variable, introduced in <em class="keyword">when</em> subject, is restricted to <em class="keyword">when</em> body.</p>
+<p class="typo-para">See the grammar for <em class="keyword">when</em>.</p>
+<h2 class="typo-header typo-h2" id="for-loops">For Loops</h2>
+<p class="typo-para"><em class="keyword">for</em> loop iterates through anything that provides an iterator. This is equivalent to the <code>foreach</code> loop in languages like C#. The syntax is as follows:</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">for (item in collection) print(item)
+</code></pre>
+</div>
+<p class="typo-para">The body can be a block.</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">for (item: Int in ints) {
+    // ...
+}
+</code></pre>
+</div>
+<p class="typo-para">As mentioned before, <em class="keyword">for</em> iterates through anything that provides an iterator, i.e.</p>
+<ul class="typo-list typo-list_type_simple">
+    <li class="typo-list__item">has a member- or extension-function <code>iterator()</code>, whose return type
+        <ul class="typo-list typo-list_type_simple">
+            <li class="typo-list__item">has a member- or extension-function <code>next()</code>, and</li>
+            <li class="typo-list__item">has a member- or extension-function <code>hasNext()</code> that returns <code>Boolean</code>.</li>
+        </ul>
+    </li>
+</ul>
+<p class="typo-para">All of these three functions need to be marked as <code>operator</code>.</p>
+<p class="typo-para">To iterate over a range of numbers, use a range expression:</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">fun main() {
+//sampleStart
+    for (i in 1..3) {
+        println(i)
+    }
+    for (i in 6 downTo 0 step 2) {
+        println(i)
+    }
+//sampleEnd
+}
+</code></pre>
+</div>
+<p class="typo-para">A <code>for</code> loop over a range or an array is compiled to an index-based loop that does not create an iterator object.</p>
+<p class="typo-para">If you want to iterate through an array or a list with an index, you can do it this way:</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">fun main() {
+val array = arrayOf("a", "b", "c")
+//sampleStart
+    for (i in array.indices) {
+        println(array[i])
+    }
+//sampleEnd
+}
+</code></pre>
+</div>
+<p class="typo-para">Alternatively, you can use the <code>withIndex</code> library function:</p>
+<div class="sample" theme="idea">
+<pre><code class="language-kotlin">fun main() {
+    val array = arrayOf("a", "b", "c")
+//sampleStart
+    for ((index, value) in array.withIndex()) {
+        println("the element at $index is $value")
+    }
+//sampleEnd
+}
+</code></pre>
+</div>
+<p class="typo-para">See the grammar for <em class="keyword">for</em>.</p>
+<h2 class="typo-header typo-h2" id="while-loops">While Loops</h2>
+<p class="typo-para"><em class="keyword">while</em> and <em class="keyword">do</em>..<em class="keyword">while</em> work as usual</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">while (x &gt; 0) {
+    x--
+}
+
+do {
+    val y = retrieveData()
+} while (y != null) // y is visible here!
+</code></pre>
+</div>
+<p class="typo-para">See the grammar for <em class="keyword">while</em>.</p>
+<h2 class="typo-header typo-h2" id="break-and-continue-in-loops">Break and continue in loops</h2>
+<p class="typo-para">Kotlin supports traditional <em class="keyword">break</em> and <em class="keyword">continue</em> operators in loops. See Returns and jumps.</p>
+
+<p><br><br></p>
+</body>
+</html>

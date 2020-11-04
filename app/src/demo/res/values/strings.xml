@@ -1,0 +1,7 @@
+<resources>
+
+    <string name="section_1">Basics</string>
+    <string name="section_2">Classes and Objects</string>
+    <string name="section_3">Functions and Lambdas</string>
+
+</resources>

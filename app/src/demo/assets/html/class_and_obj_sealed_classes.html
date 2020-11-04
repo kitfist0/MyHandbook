@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Sealed Classes</title>
+</head>
+<body>
+
+<h1 class="typo-header typo-h1" id="sealed-classes">Sealed Classes</h1>
+<p class="typo-para">Sealed classes are used for representing restricted class hierarchies, when a value can have one of the types from a limited set, but cannot have any other type. They are, in a sense, an extension of enum classes: the set of values for an enum type is also restricted, but each enum constant exists only as a single instance, whereas a subclass of a sealed class can have multiple instances which can contain state.</p>
+<p class="typo-para">To declare a sealed class, you put the <code>sealed</code> modifier before the name of the class. A sealed class can have subclasses, but all of them must be declared in the same file as the sealed class itself. (Before Kotlin 1.1, the rules were even more strict: classes had to be nested inside the declaration of the sealed class).</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">sealed class Expr
+data class Const(val number: Double) : Expr()
+data class Sum(val e1: Expr, val e2: Expr) : Expr()
+object NotANumber : Expr()
+</code></pre>
+</div>
+<p class="typo-para">(The example above uses one additional new feature of Kotlin 1.1: the possibility for data classes to extend other classes, including sealed classes.)</p>
+<p class="typo-para">A sealed class is abstract by itself, it cannot be instantiated directly and can have <em class="keyword">abstract</em> members.</p>
+<p class="typo-para">Sealed classes are not allowed to have non-<em class="keyword">private</em> constructors (their constructors are <em class="keyword">private</em> by default).</p>
+<p class="typo-para">Note that classes which extend subclasses of a sealed class (indirect inheritors) can be placed anywhere, not necessarily in the same file.</p>
+<p class="typo-para">The key benefit of using sealed classes comes into play when you use them in a <code>when</code> expression. If it's possible to verify that the statement covers all cases, you don't need to add an <code>else</code> clause to the statement. However, this works only if you use <code>when</code> as an expression (using the result) and not as a statement.</p>
+<div class="sample" data-highlight-only="" theme="idea">
+<pre><code class="language-kotlin">fun eval(expr: Expr): Double = when(expr) {
+    is Const -&gt; expr.number
+    is Sum -&gt; eval(expr.e1) + eval(expr.e2)
+    NotANumber -&gt; Double.NaN
+    // the `else` clause is not required because we've covered all the cases
+}
+</code></pre>
+</div>
+
+<p><br><br></p>
+</body>
+</html>

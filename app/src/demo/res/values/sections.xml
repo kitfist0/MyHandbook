@@ -1,0 +1,9 @@
+<resources>
+
+    <string-array name="section_names">
+        <item>@string/section_1</item>
+        <item>@string/section_2</item>
+        <item>@string/section_3</item>
+    </string-array>
+
+</resources>

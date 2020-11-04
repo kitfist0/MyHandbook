@@ -39,7 +39,7 @@ android {
             applicationIdSuffix ".demo"
             versionNameSuffix "-demo"
 
-            buildConfigField "String", "ACTUAL_DB_FILE_NAME", '"handbook.db"'
+            buildConfigField "String", "ACTUAL_DB_FILE_NAME", '"handbook2020nov04.db"'
         }
         math {
             dimension "version"
