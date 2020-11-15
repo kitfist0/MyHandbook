@@ -13,4 +13,6 @@
 
     <dimen name="chip_icon_diameter">32dp</dimen>
 
+    <dimen name="drawer_item_height">56dp</dimen>
+
 </resources>

@@ -40,8 +40,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:sectionText="@{item.section}"
+                app:sectionTextColor="@{item.section}"
                 tools:text="@string/section_1"
-                tools:textColor="@color/section_3_color"/>
+                tools:textColor="?attr/colorPrimary"/>
 
             <TextView
                 android:id="@+id/title_text_view"

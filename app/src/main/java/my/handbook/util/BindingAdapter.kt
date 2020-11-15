@@ -10,12 +10,34 @@ import android.view.ViewGroup
 import android.view.WindowInsets
 import android.widget.EditText
 import android.widget.TextView
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import my.handbook.R
+import my.handbook.data.db.entity.Section
 
 @BindingAdapter("sectionText")
 fun TextView.bindSectionText(section: Int?) {
-    setTextColor(context.resources.getSectionColorRes(section))
     text = context.resources.getSectionNameStringRes(section)
+}
+
+@BindingAdapter("sectionDrawable")
+fun TextView.bindSectionDrawable(section: Section?) {
+    when (section?.selected) {
+        true -> {
+            val drawable = ContextCompat.getDrawable(context, R.drawable.ic_round_dot)
+            drawable?.setTint(context.resources.getSectionColor(section.id))
+            setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
+        }
+        false -> {
+            setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_twotone_dot, 0, 0, 0)
+        }
+    }
+}
+
+@BindingAdapter("sectionTextColor")
+fun TextView.bindSectionTextColor(section: Int?) {
+    setTextColor(context.resources.getSectionColor(section))
 }
 
 @Suppress("DEPRECATION")
@@ -26,6 +48,31 @@ fun TextView.bindTextSnippet(snippet: String) {
     } else {
         Html.fromHtml(snippet)
     }
+}
+
+@BindingAdapter(
+    "drawableStart",
+    "drawableLeft",
+    "drawableTop",
+    "drawableEnd",
+    "drawableRight",
+    "drawableBottom",
+    requireAll = false
+)
+fun TextView.bindDrawables(
+    @DrawableRes drawableStart: Int? = null,
+    @DrawableRes drawableLeft: Int? = null,
+    @DrawableRes drawableTop: Int? = null,
+    @DrawableRes drawableEnd: Int? = null,
+    @DrawableRes drawableRight: Int? = null,
+    @DrawableRes drawableBottom: Int? = null
+) {
+    setCompoundDrawablesWithIntrinsicBounds(
+        context.getDrawableOrNull(drawableStart ?: drawableLeft),
+        context.getDrawableOrNull(drawableTop),
+        context.getDrawableOrNull(drawableEnd ?: drawableRight),
+        context.getDrawableOrNull(drawableBottom)
+    )
 }
 
 @BindingAdapter("loadingAnimation")

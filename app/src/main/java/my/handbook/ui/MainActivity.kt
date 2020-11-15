@@ -11,6 +11,9 @@ import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import my.handbook.R
 import my.handbook.databinding.ActivityMainBinding
+import my.handbook.ui.drawer.DrawerFragment
+import my.handbook.ui.drawer.HalfClockwiseRotateSlideAction
+import my.handbook.ui.drawer.ShowHideFabStateAction
 import my.handbook.ui.search.SearchFragmentDirections
 import my.handbook.util.contentView
 
@@ -18,6 +21,9 @@ import my.handbook.util.contentView
 class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
 
     private val binding: ActivityMainBinding by contentView(R.layout.activity_main)
+    private val bottomDrawer: DrawerFragment by lazy(LazyThreadSafetyMode.NONE) {
+        supportFragmentManager.findFragmentById(R.id.bottom_nav_drawer) as DrawerFragment
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +64,17 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     SearchFragmentDirections.actionGlobalSearchFragment()
                 )
             }
+        }
+
+        bottomDrawer.apply {
+            addOnSlideAction(HalfClockwiseRotateSlideAction(binding.bottomAppBarChevron))
+//            addOnSlideAction(AlphaSlideAction(binding.bottomAppBarTitle, true))
+            addOnStateChangedAction(ShowHideFabStateAction(binding.fab))
+        }
+
+        // Set up the BottomNavigationDrawer's open/close affordance
+        binding.bottomAppBarContentContainer.setOnClickListener {
+            bottomDrawer.toggle()
         }
     }
 

@@ -50,6 +50,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:sectionText="@{item.section}"
+                    app:sectionTextColor="@{item.section}"
                     tools:text="@string/section_2"
                     tools:textColor="?attr/colorPrimary"/>
 

@@ -4,5 +4,9 @@
     <string name="search">Search</string>
     <string name="fab_search_content_description">Search paragraph</string>
     <string name="default_section_name">Section#%s</string>
+    <string name="about">About</string>
+    <string name="github">GitHub</string>
+    <string name="license">License</string>
+    <string name="rate_app">Rate app</string>
 
 </resources>

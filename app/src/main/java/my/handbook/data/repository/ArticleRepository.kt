@@ -10,7 +10,7 @@ class ArticleRepository @Inject constructor(
     private val articleDao: ArticleDao
 ) {
 
-    suspend fun getArticles() = articleDao.getArticles()
+    suspend fun getArticles(sections: List<Int>) = articleDao.getArticles(sections)
 
     suspend fun changeFavorite(article: Article) {
         article.favorite = article.favorite.not()

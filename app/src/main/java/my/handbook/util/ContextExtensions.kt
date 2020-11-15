@@ -6,12 +6,15 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.Interpolator
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.use
 
 /**
@@ -37,6 +40,10 @@ fun Context.themeInterpolator(@AttrRes attr: Int): Interpolator {
             it.getResourceId(0, android.R.interpolator.fast_out_slow_in)
         }
     )
+}
+
+fun Context.getDrawableOrNull(@DrawableRes id: Int?): Drawable? {
+    return if (id == null || id == 0) null else AppCompatResources.getDrawable(this, id)
 }
 
 fun Context.isDarkThemeEnabled(): Boolean {

@@ -3,18 +3,22 @@ package my.handbook.util
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.Color
+import androidx.annotation.ColorInt
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import my.handbook.BuildConfig
 import my.handbook.R
 
-fun SharedPreferences.dbRecreationRequired(): Boolean =
-    if (contains(BuildConfig.ACTUAL_DB_FILE_NAME)) {
+fun SharedPreferences.dbRecreationRequired(dbFileName: String): Boolean =
+    if (contains(dbFileName)) {
         false
     } else {
-        edit().putBoolean(BuildConfig.ACTUAL_DB_FILE_NAME, true).apply()
+        edit().putBoolean(dbFileName, true).apply()
         true
     }
 
-fun Resources.getSectionColorRes(section: Int?) = section?.sectionNumberToIndex()
+@ColorInt
+fun Resources.getSectionColor(section: Int?) = section?.sectionNumberToIndex()
     ?.let {
         val colors = getStringArray(R.array.section_colors)
         Color.parseColor(colors[it % colors.size])
@@ -33,4 +37,3 @@ fun Resources.getSectionNameStringRes(section: Int?): String = section?.sectionN
     ?: ""
 
 private fun Int.sectionNumberToIndex() = this - 1
-

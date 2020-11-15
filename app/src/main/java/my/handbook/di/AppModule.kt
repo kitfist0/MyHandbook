@@ -10,10 +10,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
-import my.handbook.BuildConfig
 import my.handbook.data.db.AppDatabase
 import my.handbook.data.db.dao.ArticleDao
 import my.handbook.data.db.dao.ParagraphDao
+import my.handbook.data.db.dao.SectionDao
 import my.handbook.util.dbRecreationRequired
 import javax.inject.Singleton
 
@@ -30,11 +30,19 @@ object AppModule {
     @Provides
     @Singleton
     fun provideDatabase(app: Application, preferences: SharedPreferences): AppDatabase {
-        return Room.databaseBuilder(app, AppDatabase::class.java, BuildConfig.APP_DB_NAME).apply {
-            if (preferences.dbRecreationRequired()) {
+        return Room.databaseBuilder(app, AppDatabase::class.java, "app_handbook.db").apply {
+            val dbFileName = app.assets.list("database")
+                ?.let { list ->
+                    if (list.size != 1) {
+                        throw RuntimeException("Database folder is empty or contains more than 1 file")
+                    }
+                    list[0]
+                }
+                ?: throw RuntimeException("Database folder does not exist")
+            if (preferences.dbRecreationRequired(dbFileName)) {
                 fallbackToDestructiveMigration()
             }
-            createFromAsset("database/${BuildConfig.ACTUAL_DB_FILE_NAME}")
+            createFromAsset("database/$dbFileName")
             addCallback(object : RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
@@ -55,5 +63,11 @@ object AppModule {
     @Singleton
     fun provideParagraphDao(db: AppDatabase): ParagraphDao {
         return db.paragraphDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideSectionDao(db: AppDatabase): SectionDao {
+        return db.sectionDao()
     }
 }

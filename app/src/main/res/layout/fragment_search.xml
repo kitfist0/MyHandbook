@@ -41,6 +41,7 @@
                     android:imeOptions="flagNoExtractUi|actionSearch"
                     android:inputType="textNoSuggestions"
                     android:drawableEnd="@drawable/avd_progress_circular"
+                    android:importantForAutofill="no"
                     app:loadingAnimation="@{loading}"/>
 
             </FrameLayout>
@@ -60,7 +61,7 @@
             android:paddingTop="@dimen/grid_0_25"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_search_result"
-            tools:itemCount="6" />
+            tools:itemCount="6"/>
 
     </LinearLayout>
 
