@@ -14,7 +14,7 @@
     </data>
 
     <CheckedTextView
-        android:id="@+id/nav_item_title"
+        android:id="@+id/section_item_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_item_height"
         android:paddingLeft="@dimen/grid_4"

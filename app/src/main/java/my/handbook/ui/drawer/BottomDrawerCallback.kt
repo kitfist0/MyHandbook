@@ -3,9 +3,9 @@ package my.handbook.ui.drawer
 import android.annotation.SuppressLint
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.google.android.material.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import my.handbook.util.normalize
+import my.handbook.R
+import my.handbook.common.normalize
 import kotlin.math.max
 
 /**

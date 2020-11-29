@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import my.handbook.databinding.ItemDrawerDividerBinding
 import my.handbook.databinding.ItemDrawerLinkBinding
+import my.handbook.databinding.ItemDrawerProductBinding
 import my.handbook.databinding.ItemDrawerSectionBinding
 
 class DrawerAdapter(
@@ -17,11 +18,13 @@ class DrawerAdapter(
         private const val VIEW_TYPE_SECTION = 1
         private const val VIEW_TYPE_DIVIDER = 2
         private const val VIEW_TYPE_LINK = 3
+        private const val VIEW_TYPE_PRODUCT = 4
     }
 
     interface DrawerAdapterListener {
         fun onSectionClicked(item: DrawerItem.SectionItem)
         fun onLinkClicked(item: DrawerItem.LinkItem)
+        fun onProductClicked(item: DrawerItem.ProductItem)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -29,6 +32,7 @@ class DrawerAdapter(
             is DrawerItem.SectionItem -> VIEW_TYPE_SECTION
             is DrawerItem.DividerItem -> VIEW_TYPE_DIVIDER
             is DrawerItem.LinkItem -> VIEW_TYPE_LINK
+            is DrawerItem.ProductItem -> VIEW_TYPE_PRODUCT
             else -> throw RuntimeException("Unsupported ItemViewType for obj ${getItem(position)}")
         }
     }
@@ -56,6 +60,14 @@ class DrawerAdapter(
             )
             VIEW_TYPE_LINK -> DrawerItemViewHolder.LinkViewHolder(
                 ItemDrawerLinkBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                ),
+                listener
+            )
+            VIEW_TYPE_PRODUCT -> DrawerItemViewHolder.ProductViewHolder(
+                ItemDrawerProductBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false

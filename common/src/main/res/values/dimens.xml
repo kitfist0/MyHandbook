@@ -6,6 +6,7 @@
     <dimen name="min_icon_target_padding">12dp</dimen>
 
     <dimen name="bottom_app_bar_height">56dp</dimen>
+    <dimen name="bottom_app_bar_height_2x">112dp</dimen>
     <dimen name="bottom_app_bar_fab_cradle_corner_radius">32dp</dimen>
     <dimen name="bottom_app_bar_fab_cradle_margin">8dp</dimen>
 

@@ -3,6 +3,7 @@ package my.handbook.ui.drawer
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.DiffUtil
+import my.handbook.billing.data.db.Product
 import my.handbook.data.db.entity.Section
 
 /**
@@ -24,6 +25,10 @@ sealed class DrawerItem {
         @DrawableRes val iconRes: Int
     ) : DrawerItem()
 
+    data class ProductItem(
+        val product: Product
+    ) : DrawerItem()
+
     object DrawerItemDiff : DiffUtil.ItemCallback<DrawerItem>() {
         override fun areItemsTheSame(
             oldItem: DrawerItem,
@@ -34,6 +39,8 @@ sealed class DrawerItem {
                     oldItem.section.id == newItem.section.id
                 oldItem is LinkItem && newItem is LinkItem ->
                     oldItem.link == newItem.link
+                oldItem is ProductItem && newItem is ProductItem ->
+                    oldItem.product.sku == newItem.product.sku
                 else -> true
             }
         }
@@ -43,9 +50,11 @@ sealed class DrawerItem {
         ): Boolean {
             return when {
                 oldItem is SectionItem && newItem is SectionItem ->
-                    oldItem.section.selected == newItem.section.selected
+                    oldItem.section == newItem.section
                 oldItem is LinkItem && newItem is LinkItem ->
                     oldItem == newItem
+                oldItem is ProductItem && newItem is ProductItem ->
+                    oldItem.product == newItem.product
                 else -> true
             }
         }

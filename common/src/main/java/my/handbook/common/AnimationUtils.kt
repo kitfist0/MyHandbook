@@ -1,4 +1,4 @@
-package my.handbook.util
+package my.handbook.common
 
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange

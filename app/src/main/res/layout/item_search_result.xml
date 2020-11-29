@@ -20,7 +20,7 @@
         android:elevation="@dimen/plane_00"
         android:layout_marginVertical="@dimen/grid_0_25"
         android:layout_marginHorizontal="@dimen/grid_0_5"
-        android:onClick="@{(v) -> listener.onSearchResultClicked(v, item.file, item.text)}">
+        android:onClick="@{() -> listener.onSearchResultClicked(item.file, item.text)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

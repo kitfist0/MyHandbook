@@ -10,8 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import my.handbook.common.hideKeyboard
 import my.handbook.databinding.FragmentSearchBinding
-import my.handbook.util.hideKeyboard
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(), SearchResultAdapter.SearchResultAdapterListener {
@@ -24,7 +24,7 @@ class SearchFragment : Fragment(), SearchResultAdapter.SearchResultAdapterListen
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -52,7 +52,7 @@ class SearchFragment : Fragment(), SearchResultAdapter.SearchResultAdapterListen
         }
     }
 
-    override fun onSearchResultClicked(cardView: View, file: String, text: String) {
+    override fun onSearchResultClicked(file: String, text: String) {
         val searchResultText = text.replace("<b>", "").replace("</b>", "")
         findNavController().navigate(
             SearchFragmentDirections.actionSearchFragmentToReadFragment(file, searchResultText)

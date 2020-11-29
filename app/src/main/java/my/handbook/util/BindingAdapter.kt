@@ -4,13 +4,10 @@ import android.graphics.drawable.Animatable
 import android.os.Build
 import android.text.Html
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.WindowInsets
 import android.widget.EditText
 import android.widget.TextView
-import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import my.handbook.R
@@ -50,31 +47,6 @@ fun TextView.bindTextSnippet(snippet: String) {
     }
 }
 
-@BindingAdapter(
-    "drawableStart",
-    "drawableLeft",
-    "drawableTop",
-    "drawableEnd",
-    "drawableRight",
-    "drawableBottom",
-    requireAll = false
-)
-fun TextView.bindDrawables(
-    @DrawableRes drawableStart: Int? = null,
-    @DrawableRes drawableLeft: Int? = null,
-    @DrawableRes drawableTop: Int? = null,
-    @DrawableRes drawableEnd: Int? = null,
-    @DrawableRes drawableRight: Int? = null,
-    @DrawableRes drawableBottom: Int? = null
-) {
-    setCompoundDrawablesWithIntrinsicBounds(
-        context.getDrawableOrNull(drawableStart ?: drawableLeft),
-        context.getDrawableOrNull(drawableTop),
-        context.getDrawableOrNull(drawableEnd ?: drawableRight),
-        context.getDrawableOrNull(drawableBottom)
-    )
-}
-
 @BindingAdapter("loadingAnimation")
 fun EditText.bindLoadingAnimation(loading: Boolean) {
     val drawable = compoundDrawablesRelative[2]
@@ -85,24 +57,6 @@ fun EditText.bindLoadingAnimation(loading: Boolean) {
     } else {
         anim.stop()
         drawable.alpha = 0
-    }
-}
-
-@BindingAdapter("goneIf")
-fun View.bindGoneIf(gone: Boolean) {
-    visibility = if (gone) {
-        GONE
-    } else {
-        VISIBLE
-    }
-}
-
-@BindingAdapter("layoutFullscreen")
-fun View.bindLayoutFullscreen(previousFullscreen: Boolean, fullscreen: Boolean) {
-    if (previousFullscreen != fullscreen && fullscreen) {
-        systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
     }
 }
 

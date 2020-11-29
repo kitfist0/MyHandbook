@@ -4,9 +4,6 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.Color
 import androidx.annotation.ColorInt
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import my.handbook.BuildConfig
 import my.handbook.R
 
 fun SharedPreferences.dbRecreationRequired(dbFileName: String): Boolean =

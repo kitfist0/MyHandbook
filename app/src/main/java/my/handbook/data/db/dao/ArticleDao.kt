@@ -14,8 +14,8 @@ interface ArticleDao {
     @Query("SELECT * FROM articles WHERE section IN (:selectedSections)")
     suspend fun getArticles(selectedSections: List<Int>): List<Article>
 
-    @Query("SELECT * FROM articles WHERE id = :id LIMIT 1")
-    fun getArticleWithId(id: Long): Article
+//    @Query("SELECT * FROM articles WHERE id = :id LIMIT 1")
+//    fun getArticleWithId(id: Long): Article
 
     @Update
     suspend fun update(article: Article)

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="productItem"
+            type="my.handbook.ui.drawer.DrawerItem.ProductItem"/>
+        <variable
+            name="listener"
+            type="my.handbook.ui.drawer.DrawerAdapter.DrawerAdapterListener"/>
+    </data>
+
+    <TextView
+        android:id="@+id/link_item_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/drawer_item_height"
+        android:paddingLeft="@dimen/grid_4"
+        android:paddingRight="@dimen/grid_4"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical|start"
+        android:onClick="@{() -> listener.onProductClicked(productItem)}"
+        android:ellipsize="end"
+        android:lines="1"
+        android:text="@{productItem.product.title}"
+        android:textColor="@color/color_on_primary_surface_emphasis_medium"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:drawablePadding="@dimen/grid_4"
+        app:productIcon="@{productItem.product}"
+        app:drawableTint="@color/color_on_primary_surface_emphasis_medium"
+        tools:text="Link text"/>
+
+</layout>

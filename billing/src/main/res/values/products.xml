@@ -1,0 +1,9 @@
+<resources>
+
+    <string-array name="product_ids">
+        <item>coffee.espresso</item>
+        <item>coffee.cappuccino</item>
+        <item>coffee.latte</item>
+    </string-array>
+
+</resources>
