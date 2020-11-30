@@ -10,7 +10,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import my.handbook.R
-import my.handbook.util.isDarkThemeEnabled
+import my.handbook.common.isDarkThemeEnabled
 
 class ReadFragment : Fragment() {
 

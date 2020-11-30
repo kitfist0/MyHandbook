@@ -1,2 +1,4 @@
+include ':common'
+include ':billing'
 include ':app'
 rootProject.name = "MyHandbook"

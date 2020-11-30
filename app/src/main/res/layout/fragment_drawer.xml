@@ -29,10 +29,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingTop="@dimen/grid_3"
-                android:paddingBottom="@dimen/bottom_app_bar_height"
+                android:paddingBottom="@dimen/bottom_app_bar_height_2x"
                 android:clipToPadding="false"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:orientation="vertical"/>
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         </FrameLayout>
 

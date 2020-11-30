@@ -4,6 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import my.handbook.databinding.ItemDrawerDividerBinding
 import my.handbook.databinding.ItemDrawerLinkBinding
+import my.handbook.databinding.ItemDrawerProductBinding
 import my.handbook.databinding.ItemDrawerSectionBinding
 
 sealed class DrawerItemViewHolder<T : DrawerItem>(
@@ -44,6 +45,20 @@ sealed class DrawerItemViewHolder<T : DrawerItem>(
         override fun bind(item: DrawerItem.LinkItem) {
             binding.run {
                 linkItem = item
+                listener = adapterListener
+                executePendingBindings()
+            }
+        }
+    }
+
+    class ProductViewHolder(
+        private val binding: ItemDrawerProductBinding,
+        private val adapterListener: DrawerAdapter.DrawerAdapterListener
+    ) : DrawerItemViewHolder<DrawerItem.ProductItem>(binding.root) {
+
+        override fun bind(item: DrawerItem.ProductItem) {
+            binding.run {
+                productItem = item
                 listener = adapterListener
                 executePendingBindings()
             }

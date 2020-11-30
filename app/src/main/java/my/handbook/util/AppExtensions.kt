@@ -4,9 +4,6 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.Color
 import androidx.annotation.ColorInt
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import my.handbook.BuildConfig
 import my.handbook.R
 
 fun SharedPreferences.dbRecreationRequired(dbFileName: String): Boolean =
@@ -29,7 +26,7 @@ fun Resources.getSectionNameStringRes(section: Int?): String = section?.sectionN
     ?.let {
         val names = getStringArray(R.array.section_names)
         if (it >= names.size) {
-            getString(R.string.default_section_name).format(section)
+            "Section#$section"
         } else {
             names[it]
         }

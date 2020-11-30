@@ -4,26 +4,27 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.google.android.material.shape.MaterialShapeDrawable
 import dagger.hilt.android.AndroidEntryPoint
 import my.handbook.R
+import my.handbook.billing.util.billingViewModels
+import my.handbook.common.themeColor
 import my.handbook.databinding.FragmentDrawerBinding
-import my.handbook.util.themeColor
 import kotlin.LazyThreadSafetyMode.NONE
 
 @AndroidEntryPoint
 class DrawerFragment : Fragment(), DrawerAdapter.DrawerAdapterListener {
 
-    private val viewModel: DrawerViewModel by viewModels()
+    private val viewModel: DrawerViewModel by billingViewModels()
     private val drawerAdapter = DrawerAdapter(this)
     private lateinit var binding: FragmentDrawerBinding
 
@@ -61,7 +62,7 @@ class DrawerFragment : Fragment(), DrawerAdapter.DrawerAdapterListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentDrawerBinding.inflate(inflater, container, false)
         binding.container.setOnApplyWindowInsetsListener { view, windowInsets ->
             // Record the window's top inset so it can be applied when the bottom sheet is slide up
@@ -77,6 +78,7 @@ class DrawerFragment : Fragment(), DrawerAdapter.DrawerAdapterListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.run {
             container.background = shapeDrawable
 
@@ -102,10 +104,12 @@ class DrawerFragment : Fragment(), DrawerAdapter.DrawerAdapterListener {
             behavior.state = STATE_HIDDEN
 
             drawerRecyclerView.adapter = drawerAdapter
+            drawerRecyclerView.setHasFixedSize(true)
+        }
 
-            viewModel.drawerItems.observe(viewLifecycleOwner) {
-                drawerAdapter.submitList(it)
-            }
+        viewModel.drawerItems.observe(viewLifecycleOwner) {
+            Log.d("DEBUG_TAG", "drawerItems size: ${it?.size}")
+            drawerAdapter.submitList(it)
         }
     }
 
@@ -142,5 +146,9 @@ class DrawerFragment : Fragment(), DrawerAdapter.DrawerAdapterListener {
         close()
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.link))
         startActivity(intent)
+    }
+
+    override fun onProductClicked(item: DrawerItem.ProductItem) {
+        activity?.let { viewModel.purchaseProduct(it, item.product.originalJson) }
     }
 }
