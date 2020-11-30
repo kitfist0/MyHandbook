@@ -25,14 +25,14 @@ class DrawerViewModel @ViewModelInject constructor(
                 iconRes = R.drawable.ic_twotone_grade
             ),
             DrawerItem.LinkItem(
-                link = BuildConfig.GITHUB,
-                titleRes = R.string.github,
-                iconRes = R.drawable.ic_twotone_github
-            ),
-            DrawerItem.LinkItem(
                 link = BuildConfig.LICENSE,
                 titleRes = R.string.license,
                 iconRes = R.drawable.ic_twotone_copyright
+            ),
+            DrawerItem.LinkItem(
+                link = BuildConfig.GITHUB,
+                titleRes = R.string.github,
+                iconRes = R.drawable.ic_twotone_github
             )
         )
         private val coffeeDivider = listOf(DrawerItem.DividerItem(R.string.coffee_for_developers))

@@ -1,9 +1,9 @@
 <resources>
 
     <string-array name="section_names">
-        <item>@string/section_1</item>
-        <item>@string/section_2</item>
-        <item>@string/section_3</item>
+        <item>Мат. анализ</item>
+        <item>Ан. геометрия</item>
+        <item>Теор. вероятностей</item>
     </string-array>
 
 </resources>

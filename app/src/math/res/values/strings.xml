@@ -4,8 +4,10 @@
     <string name="search">Поиск</string>
     <string name="fab_search_content_description">Поиск в приложении</string>
 
-    <string name="section_1">Мат. анализ</string>
-    <string name="section_2">Ан. геометрия</string>
-    <string name="section_3">Теор. вероятностей</string>
+    <string name="about">О приложении</string>
+    <string name="github">ГитХаб</string>
+    <string name="license">Лицензия</string>
+    <string name="rate_app">Оценить</string>
+    <string name="coffee_for_developers">Кофе для разработчиков</string>
 
 </resources>
