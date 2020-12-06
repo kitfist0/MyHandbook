@@ -13,6 +13,9 @@
    .blue {
      color: blue;
    }
+   .gray {
+     color: gray;
+   }
 </style>
 </head>
 <body>
@@ -20,44 +23,42 @@
 <h2><br>2. Матрицы, основные определения, теорема Лапласа</h2>
 
 <h3>2.1 Основные определения</h3>
-<p><b>Матрицей</b> <i>A</i> размерности <i>m×n</i> называется прямоугольная таблица <i>m×n</i> чисел <i>a<sub>ij</sub></i>, где <i>i = 1, ... m</i> и <i>j = 1, ... n</i>:</p>
+<p><b>Матрицей</b> <i>A</i> размерности <i>m×n</i> называется прямоугольная таблица <i>m×n</i> чисел <i>a<sub>ij</sub></i>, где <i>i = 1, … m</i> и <i>j = 1, … n</i>:</p>
 <div align=left>
-    <table>
-        <tr>
-            <td><i>A</i>&nbsp;=</td>
-            <td>
-                <table class="matrix">
-                    <tr>
-                        <td><span class="red"><i>a<sub>11</sub></i></span>&nbsp;</td>
-                        <td><i>a<sub>12</sub></i>&nbsp;</td>
-                        <td>&hellip;&nbsp;</td>
-                        <td><i>a<sub>1n</sub></i></td>
-                    </tr>
-                    <tr>
-                        <td><i>a<sub>21</sub></i>&nbsp;</td>
-                        <td><span class="red"><i>a<sub>22</sub></i></span>&nbsp;</td>
-                        <td>&hellip;&nbsp;</td>
-                        <td><i>a<sub>2n</sub></i></td>
-                    </tr>
-                    <tr>
-                        <td>&hellip;&nbsp;</td>
-                        <td>&hellip;&nbsp;</td>
-                        <td>&hellip;&nbsp;</td>
-                        <td>&hellip;</td>
-                    </tr>
-                    <tr>
-                        <td><i>a<sub>m1</sub></i>&nbsp;</td>
-                        <td><i>a<sub>m2</sub></i>&nbsp;</td>
-                        <td>&hellip;&nbsp;</td>
-                        <td><span class="red"><i>a<sub>mn</sub></i></span></td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+    <table><tr>
+        <td><i>A</i>&nbsp;=</td>
+        <td>
+            <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
+                <tr>
+                    <td><i>a<sub>11</sub></i>&nbsp;</td>
+                    <td><i>a<sub>12</sub></i>&nbsp;</td>
+                    <td>&hellip;&nbsp;</td>
+                    <td><i>a<sub>1n</sub></i></td>
+                </tr>
+                <tr>
+                    <td><i>a<sub>21</sub></i>&nbsp;</td>
+                    <td><i>a<sub>22</sub></i>&nbsp;</td>
+                    <td>&hellip;&nbsp;</td>
+                    <td><i>a<sub>2n</sub></i></td>
+                </tr>
+                <tr>
+                    <td>&hellip;&nbsp;</td>
+                    <td>&hellip;&nbsp;</td>
+                    <td>&hellip;&nbsp;</td>
+                    <td>&hellip;</td>
+                </tr>
+                <tr>
+                    <td><i>a<sub>n1</sub></i>&nbsp;</td>
+                    <td><i>a<sub>n2</sub></i>&nbsp;</td>
+                    <td>&hellip;&nbsp;</td>
+                    <td><i>a<sub>nn</sub></i></td>
+                </tr>
+            </table>
+        </td>
+    </tr></table>
 </div>
 <p>расположенных в <i>m</i> строках и <i>n</i> столбцах. Матрица называется <b>квадратной</b>, если <i>m = n</i>.</p>
-<p>Элементы <i>a₁₁, a₂₂, ... a<sub>mn</sub></i> образуют <b><span class="red">главную диагональ</span></b> матрицы (показана красным на рис. выше), а элементы <i>a<sub>m1</sub>, a<sub>(m−1)2</sub>, ... a<sub>1n</sub></i> – <b>побочную диагональ</b>.</p>
+<p>Элементы <i>a₁₁, a₂₂, … a<sub>mn</sub></i> образуют <b><span class="red">главную диагональ</span></b> матрицы (показана красным на рис. выше), а элементы <i>a<sub>m1</sub>, a<sub>(m−1)2</sub>, … a<sub>1n</sub></i> – <b>побочную диагональ</b>.</p>
 <p>Квадратная матрица, у которой все элементы, кроме элементов главной диагонали равны нулю называется <b>диагональной</b>. Диагональная матрица, у которой каждый элемент главной диагонали равен <i>1</i>, называется <b>единичной</b>. Квадратная матрица называется <b>треугольной</b>, если все элементы, расположенные по одну сторону от главной диагонали равны нулю. Матрица, все элементы которой равны нулю, называется <b>нулевой</b>.</p>
 <p>Матрицы <b>равны</b> между собой, если равны все соответствующие элементы этих матриц.</p>
 <p>Матрица, полученная из данной заменой каждой ее строки столбцом с тем же номером (проще говоря: соответствующие строки меняются с соответствующими столбцами местами), называется матрицей <b>транспонированной</b> к данной. Обозначается <i>Aᵀ</i>. Рассмотрим <b>ПРИМЕР</b> транспонирования матрицы:</p>
@@ -66,7 +67,7 @@
         <tr>
             <td><i>A</i>&nbsp;=</td>
             <td>
-                <table class="matrix">
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr><td><i>1</i>&nbsp;</td><td><i>2</i></td><td>&nbsp;<i>3</i></td></tr>
                     <tr><td><i>4</i>&nbsp;</td><td><i>5</i></td><td>&nbsp;<i>6</i></td></tr>
                     <tr><td><i>7</i>&nbsp;</td><td><i>8</i></td><td>&nbsp;<i>9</i></td></tr>
@@ -74,7 +75,7 @@
             </td>
             <td>,&nbsp;&nbsp;<i>Aᵀ</i>&nbsp;=</td>
             <td>
-                <table>
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr><td><i>1</i>&nbsp;</td><td><i>4</i></td><td>&nbsp;<i>7</i></td></tr>
                     <tr><td><i>2</i>&nbsp;</td><td><i>5</i></td><td>&nbsp;<i>8</i></td></tr>
                     <tr><td><i>3</i>&nbsp;</td><td><i>6</i></td><td>&nbsp;<i>9</i></td></tr>
@@ -100,7 +101,7 @@
                 </table>
             </td>
             <td>
-                <table class="matrix">
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr><td><i>a<sub>11</sub></i>&nbsp;</td><td><i>a<sub>12</sub></i></td><td>&nbsp;<i>a<sub>13</sub></i></td></tr>
                     <tr><td><i>a<sub>21</sub></i>&nbsp;</td><td><i>a<sub>22</sub></i></td><td>&nbsp;<i>a<sub>23</sub></i></td></tr>
                     <tr><td><i>a<sub>31</sub></i>&nbsp;</td><td><i>a<sub>32</sub></i></td><td>&nbsp;<i>a<sub>33</sub></i></td></tr>
@@ -114,7 +115,7 @@
                 </table>
             </td>
             <td>
-                <table class="matrix">
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr><td><i><span class="green">k</span>a<sub>11</sub></i>&nbsp;</td><td><i><span class="green">k</span>a<sub>12</sub></i></td><td>&nbsp;<i><span class="green">k</span>a<sub>13</sub></i></td></tr>
                     <tr><td><i><span class="green">k</span>a<sub>21</sub></i>&nbsp;</td><td><i><span class="green">k</span>a<sub>22</sub></i></td><td>&nbsp;<i><span class="green">k</span>a<sub>23</sub></i></td></tr>
                     <tr><td><i><span class="green">k</span>a<sub>31</sub></i>&nbsp;</td><td><i><span class="green">k</span>a<sub>32</sub></i></td><td>&nbsp;<i><span class="green">k</span>a<sub>33</sub></i></td></tr>
@@ -130,7 +131,7 @@
         <tr>
             <td><i>A</i>&nbsp;=</td>
             <td>
-                <table class="matrix">
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr><td><i>a<sub>11</sub></i>&nbsp;</td><td><i>a<sub>12</sub></i></td><td>&nbsp;<i>a<sub>13</sub></i></td></tr>
                     <tr><td><i>a<sub>21</sub></i>&nbsp;</td><td><i>a<sub>22</sub></i></td><td>&nbsp;<i>a<sub>23</sub></i></td></tr>
                     <tr><td><i>a<sub>31</sub></i>&nbsp;</td><td><i>a<sub>32</sub></i></td><td>&nbsp;<i>a<sub>33</sub></i></td></tr>
@@ -138,7 +139,7 @@
             </td>
             <td>,&nbsp;&nbsp;<i>B</i>&nbsp;=</td>
             <td>
-                <table class="matrix">
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr><td><i>b<sub>11</sub></i>&nbsp;</td><td><i>b<sub>12</sub></i></td><td>&nbsp;<i>b<sub>13</sub></i></td></tr>
                     <tr><td><i>b<sub>21</sub></i>&nbsp;</td><td><i>b<sub>22</sub></i></td><td>&nbsp;<i>b<sub>23</sub></i></td></tr>
                     <tr><td><i>b<sub>31</sub></i>&nbsp;</td><td><i>b<sub>32</sub></i></td><td>&nbsp;<i>b<sub>33</sub></i></td></tr>
@@ -150,12 +151,12 @@
 <div align=left>
     <table>
         <tr>
-            <td><i>A + B</i>&nbsp;=</td>
+            <td><i>A&nbsp;+&nbsp;B</i>&nbsp;=</td>
             <td>
-                <table class="matrix">
-                    <tr><td><i>a<sub>11</sub> + b<sub>11</sub></i>&nbsp;</td><td><i>a<sub>12</sub> + b<sub>12</sub></i></td><td>&nbsp;<i>a<sub>13</sub> + b<sub>13</sub></i></td></tr>
-                    <tr><td><i>a<sub>21</sub> + b<sub>21</sub></i>&nbsp;</td><td><i>a<sub>22</sub> + b<sub>22</sub></i></td><td>&nbsp;<i>a<sub>23</sub> + b<sub>23</sub></i></td></tr>
-                    <tr><td><i>a<sub>31</sub> + b<sub>31</sub></i>&nbsp;</td><td><i>a<sub>32</sub> + b<sub>32</sub></i></td><td>&nbsp;<i>a<sub>33</sub> + b<sub>33</sub></i></td></tr>
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
+                    <tr><td><i>a<sub>11</sub>+b<sub>11</sub></i>&nbsp;</td><td><i>a<sub>12</sub>+b<sub>12</sub></i></td><td>&nbsp;<i>a<sub>13</sub>+b<sub>13</sub></i></td></tr>
+                    <tr><td><i>a<sub>21</sub>+b<sub>21</sub></i>&nbsp;</td><td><i>a<sub>22</sub>+b<sub>22</sub></i></td><td>&nbsp;<i>a<sub>23</sub>+b<sub>23</sub></i></td></tr>
+                    <tr><td><i>a<sub>31</sub>+b<sub>31</sub></i>&nbsp;</td><td><i>a<sub>32</sub>+b<sub>32</sub></i></td><td>&nbsp;<i>a<sub>33</sub>+b<sub>33</sub></i></td></tr>
                 </table>
             </td>
         </tr>
@@ -170,11 +171,10 @@
 <p><i>k ⋅ (A + B) = k ⋅ A + k ⋅ B</i></p>
 <p>5) <b>Произведение</b> матриц определяется следующим образом. Пусть заданы две матрицы <i>A</i> (размерности <i>m×n</i>) и <i>B</i> (размерности <i>n×k</i>), причем <b>число столбцов первой из них равно числу строк второй</b>:</p>
 <div align=left>
-    <table>
-        <tr>
+    <table><tr>
         <td><i>A<sub>m×n</sub></i>&nbsp;=</td>
         <td>
-            <table class="matrix">
+            <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                 <tr>
                     <td><i>a<sub>11</sub></i>&nbsp;</td>
                     <td><i>a<sub>12</sub></i>&nbsp;</td>
@@ -201,43 +201,36 @@
                 </tr>
             </table>
         </td>
-    </tr>
-    </table>
-</div>
-<div align=left>
-    <table>
-        <tr>
-            <td><i>B<sub>n×k</sub></i>&nbsp;=</td>
-            <td>
-                <table class="matrix">
-                    <tr>
-                        <td><i>b<sub>11</sub></i>&nbsp;</td>
-                        <td><i>b<sub>12</sub></i>&nbsp;</td>
-                        <td>&hellip;&nbsp;</td>
-                        <td><i>b<sub>1k</sub></i></td>
-                    </tr>
-                    <tr>
-                        <td><i>b<sub>21</sub></i>&nbsp;</td>
-                        <td><i>b<sub>22</sub></i>&nbsp;</td>
-                        <td>&hellip;&nbsp;</td>
-                        <td><i>b<sub>2k</sub></i></td>
-                    </tr>
-                    <tr>
-                        <td>&hellip;&nbsp;</td>
-                        <td>&hellip;&nbsp;</td>
-                        <td>&hellip;&nbsp;</td>
-                        <td>&hellip;</td>
-                    </tr>
-                    <tr>
-                        <td><i>b<sub>n1</sub></i>&nbsp;</td>
-                        <td><i>b<sub>n2</sub></i>&nbsp;</td>
-                        <td>&hellip;&nbsp;</td>
-                        <td><i>b<sub>nk</sub></i></td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+        <td>,&nbsp;&nbsp;<i>B<sub>n×k</sub></i>&nbsp;=</td>
+        <td>
+            <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
+                <tr>
+                    <td><i>b<sub>11</sub></i>&nbsp;</td>
+                    <td><i>b<sub>12</sub></i>&nbsp;</td>
+                    <td>&hellip;&nbsp;</td>
+                    <td><i>b<sub>1k</sub></i></td>
+                </tr>
+                <tr>
+                    <td><i>b<sub>21</sub></i>&nbsp;</td>
+                    <td><i>b<sub>22</sub></i>&nbsp;</td>
+                    <td>&hellip;&nbsp;</td>
+                    <td><i>b<sub>2k</sub></i></td>
+                </tr>
+                <tr>
+                    <td>&hellip;&nbsp;</td>
+                    <td>&hellip;&nbsp;</td>
+                    <td>&hellip;&nbsp;</td>
+                    <td>&hellip;</td>
+                </tr>
+                <tr>
+                    <td><i>b<sub>n1</sub></i>&nbsp;</td>
+                    <td><i>b<sub>n2</sub></i>&nbsp;</td>
+                    <td>&hellip;&nbsp;</td>
+                    <td><i>b<sub>nk</sub></i></td>
+                </tr>
+            </table>
+        </td>
+    </tr></table>
 </div>
 <p>то <b>произведением</b> матриц <i>A</i> и <i>B</i>, называется матрица <i>C</i> (размерности <i>m×k</i>):</p>
 <div align=left>
@@ -245,7 +238,7 @@
         <tr>
             <td><i>C<sub>m×k</sub></i>&nbsp;=</td>
             <td>
-                <table class="matrix">
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr>
                         <td><i>c<sub>11</sub></i>&nbsp;</td>
                         <td><i>c<sub>12</sub></i>&nbsp;</td>
@@ -276,26 +269,26 @@
     </table>
 </div>
 <p>элементы которой вычисляются по формуле:</p>
-<p><i>c<sub>ij</sub> = <span class="blue">a<sub>i1</sub></span><span class="green">b<sub>1j</sub></span> + <span class="blue">a<sub>i2</sub></span><span class="green">b<sub>2j</sub></span> + ... + <span class="blue">a<sub>in</sub></span><span class="green">b<sub>nj</sub></span></i></p>
-<p>где <i>i=1, ..., m</i> и <i>j=1, ..., k</i>. Произведение матриц <i>A</i> и <i>B</i> обозначается <i>AB</i>, т.е. <i>C = AB</i>.</p>
+<p><i>c<sub>ij</sub> = <span class="blue">a<sub>i1</sub></span><span class="green">b<sub>1j</sub></span> + <span class="blue">a<sub>i2</sub></span><span class="green">b<sub>2j</sub></span> + … + <span class="blue">a<sub>in</sub></span><span class="green">b<sub>nj</sub></span></i></p>
+<p>где <i>i=1, …, m</i> и <i>j=1, …, k</i>. Произведение матриц <i>A</i> и <i>B</i> обозначается <i>AB</i>, т.е. <i>C = AB</i>.</p>
 <p>Иначе говоря, элементы матрицы-произведения определяются следующим образом: элемент <i>i</i>-й строки и <i>j</i>-го столбца матрицы <i>С</i> равен сумме произведений элементов <i>i</i>-й строки матрицы <i>А</i> на соответствующие элементы <i>j</i>-го столбца матрицы <i>В</i>:</p>
 <div align=left>
     <table>
         <tr>
             <td>
-                <table class="matrix">
-                    <tr><td>●</td><td>&nbsp;●</td><td>&nbsp;...</td><td>&nbsp;●</td></tr>
-                    <tr><td><span class="blue"><i>a<sub>i1</sub></i></span></td><td>&nbsp;<span class="blue"><i>a<sub>i2</sub></i></span></td><td>&nbsp;<span class="blue">...</span></td></td><td>&nbsp;<span class="blue"><i>a<sub>im</sub></i></span></td></tr>
-                    <tr><td>...</td><td>&nbsp;...</td><td>&nbsp;...</td><td>&nbsp;...</td></tr>
-                    <tr><td>●</td><td>&nbsp;●</td><td>&nbsp;...</td><td>&nbsp;●</td></tr>
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
+                    <tr><td>●</td><td>&nbsp;●</td><td>&nbsp;&hellip;</td><td>&nbsp;●</td></tr>
+                    <tr><td><span class="blue"><i>a<sub>i1</sub></i></span></td><td>&nbsp;<span class="blue"><i>a<sub>i2</sub></i></span></td><td>&nbsp;<span class="blue">…</span></td></td><td>&nbsp;<span class="blue"><i>a<sub>im</sub></i></span></td></tr>
+                    <tr><td>&hellip;</td><td>&nbsp;&hellip;</td><td>&nbsp;&hellip;</td><td>&nbsp;&hellip;</td></tr>
+                    <tr><td>●</td><td>&nbsp;●</td><td>&nbsp;&hellip;</td><td>&nbsp;●</td></tr>
                 </table>
             </td>
             <td>&nbsp;<b>·</b>&nbsp;</td>
             <td>
-                <table class="matrix">
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr><td>●</td><td>&nbsp;<span class="green"><i>b<sub>1j</sub></i></span></td><td>&nbsp;●</td><td>&nbsp;●</td></tr>
                     <tr><td>●</td><td>&nbsp;<span class="green"><i>b<sub>2j</sub></i></span></td><td>&nbsp;●</td><td>&nbsp;●</td></tr>
-                    <tr><td>...</td><td>&nbsp;...</td><td>&nbsp;...</td><td>&nbsp;...</td></tr>
+                    <tr><td>&hellip;</td><td>&nbsp;&hellip;</td><td>&nbsp;&hellip;</td><td>&nbsp;&hellip;</td></tr>
                     <tr><td>●</td><td>&nbsp;<span class="green"><i>b<sub>nj</sub></i></span></td><td>&nbsp;●</td><td>&nbsp;●</td></tr>
                 </table>
             </td>
@@ -309,14 +302,14 @@
         <tr>
             <td><i>A</i>&nbsp;=</td>
             <td>
-                <table class="matrix">
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr><td><span class="blue"><i>1</i></span>&nbsp;</td><td><span class="blue"><i>2</i></span></td><td>&nbsp;<span class="blue"><i>1</i></span></td></tr>
                     <tr><td><i>3</i>&nbsp;</td><td><i>1</i></td><td>&nbsp;<i>0</i></td></tr>
                 </table>
             </td>
             <td>,&nbsp;&nbsp;<i>B</i>&nbsp;=</td>
             <td>
-                <table>
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr><td><span class="green"><i>1</i></span>&nbsp;</td><td><i>2</i></td><td>&nbsp;<i>3</i></td></tr>
                     <tr><td><span class="green"><i>2</i></span>&nbsp;</td><td><i>0</i></td><td>&nbsp;<i>1</i></td></tr>
                     <tr><td><span class="green"><i>3</i></span>&nbsp;</td><td><i>5</i></td><td>&nbsp;<i>4</i></td></tr>
@@ -325,7 +318,7 @@
         </tr>
     </table>
 </div>
-<p>Имеем: матрица <i>А</i> размера <i>2×3</i>, матрица <i>В</i> размера <i>3×3</i>, тогда произведение <i>АВ = С</i> существует и элементы матрицы <i>С</i> равны:</p>
+<p>Имеем: матрица <i>A</i> размера <i>2×3</i>, матрица <i>В</i> размера <i>3×3</i>, тогда произведение <i>AB = С</i> существует и элементы матрицы <i>С</i> равны:</p>
 <p><i>с₁₁ = <span class="blue">1</span> ⋅ <span class="green">1</span> + <span class="blue">2</span> ⋅ <span class="green">2</span> + <span class="blue">1</span> ⋅ <span class="green">3</span> = 8, с₁₂ = 1 ⋅ 2 + 2 ⋅ 0 + 1 ⋅ 5 = 7, с₁₃ = 1 ⋅ 3 + 2 ⋅ 1 + 1 ⋅ 4 = 9,</i></p>
 <p><i>с₂₁ = 3 ⋅ 1 + 1 ⋅ 2 + 0 ⋅ 3 = 5, с₂₂ = 3 ⋅ 2 + 1 ⋅ 0 + 0 ⋅ 5 = 6, с₂₃ = 3 ⋅ 3 + 1 ⋅ 1 + 0 ⋅ 4 = 10.</i></p>
 <div align=left>
@@ -333,9 +326,9 @@
         <tr>
             <td><i>С</i>&nbsp;=&nbsp;<i>AB</i>&nbsp;=&nbsp;</td>
             <td>
-                <table>
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr><td><i>8</i></td><td>&nbsp;<i>7</i></td><td>&nbsp;<i>9</i></td></tr>
-                    <tr><td><i>5</i></td><td>&nbsp;<i>6</i></td><td>&nbsp;<i>10</i></td></tr>
+                    <tr><td><i>5</i></td><td>&nbsp;<i>6</i></td><td><i>10</i></td></tr>
                 </table>
             </td>
         </tr>
@@ -344,9 +337,9 @@
 <p>Произведение <i>BA</i> не существует, т.к. число столбцов матрицы <i>B</i> не равно числу строк матрицы <i>А</i>.</p>
 <p>Произведение матриц в общем случае <b>антикоммутативно</b>, т.е. <i>AB≠BA</i>. Матрицы <i>A</i> и <i>B</i> называются <b>перестановочными</b>, если <i>AB=BA</i>.</p>
 <p>6) Умножение матриц обладает следующими свойствами:</p>
-<p><i>A ⋅ (B ⋅ C) = (A ⋅ B) ⋅ C</i></p>
-<p><i>A ⋅ (B + C) = AB + AC</i></p>
-<p><i>k ⋅ (A ⋅ B) = (k ⋅ A) ⋅ B</i></p>
+<p><i>A</i> ⋅ (<i>B</i> ⋅ <i>C</i>) = (<i>A</i> ⋅ <i>B</i>) ⋅ <i>C</i></p>
+<p><i>A</i> ⋅ (<i>B</i> + <i>C</i>) = <i>AB</i> + <i>AC</i></p>
+<p><i>k</i> ⋅ (<i>A</i> ⋅ <i>B</i>) = (<i>k</i> ⋅ <i>A</i>) ⋅ <i>B</i></p>
 
 <h3>2.3 Элементарные преобразования матриц</h3>
 <p>Элементарными преобразованиями матриц являются:</p>
@@ -362,7 +355,7 @@
 <p>2) ведущий элемент (первый ненулевой элемент строки при отсчёте слева направо) каждой ненулевой строки располагается строго правее ведущего элемента в строке, расположенной выше данной.</p>
 <p>Всё становится понятнее, если это записать:</p>
 <div align=left>
-    <table>
+    <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
         <tr>
             <td>
                 <table class="matrix">
@@ -382,7 +375,7 @@
 </div>
 <p>Матрица называется <b>матрицей приведенного ступенчатого вида</b> по строкам (или <b>канонического вида по строкам</b>) если она удовлетворяет дополнительному условию: каждый ведущий элемент ненулевой строки - это единица, и он является единственным ненулевым элементом в своём столбце. Вот пример матрицы приведенного ступенчатого вида по строкам:</p>
 <div align=left>
-    <table>
+    <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
         <tr>
             <td>
                 <table class="matrix">
@@ -402,7 +395,7 @@
 </div>
 <p>Важно отметить, что левый край матрицы приведенного ступенчатого вида по строкам не обязательно имеет вид единичной матрицы. Например, следующая матрица является матрицей приведенного ступенчатого вида:</p>
 <div align=left>
-    <table>
+    <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
         <tr>
             <td>
                 <table class="matrix">
@@ -465,69 +458,63 @@
 </div>
 <p>Для матрицы <i>A</i> размерности <i>3×3</i> существует несколько простых правил для поиска определителя:</p>
 <p>1) <b>Правило треугольников</b>: определитель матрицы равен алгебраической сумме произведений элементов, расположенных на главной и побочной диагоналях и в вершинах треугольников с основаниями параллельными диагоналям матрицы. Произведения элементов, расположенных на побочной диагонали и в вершинах треугольников с основаниями параллельными ей, берутся со знаком минус. Схематически это правило можно изобразить следующим образом:</p>
-<p>Ниже показаны элементы матрицы, произведения которых в итоговом выражении для определителя матрицы будут складываться (идти со знаком +):</p>
+<p>Ниже схематично показан принцип получения определителя матрицы <i>A<sub>3×3</sub></i> как суммы произведений троек ее элементов (выделены цветом):</p>
 <div align=left>
     <table>
         <tr>
-            <td>&nbsp;+&nbsp;</td>
+            <td>det(<i>A</i>)&nbsp;=</td>
             <td>
-                <table class="matrix" style="border-right: 1px solid gray; border-left: 1px solid gray">
-                    <tr><td><span class="green">●</span></td><td>&nbsp;●</td><td>&nbsp;●</td></tr>
-                    <tr><td>●</td><td>&nbsp;<span class="green">●</span></td><td>&nbsp;●</td></tr>
-                    <tr><td>●</td><td>&nbsp;●</td><td>&nbsp;<span class="green">●</span></td></tr>
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
+                    <tr><td><span class="green">●</span></td><td>&nbsp;×</td><td>&nbsp;×</td></tr>
+                    <tr><td>×</td><td>&nbsp;<span class="green">●</span></td><td>&nbsp;×</td></tr>
+                    <tr><td>×</td><td>&nbsp;×</td><td>&nbsp;<span class="green">●</span></td></tr>
                 </table>
             </td>
             <td>&nbsp;+&nbsp;</td>
             <td>
-                <table class="matrix" style="border-right: 1px solid gray; border-left: 1px solid gray">
-                    <tr><td>●</td><td>&nbsp;●</td><td>&nbsp;<span class="green">●</span></td></tr>
-                    <tr><td><span class="green">●</span></td><td>&nbsp;●</td><td>&nbsp;●</td></tr>
-                    <tr><td>●</td><td>&nbsp;<span class="green">●</span></td><td>&nbsp;●</td></tr>
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
+                    <tr><td>×</td><td>&nbsp;×</td><td>&nbsp;<span class="green">●</span></td></tr>
+                    <tr><td><span class="green">●</span></td><td>&nbsp;×</td><td>&nbsp;×</td></tr>
+                    <tr><td>×</td><td>&nbsp;<span class="green">●</span></td><td>&nbsp;×</td></tr>
                 </table>
             </td>
             <td>&nbsp;+&nbsp;</td>
             <td>
-                <table class="matrix" style="border-right: 1px solid gray; border-left: 1px solid gray">
-                    <tr><td>●</td><td>&nbsp;<span class="green">●</span></td><td>&nbsp;●</td></tr>
-                    <tr><td>●</td><td>&nbsp;●</td><td>&nbsp;<span class="green">●</span></td></tr>
-                    <tr><td><span class="green">●</span></td><td>&nbsp;●</td><td>&nbsp;●</td></tr>
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
+                    <tr><td>×</td><td>&nbsp;<span class="green">●</span></td><td>&nbsp;×</td></tr>
+                    <tr><td>×</td><td>&nbsp;×</td><td>&nbsp;<span class="green">●</span></td></tr>
+                    <tr><td><span class="green">●</span></td><td>&nbsp;×</td><td>&nbsp;×</td></tr>
+                </table>
+            </td>
+            <td>&nbsp;−&nbsp;</td>
+            <td>
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
+                    <tr><td>×</td><td>&nbsp;×</td><td>&nbsp;<span class="blue">●</span></td></tr>
+                    <tr><td>×</td><td>&nbsp;<span class="blue">●</span></td><td>&nbsp;×</td></tr>
+                    <tr><td><span class="blue">●</span></td><td>&nbsp;×</td><td>&nbsp;×</td></tr>
+                </table>
+            </td>
+            <td>&nbsp;−&nbsp;</td>
+            <td>
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
+                    <tr><td>×</td><td>&nbsp;<span class="blue">●</span></td><td>&nbsp;×</td></tr>
+                    <tr><td><span class="blue">●</span></td><td>&nbsp;×</td><td>&nbsp;×</td></tr>
+                    <tr><td>×</td><td>&nbsp;×</td><td>&nbsp;<span class="blue">●</span></td></tr>
+                </table>
+            </td>
+            <td>&nbsp;−&nbsp;</td>
+            <td>
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
+                    <tr><td><span class="blue">●</span></td><td>&nbsp;×</td><td>&nbsp;×</td></tr>
+                    <tr><td>×</td><td>&nbsp;×</td><td>&nbsp;<span class="blue">●</span></td></tr>
+                    <tr><td>×</td><td>&nbsp;<span class="blue">●</span></td><td>&nbsp;×</td></tr>
                 </table>
             </td>
         </tr>
     </table>
 </div>
-<p>Ниже показаны элементы матрицы, произведения которых в итоговом выражении для определителя матрицы будут вычитаться (идти со знаком −):</p>
-<div align=left>
-    <table>
-        <tr>
-            <td>&nbsp;−&nbsp;</td>
-            <td>
-                <table class="matrix" style="border-right: 1px solid gray; border-left: 1px solid gray">
-                    <tr><td>●</td><td>&nbsp;●</td><td>&nbsp;<span class="blue">●</span></td></tr>
-                    <tr><td>●</td><td>&nbsp;<span class="blue">●</span></td><td>&nbsp;●</td></tr>
-                    <tr><td><span class="blue">●</span></td><td>&nbsp;●</td><td>&nbsp;●</td></tr>
-                </table>
-            </td>
-            <td>&nbsp;−&nbsp;</td>
-            <td>
-                <table class="matrix" style="border-right: 1px solid gray; border-left: 1px solid gray">
-                    <tr><td>●</td><td>&nbsp;<span class="blue">●</span></td><td>&nbsp;●</td></tr>
-                    <tr><td><span class="blue">●</span></td><td>&nbsp;●</td><td>&nbsp;●</td></tr>
-                    <tr><td>●</td><td>&nbsp;●</td><td>&nbsp;<span class="blue">●</span></td></tr>
-                </table>
-            </td>
-            <td>&nbsp;−&nbsp;</td>
-            <td>
-                <table class="matrix" style="border-right: 1px solid gray; border-left: 1px solid gray">
-                    <tr><td><span class="blue">●</span></td><td>&nbsp;●</td><td>&nbsp;●</td></tr>
-                    <tr><td>●</td><td>&nbsp;●</td><td>&nbsp;<span class="blue">●</span></td></tr>
-                    <tr><td>●</td><td>&nbsp;<span class="blue">●</span></td><td>&nbsp;●</td></tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-</div>
-<p>Рассмотрим матрицу <i>A<sub>3×3</sub></i> и найдём её определитель, используя правило треугольников</p>
+<p>Со знаком плюс идут произведения троек чисел, расположенных на главной диагонали матрицы и в вершинах треугольников с основанием параллельным этой диагонали. Со знаком минус произведения троек чисел, расположенных на побочной диагонали и в вершинах треугольников с основанием параллельным этой диагонали.</p>
+<p>Рассмотрим матрицу <i>A<sub>3×3</sub></i> в общем виде и найдём её определитель, используя правило треугольников</p>
 <div align=left>
     <table>
         <tr>
@@ -555,7 +542,6 @@
     </table>
 </div>
 <p>det(<i>A</i>) = <i><span class="green">a₁₁a₂₂a₃₃</span> + <span class="green">a₂₁a₃₂a₁₃</span> + <span class="green">a₃₁a₁₂a₂₃</span> − <span class="blue">a₃₁a₂₂a₁₃</span> − <span class="blue">a₁₂a₂₁a₃₃</span> − <span class="blue">a₁₁a₃₂a₂₃</span></i></p>
-<p>Со знаком плюс идут произведения троек чисел, расположенных на главной диагонали матрицы и в вершинах треугольников с основанием параллельным этой диагонали. Со знаком минус произведения троек чисел, расположенных на побочной диагонали и в вершинах треугольников с основанием параллельным этой диагонали.</p>
 <p><b>ПРИМЕР</b> найдем определитель матрицы по правилу треугольников</p>
 <div align=left>
     <table>
@@ -706,7 +692,7 @@
         <tr>
             <td><i>A</i>&nbsp;=</td>
             <td>
-                <table class="matrix">
+                <table style="text-align: center; border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr>
                         <td><i>a<sub>11</sub></i>&nbsp;</td>
                         <td><i>a<sub>12</sub></i>&nbsp;</td>
@@ -808,12 +794,12 @@
                     <tr>
                         <td>
                             <table class="matrix">
-                                <tr><td><i>a<sub>11</sub></i>&nbsp;</td><td><i>a<sub>12</sub></i>&nbsp;</td><td>...&nbsp;</td><td><span class="red"><i>a<sub>1j</sub></i></span></td><td>&nbsp;...</td><td>&nbsp;<i>a<sub>1n</sub></i></td></tr>
-                                <tr><td><i>a<sub>21</sub></i>&nbsp;</td><td><i>a<sub>22</sub></i>&nbsp;</td><td>...&nbsp;</td><td><span class="red"><i>a<sub>2j</sub></i></span></td><td>&nbsp;...</td><td>&nbsp;<i>a<sub>2n</sub></i></td></tr>
-                                <tr><td>...&nbsp;</td><td>...&nbsp;</td><td>...&nbsp;</td><td><span class="red">...</span>&nbsp;</td><td>...&nbsp;</td><td>...&nbsp;</td></tr>
-                                <tr><td><span class="red"><i>a<sub>i1</sub></i></span>&nbsp;</td><td><span class="red"><i>a<sub>i2</sub></i></span>&nbsp;</td><td><span class="red">...</span>&nbsp;</td><td><span class="red"><b><i>a<sub>ij</sub></i></b></span></td><td>&nbsp;<span class="red">...</span></td><td>&nbsp;<span class="red"><i>a<sub>in</sub></i></span></td></tr>
-                                <tr><td>...&nbsp;</td><td>...&nbsp;</td><td>...&nbsp;</td><td><span class="red">...</span>&nbsp;</td><td>&nbsp;...</td><td>&nbsp;...</td></tr>
-                                <tr><td><i>a<sub>n1</sub></i>&nbsp;</td><td><i>a<sub>n2</sub></i>&nbsp;</td><td>...&nbsp;</td><td><span class="red"><i>a<sub>nj</sub></i></span></td><td>&nbsp;...</td><td>&nbsp;<i>a<sub>nn</sub></i></td></tr>
+                                <tr><td><i>a<sub>11</sub></i>&nbsp;</td><td><i>a<sub>12</sub></i>&nbsp;</td><td>…&nbsp;</td><td><span class="red"><i>a<sub>1j</sub></i></span></td><td>&nbsp;…</td><td>&nbsp;<i>a<sub>1n</sub></i></td></tr>
+                                <tr><td><i>a<sub>21</sub></i>&nbsp;</td><td><i>a<sub>22</sub></i>&nbsp;</td><td>…&nbsp;</td><td><span class="red"><i>a<sub>2j</sub></i></span></td><td>&nbsp;…</td><td>&nbsp;<i>a<sub>2n</sub></i></td></tr>
+                                <tr><td>…&nbsp;</td><td>…&nbsp;</td><td>…&nbsp;</td><td><span class="red">…</span>&nbsp;</td><td>…&nbsp;</td><td>…&nbsp;</td></tr>
+                                <tr><td><span class="red"><i>a<sub>i1</sub></i></span>&nbsp;</td><td><span class="red"><i>a<sub>i2</sub></i></span>&nbsp;</td><td><span class="red">…</span>&nbsp;</td><td><span class="red"><b><i>a<sub>ij</sub></i></b></span></td><td>&nbsp;<span class="red">…</span></td><td>&nbsp;<span class="red"><i>a<sub>in</sub></i></span></td></tr>
+                                <tr><td>…&nbsp;</td><td>…&nbsp;</td><td>…&nbsp;</td><td><span class="red">…</span>&nbsp;</td><td>&nbsp;…</td><td>&nbsp;…</td></tr>
+                                <tr><td><i>a<sub>n1</sub></i>&nbsp;</td><td><i>a<sub>n2</sub></i>&nbsp;</td><td>…&nbsp;</td><td><span class="red"><i>a<sub>nj</sub></i></span></td><td>&nbsp;…</td><td>&nbsp;<i>a<sub>nn</sub></i></td></tr>
                             </table>
                         </td>
                     </tr>
@@ -825,7 +811,7 @@
 <p>3) <b>Базисный минор</b>. В матрице порядка <i>m×n</i> минор порядка <i>k</i> называется <b>базисным</b>, если он не равен нулю, а все миноры порядка <i>k+1</i> и выше равны нулю, или не существуют вовсе, т.е. <i>k</i> совпадает с меньшим из чисел <i>m</i> или <i>n</i>. Столбцы и строки матрицы, на которых стоит базисный минор, также называются <b>базисными</b>. В матрице может быть несколько различных базисных миноров, имеющих одинаковый порядок.</p>
 <p>Базисный минор матрицы <i>A</i> — любой ненулевой минор матрицы <i>A</i> порядка <i>r</i>, где <i>r = rang A</i>.</p>
 <p>4) <b>Алгебраическое дополнение</b> для элемента <i>a<sub>ij</sub></i> — это число, которое вычисляется по формуле:</p>
-<p><i>A<sub>ij</sub> = (–1)<sup>i+j</sup> ⋅ M<sub>ij</sub></i></p>
+<p><i>A<sub>ij</sub> =</i> (<i>–1</i>)<i><sup>i+j</sup> ⋅ M<sub>ij</sub></i></p>
 <p>где <i>M<sub>ij</sub></i> — <b>дополнительный минор</b> элемента <i>a<sub>ij</sub></i>. Дополнительным минором называется определитель матрицы, получающейся из исходной матрицы <i>A</i> путем вычёркивания <i>i</i>-й строки и <i>j</i>-го столбца.</p>
 
 <h3>2.4.3 Ранг матрицы</h3>
@@ -850,7 +836,7 @@
         <tr>
             <td><i>A</i>&nbsp;=&nbsp;</td>
             <td>
-                <table class="matrix">
+                <table style="text-align: center; border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr>
                         <td><i>1</i>&nbsp;</td>
                         <td><i>3</i>&nbsp;</td>
@@ -948,7 +934,7 @@
         </tr>
     </table>
 </div>
-<p>Окаймляющие миноры третьего порядка равны нулю, поэтому ранг матрицы равен <i>2</i> (т.к. ранг матрицы равен максимальному порядку ее миноров, отличных от нуля)</p>
+<p>Окаймляющие миноры третьего порядка равны нулю, поэтому ранг матрицы равен <i>2</i> (т.к. ранг матрицы равен максимальному порядку ее миноров, отличных от нуля).</p>
 
 <h3>2.4.4 Определители матриц высоких порядков. Разложение определителя по строке (столбцу)</h3>
 <p>Для матриц более высоких порядков (выше 2-го порядка).</p>
@@ -957,7 +943,7 @@
         <tr>
             <td><i>A</i>&nbsp;=&nbsp;</td>
             <td>
-                <table class="matrix">
+                <table style="text-align: center; border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr>
                         <td><i>a<sub>11</sub></i>&nbsp;</td>
                         <td><i>a<sub>12</sub></i>&nbsp;</td>
@@ -1108,7 +1094,7 @@
         <tr>
             <td><i>A</i>&nbsp;=</td>
             <td>
-                <table class="matrix">
+                <table style="text-align: center; border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr>
                         <td><i>a<sub>11</sub></i>&nbsp;</td>
                         <td><i>a<sub>12</sub></i>&nbsp;</td>
@@ -1138,7 +1124,7 @@
         </tr>
     </table>
 </div>
-<p><i>A</i> — квадратная матрица <i>n</i>-го порядка. Выберем в матрице <i>A</i> <i>k</i> строк (<i>1 ≤ k ≤ n</i>) с номерами <i>i<sub>1</sub>, i<sub>2</sub>, ..., i<sub>k</sub></i> (<i>1 ≤ i<sub>1</sub> < i<sub>2</sub> < ... < i<sub>n</sub> ≤ n</i>) и <b>k</b> столбцов с номерами <i>j<sub>1</sub>, j<sub>2</sub> ... j<sub>k</sub></i> (<i>1 ≤ j<sub>1</sub> < j<sub>2</sub> < ... < j<sub>n</sub> ≤ n</i>).</p>
+<p><i>A</i> — квадратная матрица <i>n</i>-го порядка. Выберем в матрице <i>A</i> <i>k</i> строк (<i>1 ≤ k ≤ n</i>) с номерами <i>i<sub>1</sub>, i<sub>2</sub>, …, i<sub>k</sub></i> (<i>1 ≤ i<sub>1</sub> < i<sub>2</sub> < … < i<sub>n</sub> ≤ n</i>) и <b>k</b> столбцов с номерами <i>j<sub>1</sub>, j<sub>2</sub> … j<sub>k</sub></i> (<i>1 ≤ j<sub>1</sub> < j<sub>2</sub> < … < j<sub>n</sub> ≤ n</i>).</p>
 <p><b>Минором</b> матрицы <i>k</i>-го порядка называется определитель</p>
 <div align=left>
     <table>
@@ -1176,7 +1162,7 @@
         </tr>
     </table>
 </div>
-<p>называется умноженный на (<i>−1</i>)<sup><i>i<sub>1</sub> + i<sub>2</sub> ... i<sub>k</sub> + j<sub>1</sub> + j<sub>2</sub> ... j<sub>k</sub></i></sup> определитель матрицы (<i>n−k</i>)-го порядка, полученной из матрицы <i>A</i> вычеркиванием выбранных <i>k</i> строк и <i>k</i> столбцов. Он обозначается:</p>
+<p>называется умноженный на (<i>−1</i>)<sup><i>i<sub>1</sub> + i<sub>2</sub> … i<sub>k</sub> + j<sub>1</sub> + j<sub>2</sub> … j<sub>k</sub></i></sup> определитель матрицы (<i>n−k</i>)-го порядка, полученной из матрицы <i>A</i> вычеркиванием выбранных <i>k</i> строк и <i>k</i> столбцов. Он обозначается:</p>
 <div align=left>
     <table>
         <tr>
@@ -1616,7 +1602,7 @@
         <tr>
             <td><i>A</i>&nbsp;=</td>
             <td>
-                <table class="matrix">
+                <table style="text-align: center; border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr>
                         <td><i>2</i></td>
                         <td>&nbsp;&nbsp;<i>3</i></td>
@@ -1822,7 +1808,7 @@
 <div align=left><table><tr>
     <td><table><tr>
         <td>
-            <table class="matrix">
+            <table style="text-align: center; border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                 <tr>
                     <td>×</td>
                     <td>&nbsp;&nbsp;×</td>
@@ -1933,7 +1919,7 @@
 <div align=left><table><tr>
     <td><table><tr>
         <td>
-            <table class="matrix">
+            <table style="text-align: center; border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                 <tr>
                     <td><i><span class="blue">2</span></i></td>
                     <td>&nbsp;&nbsp;×</td>
@@ -2043,7 +2029,7 @@
 <div align=left><table><tr>
     <td><table><tr>
         <td>
-            <table class="matrix">
+            <table style="text-align: center; border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                 <tr>
                     <td><i><span class="blue">2</span></i></td>
                     <td>&nbsp;&nbsp;×</td>
@@ -2153,7 +2139,7 @@
 <div align=left><table><tr>
     <td><table><tr>
         <td>
-            <table class="matrix">
+            <table style="text-align: center; border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                 <tr>
                     <td><i><span class="blue">2</span></i></td>
                     <td>&nbsp;&nbsp;<i><span class="blue">3</span></i></td>
@@ -2327,17 +2313,18 @@
         <tr>
             <td>det(<i>AB</i>)&nbsp;=&nbsp;</td>
             <td>
-                <table>
+                <table style="text-align: center">
                     <tr>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
-                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;∑</td>
+                        <td>∑</td>
                     </tr>
                     <tr>
                         <td><i>k<sub>1</sub>&lt;k<sub>2</sub>&nbsp;…&nbsp;&lt;k<sub>m</sub></i></td>
                     </tr>
                 </table>
+            </td>
             <td><i>A</i></td>
             <td>
                 <table>
@@ -2363,7 +2350,7 @@
         </tr>
     </table>
 </div>
-<p>где <i>A<sub>k<sub>1</sub>, k<sub>2</sub> ... k<sub>m</sub></sub></i> — минор матрицы <i>A</i>, составленный из <b>столбцов</b> с номерами <i>k<sub>1</sub>, k<sub>2</sub> ... k<sub>m</sub></i>, <i>B<sub>k<sub>1</sub>, k<sub>2</sub> ... k<sub>m</sub></sub></i> — минор матрицы <i>В</i>, составленный из <b>строк</b> с номерами <i>k<sub>1</sub>, k<sub>2</sub> ... k<sub>m</sub></i></p>
+<p>где <i>A<sub>k<sub>1</sub>, k<sub>2</sub> … k<sub>m</sub></sub></i> — минор матрицы <i>A</i>, составленный из <b>столбцов</b> с номерами <i>k<sub>1</sub>, k<sub>2</sub> … k<sub>m</sub></i>, <i>B<sub>k<sub>1</sub>, k<sub>2</sub> … k<sub>m</sub></sub></i> — минор матрицы <i>В</i>, составленный из <b>строк</b> с номерами <i>k<sub>1</sub>, k<sub>2</sub> … k<sub>m</sub></i></p>
 <p>3) равен произведению определителей матриц <i>A</i> и <i>B</i>, если <i>n = m</i>.</p>
 <p><b>ПРИМЕР</b>: Найдем определитель произведения двух прямоугольных матриц:</p>
 <div align=left>
@@ -2371,7 +2358,7 @@
         <tr>
             <td><i>A<sub>2×n</sub></i>&nbsp;=&nbsp;</td>
             <td>
-                <table class="matrix">
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr>
                         <td><i>a<sub>1</sub></i></td>
                         <td>&nbsp;<i>a<sub>2</sub></i></td>
@@ -2388,7 +2375,7 @@
             </td>
             <td>,&nbsp;<i>B<sub>n×2</sub></i>&nbsp;=&nbsp;</td>
             <td>
-                <table class="matrix">
+                <table style="border-left: 1px solid gray; border-right: 1px solid gray; border-top-left-radius: 0.5em; border-top-right-radius: 0.5em; border-bottom-left-radius: 0.5em; border-bottom-right-radius: 0.5em">
                     <tr>
                         <td><i>a<sub>1</sub></i></td>
                         <td>&nbsp;<i>b<sub>1</sub></i></td>
@@ -2507,14 +2494,14 @@
             </td>
             <td>&nbsp;·&nbsp;</td>
             <td>
-                <table class="matrix" style="border-right: 1px solid gray; border-left: 1px solid gray">
+                <table class="matrix" style="text-align: center; border-right: 1px solid gray; border-left: 1px solid gray">
                     <tr>
                         <td><i>a<sub>n−1</sub></i></td>
                         <td>&nbsp;<i>b<sub>n−1</sub></i></td>
                     </tr>
                     <tr>
-                        <td>&nbsp;<i>a<sub>n</sub></i></td>
-                        <td>&nbsp;&nbsp;<i>b<sub>n</sub></i></td>
+                        <td><i>a<sub>n</sub></i></td>
+                        <td>&nbsp;<i>b<sub>n</sub></i></td>
                     </tr>
                 </table>
             </td>
@@ -2522,7 +2509,7 @@
     </table>
 </div>
 <p>вычислив определители и перемножив результаты, получим:</p>
-<p><i>(a₁b₂ − a₂b₁)² + (a₂b₃ − a₃b₂)² + ... + (a<sub>n-1</sub> b<sub>n</sub> − a<sub>n</sub> b<sub>n-1</sub>)²</i></p>
+<p>(<i>a₁b₂ − a₂b₁</i>)²<i> + </i>(<i>a₂b₃ − a₃b₂</i>)² <i>+ … +</i> (<i>a<sub>n-1</sub> b<sub>n</sub> − a<sub>n</sub> b<sub>n-1</sub></i>)²</p>
 <p>таким образом можно записать в виде суммы</p>
 <div align=left>
     <table>
@@ -2531,7 +2518,7 @@
                 <table style="text-align: center">
                     <tr>
                         <td>∑</td>
-                        <td>(<i>a<sub>i</sub>b<sub>j</sub>&nbsp;−&nbsp;a<sub>j</sub>b<sub>i</sub></i>)<i>²</i></td>
+                        <td>(<i>a<sub>i</sub>b<sub>j</sub>&nbsp;−&nbsp;a<sub>j</sub>b<sub>i</sub></i>)²</td>
                     </tr>
                     <tr>
                         <td><i>i&lt;j</i></td>
@@ -2548,10 +2535,10 @@
     <table>
         <tr>
             <td>
-                <table class="matrix" style="border-right: 1px solid gray; border-left: 1px solid gray">
+                <table class="matrix" style="text-align: center; border-right: 1px solid gray; border-left: 1px solid gray">
                     <tr>
-                        <td>&nbsp;&nbsp;&nbsp;<i>a<sub>11</sub></i>&nbsp;</td>
-                        <td>&nbsp;&nbsp;&nbsp;<i>a<sub>12</sub></i></td>
+                        <td><i>a<sub>11</sub></i>&nbsp;</td>
+                        <td><i>a<sub>12</sub></i></td>
                     </tr>
                     <tr>
                         <td><i>a<sub>21</sub> + b<sub>21</sub></i>&nbsp;</td>
@@ -2601,20 +2588,20 @@
                 <table class="matrix" style="border-right: 1px solid gray; border-left: 1px solid gray">
                     <tr>
                         <td><i>a<sub>11</sub></i>&nbsp;</td>
-                        <td>&nbsp;<i>a<sub>12</sub></i></td>
+                        <td><i>a<sub>12</sub></i></td>
                     </tr>
                     <tr>
                         <td><i>a<sub>21</sub></i>&nbsp;</td>
-                        <td>&nbsp;<i>a<sub>22</sub></i></td>
+                        <td><i>a<sub>22</sub></i></td>
                     </tr>
                 </table>
             </td>
             <td>&nbsp;=&nbsp;</td>
             <td>
-                <table class="matrix" style="border-right: 1px solid gray; border-left: 1px solid gray">
+                <table class="matrix" style="text-align: center; border-right: 1px solid gray; border-left: 1px solid gray">
                     <tr>
-                        <td>&nbsp;&nbsp;&nbsp;&nbsp;<i>a<sub>11</sub></i>&nbsp;</td>
-                        <td>&nbsp;&nbsp;&nbsp;&nbsp;<i>a<sub>12</sub></i></td>
+                        <td><i>a<sub>11</sub></i>&nbsp;</td>
+                        <td><i>a<sub>12</sub></i></td>
                     </tr>
                     <tr>
                         <td><i>k·a<sub>11</sub> + a<sub>21</sub></i>&nbsp;</td>
