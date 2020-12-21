@@ -1,4 +1,4 @@
-package my.handbook.billing
+package simple.billing
 
 import org.junit.Test
 

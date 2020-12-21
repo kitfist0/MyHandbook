@@ -1,20 +1,23 @@
 package my.handbook.ui.drawer
 
+import android.app.Activity
+import android.app.Application
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import my.handbook.BuildConfig
 import my.handbook.R
-import my.handbook.billing.core.BillingHandler
-import my.handbook.billing.ui.BillingViewModel
 import my.handbook.common.combineWith
 import my.handbook.data.repository.SectionRepository
+import simple.billing.core.BillingHandler
+import simple.billing.core.BillingUseCases
+import simple.billing.data.db.Product
 
 class DrawerViewModel @ViewModelInject constructor(
-    private val sectionRepository: SectionRepository,
-    billingHandler: BillingHandler
-) : BillingViewModel(billingHandler) {
+    application: Application,
+    private val sectionRepository: SectionRepository
+) : ViewModel(), BillingUseCases {
 
     companion object {
         private val aboutDivider = listOf(DrawerItem.DividerItem(R.string.about))
@@ -37,6 +40,13 @@ class DrawerViewModel @ViewModelInject constructor(
         )
         private val coffeeDivider = listOf(DrawerItem.DividerItem(R.string.coffee_for_developers))
     }
+
+    private val billingHandler = BillingHandler.getInstance(application)
+
+    override val products: LiveData<List<Product>> = billingHandler.products
+
+    override fun purchaseProduct(activity: Activity, originalJson: String) =
+        billingHandler.purchaseProduct(activity, originalJson)
 
     private val sections = liveData {
         sectionRepository.getSections().collect { emit(it) }

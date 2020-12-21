@@ -1,4 +1,4 @@
-package my.handbook.billing.data.db
+package simple.billing.data.db
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -16,7 +16,7 @@ interface ProductDao {
     suspend fun getProductWithSku(sku: String): Product?
 
     @Query("UPDATE products SET purchaseToken = :token, purchaseTime = :time WHERE sku = :sku")
-    suspend fun productPurchased(sku: String, token: String, time: Long)
+    suspend fun onProductPurchased(sku: String, token: String, time: Long)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(products: List<Product>)

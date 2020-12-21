@@ -1,8 +1,8 @@
-package my.handbook.billing.ui
+package simple.billing.ui
 
 import androidx.recyclerview.widget.RecyclerView
-import my.handbook.billing.data.db.Product
-import my.handbook.billing.databinding.ItemProductBinding
+import simple.billing.data.db.Product
+import simple.billing.databinding.ItemProductBinding
 
 class SimpleProductViewHolder(
     private val binding: ItemProductBinding,
