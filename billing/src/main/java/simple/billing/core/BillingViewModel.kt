@@ -1,14 +1,12 @@
-package simple.billing.ui
+package simple.billing.core
 
 import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import simple.billing.core.BillingHandler
-import simple.billing.core.BillingUseCases
 import simple.billing.data.db.Product
 
-class BillingViewModel constructor(context: Context) : ViewModel(), BillingUseCases {
+open class BillingViewModel(context: Context) : ViewModel(), BillingUseCases {
 
     private val billingHandler = BillingHandler.getInstance(context)
 
