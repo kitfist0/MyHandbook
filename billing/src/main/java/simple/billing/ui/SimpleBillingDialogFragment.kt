@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import simple.billing.data.db.Product
 import simple.billing.databinding.FragmentBillingBinding
@@ -18,16 +17,20 @@ class SimpleBillingDialogFragment : BottomSheetDialogFragment(),
             .show(childFragmentManager, SimpleBillingDialogFragment::class.simpleName)
     }
 
-    private val viewModel: SimpleBillingViewModel by viewModels()
+    // https://developer.android.com/topic/libraries/view-binding#fragments
+    private var _binding: FragmentBillingBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel by lazy { SimpleBillingViewModel(requireContext()) }
     private val adapter = SimpleProductAdapter(this)
-    private lateinit var binding: FragmentBillingBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentBillingBinding.inflate(inflater, container, false)
+        _binding = FragmentBillingBinding.inflate(inflater, container, false)
+            .apply { recyclerView.adapter = adapter }
         return binding.root
     }
 
@@ -38,5 +41,10 @@ class SimpleBillingDialogFragment : BottomSheetDialogFragment(),
 
     override fun onProductClicked(product: Product) {
         activity?.let { viewModel.purchaseProduct(it, product.originalJson) }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
