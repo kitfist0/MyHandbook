@@ -1,16 +1,15 @@
-package my.handbook.billing.ui
+package simple.billing.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import my.handbook.billing.data.db.Product
-import my.handbook.billing.databinding.ItemProductBinding
-import my.handbook.billing.util.isPurchased
+import simple.billing.data.db.Product
+import simple.billing.databinding.ItemProductBinding
+import simple.billing.isPurchased
 
 class SimpleProductAdapter(
     private val listener: ProductAdapterListener
-) : ListAdapter<Product, SimpleProductViewHolder>(MyItemDiffCallback) {
+) : androidx.recyclerview.widget.ListAdapter<Product, SimpleProductViewHolder>(MyItemDiffCallback) {
 
     companion object {
         object MyItemDiffCallback : DiffUtil.ItemCallback<Product>() {

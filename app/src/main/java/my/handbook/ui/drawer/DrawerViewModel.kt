@@ -1,20 +1,20 @@
 package my.handbook.ui.drawer
 
+import android.app.Application
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import my.handbook.BuildConfig
 import my.handbook.R
-import my.handbook.billing.core.BillingHandler
-import my.handbook.billing.ui.BillingViewModel
 import my.handbook.common.combineWith
 import my.handbook.data.repository.SectionRepository
+import simple.billing.core.BillingViewModel
 
 class DrawerViewModel @ViewModelInject constructor(
-    private val sectionRepository: SectionRepository,
-    billingHandler: BillingHandler
-) : BillingViewModel(billingHandler) {
+    application: Application,
+    private val sectionRepository: SectionRepository
+) : BillingViewModel(application) {
 
     companion object {
         private val aboutDivider = listOf(DrawerItem.DividerItem(R.string.about))

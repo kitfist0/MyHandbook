@@ -11,20 +11,21 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.google.android.material.shape.MaterialShapeDrawable
 import dagger.hilt.android.AndroidEntryPoint
 import my.handbook.R
-import my.handbook.billing.util.billingViewModels
 import my.handbook.common.themeColor
 import my.handbook.databinding.FragmentDrawerBinding
+import simple.billing.attachBillingToFragmentLifecycle
 import kotlin.LazyThreadSafetyMode.NONE
 
 @AndroidEntryPoint
 class DrawerFragment : Fragment(), DrawerAdapter.DrawerAdapterListener {
 
-    private val viewModel: DrawerViewModel by billingViewModels()
+    private val viewModel: DrawerViewModel by viewModels()
     private val drawerAdapter = DrawerAdapter(this)
     private lateinit var binding: FragmentDrawerBinding
 
@@ -55,6 +56,7 @@ class DrawerFragment : Fragment(), DrawerAdapter.DrawerAdapterListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        attachBillingToFragmentLifecycle()
         requireActivity().onBackPressedDispatcher.addCallback(this, closeDrawerOnBackPressed)
     }
 

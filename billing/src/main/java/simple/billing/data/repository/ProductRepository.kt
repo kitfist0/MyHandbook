@@ -1,14 +1,13 @@
-package my.handbook.billing.data.repository
+package simple.billing.data.repository
 
+import android.content.Context
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
-import my.handbook.billing.data.db.Product
-import my.handbook.billing.data.db.ProductDao
-import javax.inject.Inject
-import javax.inject.Singleton
+import simple.billing.data.db.Product
+import simple.billing.data.db.ProductDao
+import simple.billing.data.db.ProductDatabase
 
-@Singleton
-class ProductRepository @Inject constructor(
+class ProductRepository(
     private val productDao: ProductDao
 ) {
 
@@ -26,9 +25,21 @@ class ProductRepository @Inject constructor(
         }
         .also { productDao.insert(it) }
 
-    suspend fun productPurchased(purchase: Purchase) = productDao.productPurchased(
+    suspend fun onProductPurchased(purchase: Purchase) = productDao.onProductPurchased(
         purchase.sku,
         purchase.purchaseToken,
         purchase.purchaseTime
     )
+
+    companion object {
+
+        @Volatile private var instance: ProductRepository? = null
+
+        fun getInstance(context: Context): ProductRepository {
+            return instance ?: synchronized(this) {
+                instance ?: ProductRepository(ProductDatabase.getInstance(context).productDao())
+                    .also { instance = it }
+            }
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package my.handbook.billing.data.db
+package simple.billing.data.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

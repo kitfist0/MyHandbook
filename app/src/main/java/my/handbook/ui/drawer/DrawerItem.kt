@@ -3,8 +3,8 @@ package my.handbook.ui.drawer
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.DiffUtil
-import my.handbook.billing.data.db.Product
 import my.handbook.data.db.entity.Section
+import simple.billing.data.db.Product
 
 /**
  * A sealed class which encapsulates all objects [DrawerAdapter] is able to display.

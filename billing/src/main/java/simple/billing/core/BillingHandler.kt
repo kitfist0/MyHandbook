@@ -1,43 +1,32 @@
-package my.handbook.billing.core
+package simple.billing.core
 
 import android.app.Activity
-import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
 import com.android.billingclient.api.*
 import kotlinx.coroutines.*
-import my.handbook.billing.data.repository.ProductRepository
-import javax.inject.Inject
-import javax.inject.Named
-import javax.inject.Singleton
+import simple.billing.BuildConfig
+import simple.billing.data.repository.ProductRepository
 import kotlin.coroutines.CoroutineContext
 
-@Singleton
-class BillingHandler @Inject constructor(
-    private val application: Application,
-    private val productRepository: ProductRepository,
-    @Named("skuList") private val skuList: List<String>
+class BillingHandler(
+    private val context: Context,
+    private val productRepository: ProductRepository
 ) : LifecycleObserver, PurchasesUpdatedListener, CoroutineScope,
     BillingClientStateListener, BillingUseCases {
-
-    companion object {
-        private const val LOG_TAG = "BILLING_HANDLER"
-
-        private inline fun BillingResult.onOkBillingResult(onOkResult: () -> Unit) =
-            takeIf { responseCode == BillingClient.BillingResponseCode.OK }
-                ?.let { onOkResult.invoke() }
-    }
 
     private var billingClient: BillingClient? = null
     private var lifecycle: Lifecycle? = null
 
-    override val coroutineContext: CoroutineContext = Job() + Dispatchers.IO
-    override val products = productRepository.productsFlow.asLiveData()
-
-    override fun initBilling(lifecycle: Lifecycle) {
+    fun initBilling(lifecycle: Lifecycle) {
         this.lifecycle = lifecycle
         this.lifecycle?.addObserver(this)
     }
+
+    override val coroutineContext: CoroutineContext = Job() + Dispatchers.IO
+
+    override val products = productRepository.productsFlow.asLiveData()
 
     override fun purchaseProduct(activity: Activity, originalJson: String) {
         takeIf { billingClient?.isReady == true }
@@ -54,7 +43,7 @@ class BillingHandler @Inject constructor(
     @OnLifecycleEvent(value = Lifecycle.Event.ON_CREATE)
     private fun startConnection() {
         Log.d(LOG_TAG, "startConnection")
-        billingClient = BillingClient.newBuilder(application)
+        billingClient = BillingClient.newBuilder(context)
             .setListener(this)
             .enablePendingPurchases()
             .build()
@@ -88,34 +77,63 @@ class BillingHandler @Inject constructor(
     }
 
     private suspend fun queryInAppPurchasesWithDetails() {
+        Log.d(LOG_TAG, "queryInAppPurchasesWithDetails")
         querySkuDetails()
         billingClient?.queryPurchases(BillingClient.SkuType.INAPP)?.purchasesList
-            ?.let { it.forEach { purchase -> purchase.handlePurchase() } }
+            ?.let {
+                BillingGlobal.HAS_PURCHASED_PRODUCTS = it.any { purchase -> purchase.statePurchased() }
+                it.forEach { purchase -> purchase.handlePurchase() }
+            }
     }
 
     private suspend fun querySkuDetails() {
         val params = SkuDetailsParams.newBuilder()
-            .setSkusList(skuList)
+            .setSkusList(BuildConfig.ALL_PRODUCT_IDS.toList())
             .setType(BillingClient.SkuType.INAPP)
             .build()
         val result = billingClient?.querySkuDetails(params)
+        Log.d(LOG_TAG, "querySkuDetails, responseCode: ${result?.billingResult?.responseCode}")
         result?.billingResult?.onOkBillingResult {
-            result.skuDetailsList?.let { productRepository.setupProducts(it) }
+            result.skuDetailsList?.let {
+                Log.d(LOG_TAG, "setupProducts")
+                productRepository.setupProducts(it)
+            }
         }
     }
 
-    private suspend fun Purchase.handlePurchase() =
-        takeIf { purchaseState == Purchase.PurchaseState.PURCHASED }
-            ?.let { purchase ->
-                if (isAcknowledged) {
-                    productRepository.productPurchased(purchase)
-                } else {
-                    val params = AcknowledgePurchaseParams.newBuilder()
-                        .setPurchaseToken(purchaseToken)
-                        .build()
-                    billingClient?.acknowledgePurchase(params)?.onOkBillingResult {
-                        productRepository.productPurchased(purchase)
-                    }
+    private suspend fun Purchase.handlePurchase() = takeIf { this.statePurchased() }
+        ?.let { purchase ->
+            Log.d(LOG_TAG, "handlePurchase, ${purchase.sku}")
+            productRepository.onProductPurchased(purchase)
+            BillingGlobal.HAS_PURCHASED_PRODUCTS = true
+            if (!isAcknowledged) {
+                val params = AcknowledgePurchaseParams.newBuilder()
+                    .setPurchaseToken(purchaseToken)
+                    .build()
+                billingClient?.acknowledgePurchase(params)?.onOkBillingResult {
+                    Log.d(LOG_TAG, "acknowledgePurchase, success")
                 }
             }
+        }
+
+    companion object {
+
+        @Volatile private var instance: BillingHandler? = null
+
+        fun getInstance(context: Context): BillingHandler {
+            return instance ?: synchronized(this) {
+                instance ?: BillingHandler(context, ProductRepository.getInstance(context))
+                    .also { instance = it }
+            }
+        }
+
+        private const val LOG_TAG = "BILLING_HANDLER"
+
+        private inline fun BillingResult.onOkBillingResult(onOkResult: () -> Unit) =
+            takeIf { responseCode == BillingClient.BillingResponseCode.OK }
+                ?.let { onOkResult.invoke() }
+
+        private fun Purchase.statePurchased(): Boolean =
+            purchaseState == Purchase.PurchaseState.PURCHASED
+    }
 }

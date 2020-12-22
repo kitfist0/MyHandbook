@@ -7,29 +7,29 @@
     <data>
         <variable
             name="item"
-            type="my.handbook.billing.data.db.Product"/>
+            type="simple.billing.data.db.Product"/>
         <variable
             name="listener"
-            type="my.handbook.billing.ui.SimpleProductAdapter.ProductAdapterListener"/>
+            type="simple.billing.ui.SimpleProductAdapter.ProductAdapterListener"/>
     </data>
 
     <TextView
         android:id="@+id/item_title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/drawer_item_height"
-        android:paddingLeft="@dimen/grid_4"
-        android:paddingRight="@dimen/grid_4"
+        android:layout_height="@dimen/product_item_height"
+        android:paddingStart="@dimen/product_item_padding_left"
+        android:paddingEnd="@dimen/product_item_padding_right"
         android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical|start"
         android:onClick="@{() -> listener.onProductClicked(item)}"
         android:ellipsize="end"
         android:lines="1"
         android:text="@{item.title}"
-        android:textColor="@color/color_on_primary_surface_emphasis_medium"
+        android:textColor="?attr/colorOnPrimarySurface"
         android:textAppearance="?attr/textAppearanceSubtitle1"
-        android:drawablePadding="@dimen/grid_4"
+        android:drawablePadding="@dimen/product_item_drawable_padding"
         app:productIcon="@{item}"
         tools:text="Product title"
-        tools:drawableStartCompat="@drawable/ic_twotone_cup" />
+        tools:drawableStartCompat="@drawable/ic_product_default" />
 
 </layout>
