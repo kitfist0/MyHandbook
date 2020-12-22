@@ -88,7 +88,7 @@ class BillingHandler(
 
     private suspend fun querySkuDetails() {
         val params = SkuDetailsParams.newBuilder()
-            .setSkusList(BuildConfig.ALL_PRODUCT_IDS.toList())
+            .setSkusList(BuildConfig.PRODUCT_IDS.toList())
             .setType(BillingClient.SkuType.INAPP)
             .build()
         val result = billingClient?.querySkuDetails(params)
