@@ -11,7 +11,7 @@ import simple.billing.data.repository.ProductRepository
 import kotlin.coroutines.CoroutineContext
 
 class BillingHandler(
-    private val context: Context,
+    private val clientBuilder: BillingClient.Builder,
     private val productRepository: ProductRepository
 ) : LifecycleObserver, PurchasesUpdatedListener, CoroutineScope,
     BillingClientStateListener, BillingUseCases {
@@ -43,7 +43,7 @@ class BillingHandler(
     @OnLifecycleEvent(value = Lifecycle.Event.ON_CREATE)
     private fun startConnection() {
         Log.d(LOG_TAG, "startConnection")
-        billingClient = BillingClient.newBuilder(context)
+        billingClient = clientBuilder
             .setListener(this)
             .enablePendingPurchases()
             .build()
@@ -122,8 +122,10 @@ class BillingHandler(
 
         fun getInstance(context: Context): BillingHandler {
             return instance ?: synchronized(this) {
-                instance ?: BillingHandler(context, ProductRepository.getInstance(context))
-                    .also { instance = it }
+                instance ?: BillingHandler(
+                    BillingClient.newBuilder(context),
+                    ProductRepository.getInstance(context)
+                ).also { instance = it }
             }
         }
 
