@@ -1,8 +1,8 @@
 package my.handbook.ui.drawer
 
 import android.app.Application
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import my.handbook.BuildConfig
@@ -10,8 +10,10 @@ import my.handbook.R
 import my.handbook.common.combineWith
 import my.handbook.data.repository.SectionRepository
 import simple.billing.core.BillingViewModel
+import javax.inject.Inject
 
-class DrawerViewModel @ViewModelInject constructor(
+@HiltViewModel
+class DrawerViewModel @Inject constructor(
     application: Application,
     private val sectionRepository: SectionRepository
 ) : BillingViewModel(application) {

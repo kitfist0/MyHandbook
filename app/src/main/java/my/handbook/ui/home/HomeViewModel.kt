@@ -1,14 +1,16 @@
 package my.handbook.ui.home
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import my.handbook.data.db.entity.Article
 import my.handbook.data.repository.ArticleRepository
 import my.handbook.data.repository.SectionRepository
+import javax.inject.Inject
 
-class HomeViewModel @ViewModelInject constructor(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val articleRepository: ArticleRepository,
     private val sectionRepository: SectionRepository
 ) : ViewModel() {
