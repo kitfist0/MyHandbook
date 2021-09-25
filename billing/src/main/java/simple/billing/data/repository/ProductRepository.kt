@@ -8,7 +8,7 @@ import simple.billing.data.db.ProductDao
 import simple.billing.data.db.ProductDatabase
 
 class ProductRepository(
-    private val productDao: ProductDao
+    private val productDao: ProductDao,
 ) {
 
     val productsFlow = productDao.getProducts()
@@ -26,9 +26,9 @@ class ProductRepository(
         .also { productDao.insert(it) }
 
     suspend fun onProductPurchased(purchase: Purchase) = productDao.onProductPurchased(
-        purchase.sku,
+        purchase.skus[0],
         purchase.purchaseToken,
-        purchase.purchaseTime
+        purchase.purchaseTime,
     )
 
     companion object {

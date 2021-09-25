@@ -12,7 +12,7 @@ import kotlin.coroutines.CoroutineContext
 
 class BillingHandler(
     private val clientBuilder: BillingClient.Builder,
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
 ) : LifecycleObserver, PurchasesUpdatedListener, CoroutineScope,
     BillingClientStateListener, BillingUseCases {
 
@@ -57,10 +57,15 @@ class BillingHandler(
         lifecycle?.removeObserver(this)
     }
 
-    override fun onBillingSetupFinished(result: BillingResult) {
-        Log.d(LOG_TAG, "onBillingSetupFinished, ${result.responseCode}")
-        takeIf { result.responseCode == BillingClient.BillingResponseCode.OK }
-            ?.launch { queryInAppPurchasesWithDetails() }
+    override fun onBillingSetupFinished(billingResult: BillingResult) {
+        Log.d(LOG_TAG, "onBillingSetupFinished, ${billingResult.responseCode}")
+        billingResult.onOkBillingResult {
+            launch {
+                querySkuDetails()
+                billingClient?.queryPurchasesAsync(BillingClient.SkuType.INAPP)?.purchasesList
+                    ?.handlePurchases()
+            }
+        }
     }
 
     override fun onBillingServiceDisconnected() {
@@ -70,20 +75,11 @@ class BillingHandler(
         }
     }
 
-    override fun onPurchasesUpdated(result: BillingResult, purchases: MutableList<Purchase>?) {
-        Log.d(LOG_TAG, "onPurchasesUpdated, ${result.debugMessage}")
-        takeIf { result.responseCode == BillingClient.BillingResponseCode.OK }
-            ?.launch { purchases?.forEach { it.handlePurchase() } }
-    }
-
-    private suspend fun queryInAppPurchasesWithDetails() {
-        Log.d(LOG_TAG, "queryInAppPurchasesWithDetails")
-        querySkuDetails()
-        billingClient?.queryPurchases(BillingClient.SkuType.INAPP)?.purchasesList
-            ?.let {
-                BillingGlobal.HAS_PURCHASED_PRODUCTS = it.any { purchase -> purchase.statePurchased() }
-                it.forEach { purchase -> purchase.handlePurchase() }
-            }
+    override fun onPurchasesUpdated(billingResult: BillingResult, purchases: List<Purchase>?) {
+        Log.d(LOG_TAG, "onPurchasesUpdated, ${billingResult.debugMessage}")
+        billingResult.onOkBillingResult {
+            launch { purchases?.handlePurchases() }
+        }
     }
 
     private suspend fun querySkuDetails() {
@@ -91,30 +87,26 @@ class BillingHandler(
             .setSkusList(BuildConfig.PRODUCT_IDS.toList())
             .setType(BillingClient.SkuType.INAPP)
             .build()
-        val result = billingClient?.querySkuDetails(params)
-        Log.d(LOG_TAG, "querySkuDetails, responseCode: ${result?.billingResult?.responseCode}")
-        result?.billingResult?.onOkBillingResult {
-            result.skuDetailsList?.let {
-                Log.d(LOG_TAG, "setupProducts")
-                productRepository.setupProducts(it)
-            }
+        val skuDetailsResult = billingClient?.querySkuDetails(params)
+        Log.d(LOG_TAG, "querySkuDetails, responseCode: ${skuDetailsResult?.billingResult?.responseCode}")
+        skuDetailsResult?.billingResult?.onOkBillingResult {
+            skuDetailsResult.skuDetailsList?.let { productRepository.setupProducts(it) }
         }
     }
 
-    private suspend fun Purchase.handlePurchase() = takeIf { this.statePurchased() }
-        ?.let { purchase ->
-            Log.d(LOG_TAG, "handlePurchase, ${purchase.sku}")
+    private suspend fun List<Purchase>.handlePurchases() = forEach { purchase ->
+        if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+            Log.d(LOG_TAG, "handlePurchase, ${purchase.originalJson}")
             productRepository.onProductPurchased(purchase)
             BillingGlobal.HAS_PURCHASED_PRODUCTS = true
-            if (!isAcknowledged) {
+            if (!purchase.isAcknowledged) {
                 val params = AcknowledgePurchaseParams.newBuilder()
-                    .setPurchaseToken(purchaseToken)
+                    .setPurchaseToken(purchase.purchaseToken)
                     .build()
-                billingClient?.acknowledgePurchase(params)?.onOkBillingResult {
-                    Log.d(LOG_TAG, "acknowledgePurchase, success")
-                }
+                billingClient?.acknowledgePurchase(params)
             }
         }
+    }
 
     companion object {
 
@@ -134,8 +126,5 @@ class BillingHandler(
         private inline fun BillingResult.onOkBillingResult(onOkResult: () -> Unit) =
             takeIf { responseCode == BillingClient.BillingResponseCode.OK }
                 ?.let { onOkResult.invoke() }
-
-        private fun Purchase.statePurchased(): Boolean =
-            purchaseState == Purchase.PurchaseState.PURCHASED
     }
 }
