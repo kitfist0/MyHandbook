@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/ic_twotone_github.xml" value="0.1925925925925926" />
+        <entry key="app/src/main/res/layout/fragment_read.xml" value="0.125" />
       </map>
     </option>
   </component>

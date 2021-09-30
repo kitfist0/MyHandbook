@@ -12,7 +12,7 @@ import kotlin.math.abs
 
 class ArticleViewHolder(
     private val binding: ItemArticleBinding,
-    listener: ArticleAdapter.ArticleAdapterListener
+    listener: ArticleAdapter.ArticleAdapterListener,
 ): RecyclerView.ViewHolder(binding.root), ReboundingSwipeActionCallback.ReboundableViewHolder {
 
     companion object {
@@ -29,7 +29,7 @@ class ArticleViewHolder(
         }
     }
 
-    override val reboundableView: View = binding.cardView
+    override val reboundableView: View = binding.articleCard
 
     init {
         binding.run {
@@ -45,7 +45,7 @@ class ArticleViewHolder(
         // Setting interpolation here controls whether or not we draw the top left corner as
         // rounded or squared. Since all other corners are set to 0dp rounded, they are
         // not affected.
-        binding.cardView.updateCardViewTopLeftCornerSize(if (item.favorite) 1F else 0F)
+        binding.articleCard.updateCardViewTopLeftCornerSize(if (item.favorite) 1F else 0F)
 
         binding.executePendingBindings()
     }
@@ -65,7 +65,7 @@ class ArticleViewHolder(
         // Animate the top left corner radius of the article card as swipe happens.
         val interpolation = (currentSwipePercentage / swipeThreshold).coerceIn(0F, 1F)
         val adjustedInterpolation = abs((if (isFavorite) 1F else 0F) - interpolation)
-        binding.cardView.updateCardViewTopLeftCornerSize(adjustedInterpolation)
+        binding.articleCard.updateCardViewTopLeftCornerSize(adjustedInterpolation)
 
         // Start the background animation once the threshold is met.
         val thresholdMet = currentSwipePercentage >= swipeThreshold

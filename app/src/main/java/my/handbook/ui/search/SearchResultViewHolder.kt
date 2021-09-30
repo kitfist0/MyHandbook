@@ -6,7 +6,7 @@ import my.handbook.databinding.ItemSearchResultBinding
 
 class SearchResultViewHolder(
     private val binding: ItemSearchResultBinding,
-    listener: SearchResultAdapter.SearchResultAdapterListener
+    listener: SearchResultAdapter.SearchResultAdapterListener,
 ): RecyclerView.ViewHolder(binding.root) {
 
     init {

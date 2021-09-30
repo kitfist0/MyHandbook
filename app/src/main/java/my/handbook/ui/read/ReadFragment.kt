@@ -1,40 +1,41 @@
 package my.handbook.ui.read
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.webkit.WebView
-import androidx.navigation.fragment.navArgs
+import android.webkit.WebViewClient
+import androidx.fragment.app.viewModels
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
+import dagger.hilt.android.AndroidEntryPoint
 import my.handbook.R
 import my.handbook.common.isDarkThemeEnabled
+import my.handbook.databinding.FragmentReadBinding
+import my.handbook.ui.base.BaseFragment
 
-class ReadFragment : Fragment() {
+@AndroidEntryPoint
+class ReadFragment : BaseFragment<FragmentReadBinding>() {
 
-    private val args: ReadFragmentArgs by navArgs()
+    override val layoutRes: Int = R.layout.fragment_read
+    override val viewModel: ReadViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_read, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val webView = view.findViewById<WebView>(R.id.web_view)
-        webView.apply {
-            loadUrl("file:///android_asset/html/${args.fileName}")
-            val text = args.searchResult
-            if (text.isNotEmpty()) {
-                findAllAsync(text)
-            }
+    override fun initViews() {
+        binding.readWebView.apply {
             if (context.isDarkThemeEnabled() && WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
                 WebSettingsCompat.setForceDark(settings, WebSettingsCompat.FORCE_DARK_ON)
             }
+            webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView, url: String) {
+                    viewModel.onPageFinished()
+                }
+            }
+        }
+    }
+
+    override fun observeData() {
+        viewModel.url.observe(viewLifecycleOwner) {
+            binding.readWebView.loadUrl(it)
+        }
+        viewModel.searchText.observe(viewLifecycleOwner) {
+            binding.readWebView.findAllAsync(it)
         }
     }
 }

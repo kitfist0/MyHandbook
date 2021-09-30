@@ -8,7 +8,7 @@ import my.handbook.data.db.entity.SearchResult
 import my.handbook.databinding.ItemSearchResultBinding
 
 class SearchResultAdapter(
-    private val listener: SearchResultAdapterListener
+    private val listener: SearchResultAdapterListener,
 ) : ListAdapter<SearchResult, SearchResultViewHolder>(ParagraphDiffCallback) {
 
     companion object {

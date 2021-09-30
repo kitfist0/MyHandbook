@@ -7,13 +7,14 @@ import kotlinx.coroutines.launch
 import my.handbook.data.db.entity.Article
 import my.handbook.data.repository.ArticleRepository
 import my.handbook.data.repository.SectionRepository
+import my.handbook.ui.base.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val articleRepository: ArticleRepository,
-    private val sectionRepository: SectionRepository
-) : ViewModel() {
+    private val sectionRepository: SectionRepository,
+) : BaseViewModel() {
 
     private val selectedSections = liveData {
         sectionRepository.getSelectedSections().collect { emit(it) }
@@ -23,6 +24,11 @@ class HomeViewModel @Inject constructor(
         liveData { emit(articleRepository.getArticles(sections)) }
     }
 
-    fun onFavoriteClicked(article: Article) =
+    fun onArticleClicked(file: String) {
+        navigateTo(HomeFragmentDirections.actionHomeFragmentToReadFragment(file))
+    }
+
+    fun onFavoriteChanged(article: Article) {
         viewModelScope.launch { articleRepository.changeFavorite(article) }
+    }
 }

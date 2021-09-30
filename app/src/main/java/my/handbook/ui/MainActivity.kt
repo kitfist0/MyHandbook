@@ -68,7 +68,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         bottomDrawer.apply {
             addOnSlideAction(HalfClockwiseRotateSlideAction(binding.bottomAppBarChevron))
-//            addOnSlideAction(AlphaSlideAction(binding.bottomAppBarTitle, true))
             addOnStateChangedAction(ShowHideFabStateAction(binding.fab))
         }
 

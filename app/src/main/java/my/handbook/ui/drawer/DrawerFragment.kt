@@ -4,7 +4,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -110,7 +109,6 @@ class DrawerFragment : Fragment(), DrawerAdapter.DrawerAdapterListener {
         }
 
         viewModel.drawerItems.observe(viewLifecycleOwner) {
-            Log.d("DEBUG_TAG", "drawerItems size: ${it?.size}")
             drawerAdapter.submitList(it)
         }
     }

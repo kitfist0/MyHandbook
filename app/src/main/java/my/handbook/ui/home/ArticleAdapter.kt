@@ -9,7 +9,7 @@ import my.handbook.data.db.entity.Article
 import my.handbook.databinding.ItemArticleBinding
 
 class ArticleAdapter(
-    private val listener: ArticleAdapterListener
+    private val listener: ArticleAdapterListener,
 ) : ListAdapter<Article, ArticleViewHolder>(MyItemDiffCallback) {
 
     companion object {
@@ -22,7 +22,7 @@ class ArticleAdapter(
     }
 
     interface ArticleAdapterListener {
-        fun onArticleClicked(cardView: View, file: String)
+        fun onArticleClicked(file: String)
         fun onFavoriteChanged(item: Article)
     }
 

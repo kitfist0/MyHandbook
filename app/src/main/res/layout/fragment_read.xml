@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WebView
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/web_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="model"
+            type="my.handbook.ui.base.BaseViewModel"/>
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <WebView
+            android:id="@+id/read_web_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:goneIf="@{model.isLoading}"/>
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="180dp"
+            android:background="?android:colorBackground"
+            android:visibility="visible"
+            app:goneIf="@{!model.isLoading}"/>
+
+    </FrameLayout>
+
+</layout>
