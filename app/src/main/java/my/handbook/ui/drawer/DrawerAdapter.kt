@@ -9,10 +9,8 @@ import my.handbook.databinding.ItemDrawerProductBinding
 import my.handbook.databinding.ItemDrawerSectionBinding
 
 class DrawerAdapter(
-    private val listener: DrawerAdapterListener
-) : ListAdapter<DrawerItem, DrawerItemViewHolder<DrawerItem>>(
-    DrawerItem.DrawerItemDiff
-) {
+    private val listener: DrawerAdapterListener,
+) : ListAdapter<DrawerItem, DrawerItemViewHolder<DrawerItem>>(DrawerItemDiff) {
 
     companion object {
         private const val VIEW_TYPE_SECTION = 1
