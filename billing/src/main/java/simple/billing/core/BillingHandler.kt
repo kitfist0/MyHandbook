@@ -6,29 +6,35 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.android.billingclient.api.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import simple.billing.BuildConfig
+import simple.billing.data.db.Product
 import simple.billing.data.repository.ProductRepository
 import kotlin.coroutines.CoroutineContext
 
 class BillingHandler(
     private val clientBuilder: BillingClient.Builder,
     private val productRepository: ProductRepository,
-) : LifecycleObserver, PurchasesUpdatedListener, CoroutineScope,
-    BillingClientStateListener, BillingUseCases {
+) : LifecycleObserver, PurchasesUpdatedListener, CoroutineScope, BillingClientStateListener {
 
     private var billingClient: BillingClient? = null
     private var lifecycle: Lifecycle? = null
+
+    // Products
+    val products: Flow<List<Product>> = productRepository.productsFlow
+
+    // Error messages
+    private val _errors = MutableSharedFlow<String>()
+    val errors = _errors.asSharedFlow()
 
     fun initBilling(lifecycle: Lifecycle) {
         this.lifecycle = lifecycle
         this.lifecycle?.addObserver(this)
     }
 
-    override val coroutineContext: CoroutineContext = Job() + Dispatchers.IO
+    override val coroutineContext: CoroutineContext = Job()
 
-    override val products = productRepository.productsFlow.asLiveData()
-
-    override fun purchaseProduct(activity: Activity, originalJson: String) {
+    fun purchaseProduct(activity: Activity, originalJson: String) {
         takeIf { billingClient?.isReady == true }
             ?.let {
                 Log.d(LOG_TAG, "launchBillingFlow, billing flow is ready")
@@ -59,12 +65,10 @@ class BillingHandler(
 
     override fun onBillingSetupFinished(billingResult: BillingResult) {
         Log.d(LOG_TAG, "onBillingSetupFinished, ${billingResult.responseCode}")
-        billingResult.onOkBillingResult {
-            launch {
-                querySkuDetails()
-                billingClient?.queryPurchasesAsync(BillingClient.SkuType.INAPP)?.purchasesList
-                    ?.handlePurchases()
-            }
+        billingResult.launchOnBillingResult {
+            querySkuDetails()
+            billingClient?.queryPurchasesAsync(BillingClient.SkuType.INAPP)?.purchasesList
+                ?.handlePurchases()
         }
     }
 
@@ -77,8 +81,8 @@ class BillingHandler(
 
     override fun onPurchasesUpdated(billingResult: BillingResult, purchases: List<Purchase>?) {
         Log.d(LOG_TAG, "onPurchasesUpdated, ${billingResult.debugMessage}")
-        billingResult.onOkBillingResult {
-            launch { purchases?.handlePurchases() }
+        billingResult.launchOnBillingResult {
+            purchases?.handlePurchases()
         }
     }
 
@@ -89,7 +93,7 @@ class BillingHandler(
             .build()
         val skuDetailsResult = billingClient?.querySkuDetails(params)
         Log.d(LOG_TAG, "querySkuDetails, responseCode: ${skuDetailsResult?.billingResult?.responseCode}")
-        skuDetailsResult?.billingResult?.onOkBillingResult {
+        if (skuDetailsResult?.billingResult?.isOkResponse() == true) {
             skuDetailsResult.skuDetailsList?.let { productRepository.setupProducts(it) }
         }
     }
@@ -104,6 +108,26 @@ class BillingHandler(
                     .setPurchaseToken(purchase.purchaseToken)
                     .build()
                 billingClient?.acknowledgePurchase(params)
+            }
+        }
+    }
+
+    private fun BillingResult.launchOnBillingResult(onOkResult: suspend () -> Unit) {
+        launch {
+            if (isOkResponse()) {
+                onOkResult.invoke()
+            } else {
+                when (responseCode) {
+                    BillingClient.BillingResponseCode.SERVICE_TIMEOUT -> "Service timeout"
+                    BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED -> "Feature not supported"
+                    BillingClient.BillingResponseCode.SERVICE_DISCONNECTED -> "Service disconnected"
+                    BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE -> "Service unavailable"
+                    BillingClient.BillingResponseCode.BILLING_UNAVAILABLE -> "Billing unavailable"
+                    BillingClient.BillingResponseCode.ITEM_UNAVAILABLE -> "Item unavailable"
+                    BillingClient.BillingResponseCode.DEVELOPER_ERROR -> "Developer error"
+                    BillingClient.BillingResponseCode.ERROR -> "Error"
+                    else -> null
+                }?.let { _errors.emit(it) }
             }
         }
     }
@@ -123,8 +147,6 @@ class BillingHandler(
 
         private const val LOG_TAG = "BILLING_HANDLER"
 
-        private inline fun BillingResult.onOkBillingResult(onOkResult: () -> Unit) =
-            takeIf { responseCode == BillingClient.BillingResponseCode.OK }
-                ?.let { onOkResult.invoke() }
+        private fun BillingResult.isOkResponse() = responseCode == BillingClient.BillingResponseCode.OK
     }
 }

@@ -14,6 +14,8 @@ class SimpleBillingViewModel(application: Application) : AndroidViewModel(applic
 
     val products: LiveData<List<Product>> = billingHandler.products.asLiveData()
 
-    fun purchaseProduct(activity: Activity, originalJson: String) =
-        billingHandler.purchaseProduct(activity, originalJson)
+    val errors: LiveData<String> = billingHandler.errors.asLiveData()
+
+    fun onProductClicked(activity: Activity?, product: Product) =
+        activity?.let { billingHandler.purchaseProduct(it, product.originalJson) }
 }
