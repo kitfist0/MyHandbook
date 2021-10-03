@@ -12,4 +12,14 @@ data class Product(
     var priceAmountMicros: Long = 0L,
     var purchaseTime: Long = 0L,
     var purchaseToken: String = ""
-)
+) {
+    companion object {
+        fun Product.isPurchased() = purchaseToken.isNotEmpty()
+
+        fun Product.getProductDrawable() = if (isPurchased()) {
+            simple.billing.R.drawable.ic_product_purchased
+        } else {
+            simple.billing.R.drawable.ic_product_default
+        }
+    }
+}

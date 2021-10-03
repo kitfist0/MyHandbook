@@ -3,6 +3,7 @@ package simple.billing.data.repository
 import android.content.Context
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
+import kotlinx.coroutines.flow.Flow
 import simple.billing.data.db.Product
 import simple.billing.data.db.ProductDao
 import simple.billing.data.db.ProductDatabase
@@ -11,7 +12,7 @@ class ProductRepository(
     private val productDao: ProductDao,
 ) {
 
-    val productsFlow = productDao.getProducts()
+    val productsFlow: Flow<List<Product>> = productDao.getProducts()
 
     suspend fun setupProducts(skuDetailsList: List<SkuDetails>) = skuDetailsList
         .map {
