@@ -18,7 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import my.handbook.R
 import my.handbook.common.themeColor
 import my.handbook.databinding.FragmentDrawerBinding
-import simple.billing.attachBillingToFragmentLifecycle
 import kotlin.LazyThreadSafetyMode.NONE
 
 @AndroidEntryPoint
@@ -55,7 +54,6 @@ class DrawerFragment : Fragment(), DrawerAdapter.DrawerAdapterListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        attachBillingToFragmentLifecycle()
         requireActivity().onBackPressedDispatcher.addCallback(this, closeDrawerOnBackPressed)
     }
 
@@ -149,6 +147,6 @@ class DrawerFragment : Fragment(), DrawerAdapter.DrawerAdapterListener {
     }
 
     override fun onProductClicked(item: DrawerItem.ProductItem) {
-        activity?.let { viewModel.purchaseProduct(it, item.product.originalJson) }
+        viewModel.onProductClicked(activity, item)
     }
 }

@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -16,9 +15,10 @@ import my.handbook.ui.drawer.HalfClockwiseRotateSlideAction
 import my.handbook.ui.drawer.ShowHideFabStateAction
 import my.handbook.ui.search.SearchFragmentDirections
 import my.handbook.util.contentView
+import simple.billing.core.BillingAppCompatActivity
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
+class MainActivity : BillingAppCompatActivity(), NavController.OnDestinationChangedListener {
 
     private val binding: ActivityMainBinding by contentView(R.layout.activity_main)
     private val bottomDrawer: DrawerFragment by lazy(LazyThreadSafetyMode.NONE) {

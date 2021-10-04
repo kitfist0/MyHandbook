@@ -8,10 +8,13 @@ import android.view.ViewGroup
 import android.view.WindowInsets
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import my.handbook.R
 import my.handbook.data.db.entity.Section
+import simple.billing.data.db.Product
+import simple.billing.data.db.Product.Companion.getProductDrawable
 
 @BindingAdapter("sectionText")
 fun TextView.bindSectionText(section: Int?) {
@@ -151,5 +154,15 @@ fun View.requestApplyInsetsWhenAttached() {
 
             override fun onViewDetachedFromWindow(v: View) = Unit
         })
+    }
+}
+
+@BindingAdapter("productIcon")
+fun TextView.bindDrawerProductItemIcon(product: Product?) {
+    product?.let {
+        setCompoundDrawablesWithIntrinsicBounds(
+            AppCompatResources.getDrawable(context, it.getProductDrawable()),
+            null, null, null
+        )
     }
 }
