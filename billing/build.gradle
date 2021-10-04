@@ -18,10 +18,6 @@ android {
         buildConfigField "String[]", "PRODUCT_IDS", '{"coffee.espresso", "coffee.cappuccino", "coffee.latte"}'
     }
 
-    buildFeatures {
-        dataBinding true
-    }
-
     buildTypes {
         release {
             minifyEnabled false

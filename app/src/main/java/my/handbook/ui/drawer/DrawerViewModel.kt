@@ -1,6 +1,6 @@
 package my.handbook.ui.drawer
 
-import android.app.Application
+import android.app.Activity
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -9,14 +9,14 @@ import my.handbook.BuildConfig
 import my.handbook.R
 import my.handbook.common.combineWith
 import my.handbook.data.repository.SectionRepository
-import simple.billing.core.BillingViewModel
+import simple.billing.core.BillingHandler
 import javax.inject.Inject
 
 @HiltViewModel
 class DrawerViewModel @Inject constructor(
-    application: Application,
-    private val sectionRepository: SectionRepository
-) : BillingViewModel(application) {
+    private val billingHandler: BillingHandler,
+    private val sectionRepository: SectionRepository,
+) : ViewModel() {
 
     companion object {
         private val aboutDivider = listOf(DrawerItem.DividerItem(R.string.about))
@@ -53,7 +53,7 @@ class DrawerViewModel @Inject constructor(
         }
     }
 
-    private val productItems = products.map {
+    private val productItems = billingHandler.products.asLiveData().map {
         it.map { product -> DrawerItem.ProductItem(product) }
     }
 
@@ -63,4 +63,13 @@ class DrawerViewModel @Inject constructor(
 
     fun onSectionClicked(sectionItem: DrawerItem.SectionItem) =
         viewModelScope.launch { sectionRepository.updateSection(sectionItem.section) }
+
+    fun onProductClicked(
+        activity: Activity?,
+        productItem: DrawerItem.ProductItem,
+    ) {
+        activity?.let {
+            billingHandler.purchaseProduct(it, productItem.product.originalJson)
+        }
+    }
 }

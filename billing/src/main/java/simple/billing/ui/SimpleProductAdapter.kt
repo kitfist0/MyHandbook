@@ -3,12 +3,12 @@ package simple.billing.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import simple.billing.R
 import simple.billing.data.db.Product
-import simple.billing.databinding.ItemProductBinding
-import simple.billing.isPurchased
+import simple.billing.data.db.Product.Companion.isPurchased
 
 class SimpleProductAdapter(
-    private val listener: ProductAdapterListener
+    private val listener: ProductAdapterListener,
 ) : androidx.recyclerview.widget.ListAdapter<Product, SimpleProductViewHolder>(MyItemDiffCallback) {
 
     companion object {
@@ -25,14 +25,8 @@ class SimpleProductAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimpleProductViewHolder {
-        return SimpleProductViewHolder(
-            ItemProductBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            ),
-            listener
-        )
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false)
+        return SimpleProductViewHolder(itemView, listener)
     }
 
     override fun onBindViewHolder(holder: SimpleProductViewHolder, position: Int) {

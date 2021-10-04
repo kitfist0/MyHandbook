@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/drawable/ic_twotone_github.xml" value="0.1925925925925926" />
         <entry key="app/src/main/res/layout/fragment_read.xml" value="0.125" />
+        <entry key="billing/src/main/res/layout/item_product.xml" value="0.1" />
       </map>
     </option>
   </component>
