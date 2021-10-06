@@ -31,6 +31,10 @@ abstract class BaseViewModel : ViewModel() {
         offerEvent(TextMessage(message))
     }
 
+    open fun onBackPressed() {
+        navigateBack()
+    }
+
     private fun offerEvent(event: Event) {
         viewModelScope.launch { _event.emit(event) }
     }

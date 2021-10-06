@@ -18,7 +18,7 @@ import kotlin.math.max
  * in [onSlide] is corrected to guarantee that the offset 0.0 <i>always</i> be exactly at the
  * [BottomSheetBehavior.STATE_HALF_EXPANDED] state.
  */
-class BottomDrawerCallback : BottomSheetBehavior.BottomSheetCallback() {
+class DrawerBehaviorCallback : BottomSheetBehavior.BottomSheetCallback() {
 
     private val onSlideActions: MutableList<OnSlideAction> = mutableListOf()
     private val onStateChangedActions: MutableList<OnStateChangedAction> = mutableListOf()

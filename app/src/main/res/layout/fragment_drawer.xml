@@ -8,7 +8,7 @@
         android:layout_height="match_parent">
 
         <View
-            android:id="@+id/scrim_view"
+            android:id="@+id/drawer_scrim_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
@@ -16,7 +16,7 @@
             android:background="?attr/scrimBackground"/>
 
         <FrameLayout
-            android:id="@+id/container"
+            android:id="@+id/drawer_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/bottom_sheet_behavior"

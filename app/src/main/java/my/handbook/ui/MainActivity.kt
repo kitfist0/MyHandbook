@@ -8,12 +8,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import my.handbook.NavGraphDirections
 import my.handbook.R
 import my.handbook.databinding.ActivityMainBinding
-import my.handbook.ui.drawer.DrawerFragment
-import my.handbook.ui.drawer.HalfClockwiseRotateSlideAction
-import my.handbook.ui.drawer.ShowHideFabStateAction
-import my.handbook.ui.search.SearchFragmentDirections
+import my.handbook.ui.drawer.*
 import my.handbook.util.contentView
 import simple.billing.core.BillingAppCompatActivity
 
@@ -21,8 +19,9 @@ import simple.billing.core.BillingAppCompatActivity
 class MainActivity : BillingAppCompatActivity(), NavController.OnDestinationChangedListener {
 
     private val binding: ActivityMainBinding by contentView(R.layout.activity_main)
-    private val bottomDrawer: DrawerFragment by lazy(LazyThreadSafetyMode.NONE) {
-        supportFragmentManager.findFragmentById(R.id.bottom_nav_drawer) as DrawerFragment
+
+    private val drawerInterface: DrawerInterface by lazy(LazyThreadSafetyMode.NONE) {
+        supportFragmentManager.findFragmentById(R.id.bottom_nav_drawer) as DrawerInterface
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,19 +60,19 @@ class MainActivity : BillingAppCompatActivity(), NavController.OnDestinationChan
             setHideMotionSpecResource(R.animator.fab_hide)
             setOnClickListener {
                 findNavController(R.id.nav_host_fragment).navigate(
-                    SearchFragmentDirections.actionGlobalSearchFragment()
+                    NavGraphDirections.actionGlobalSearchFragment()
                 )
             }
         }
 
-        bottomDrawer.apply {
+        drawerInterface.drawerBehaviorCallback.apply {
             addOnSlideAction(HalfClockwiseRotateSlideAction(binding.bottomAppBarChevron))
             addOnStateChangedAction(ShowHideFabStateAction(binding.fab))
         }
 
         // Set up the BottomNavigationDrawer's open/close affordance
         binding.bottomAppBarContentContainer.setOnClickListener {
-            bottomDrawer.toggle()
+            drawerInterface.toggleState()
         }
     }
 
@@ -81,12 +80,13 @@ class MainActivity : BillingAppCompatActivity(), NavController.OnDestinationChan
         binding.run {
             bottomAppBar.performHide()
             // Get a handle on the animator that hides the bottom app bar so we can wait to hide
-            // the fab and bottom app bar until after it's exit animation finishes.
+            // the fab and bottom app bar until after it's exit animation finishes
             bottomAppBar.animate().setListener(object : AnimatorListenerAdapter() {
+
                 var isCanceled = false
+
                 override fun onAnimationEnd(animation: Animator?) {
                     if (isCanceled) return
-
                     // Hide the BottomAppBar to avoid it showing above the keyboard
                     bottomAppBar.visibility = View.GONE
                     fab.visibility = View.INVISIBLE

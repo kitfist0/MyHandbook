@@ -2,13 +2,16 @@ package my.handbook.ui.drawer
 
 import android.app.Activity
 import androidx.lifecycle.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import my.handbook.BuildConfig
 import my.handbook.R
 import my.handbook.common.combineWith
 import my.handbook.data.repository.SectionRepository
+import my.handbook.ui.base.BaseViewModel
+import my.handbook.ui.base.Event
 import simple.billing.core.BillingHandler
 import javax.inject.Inject
 
@@ -16,7 +19,7 @@ import javax.inject.Inject
 class DrawerViewModel @Inject constructor(
     private val billingHandler: BillingHandler,
     private val sectionRepository: SectionRepository,
-) : ViewModel() {
+) : BaseViewModel() {
 
     companion object {
         private val aboutDivider = listOf(DrawerItem.DividerItem(R.string.about))
@@ -61,6 +64,21 @@ class DrawerViewModel @Inject constructor(
         if (pList.isNullOrEmpty()) slList else slList?.plus(coffeeDivider)?.plus(pList)
     }
 
+    private val _bottomSheetState = MutableStateFlow(BottomSheetBehavior.STATE_HIDDEN)
+    val bottomSheetState = _bottomSheetState.asStateFlow()
+
+    override fun onBackPressed() {
+        if (bottomSheetState.value != BottomSheetBehavior.STATE_HIDDEN) {
+            changeBottomSheetState(BottomSheetBehavior.STATE_HIDDEN)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    fun onBottomSheetStateChanged(newState: Int) {
+        viewModelScope.launch { _bottomSheetState.emit(newState) }
+    }
+
     fun onSectionClicked(sectionItem: DrawerItem.SectionItem) =
         viewModelScope.launch { sectionRepository.updateSection(sectionItem.section) }
 
@@ -71,5 +89,24 @@ class DrawerViewModel @Inject constructor(
         activity?.let {
             billingHandler.purchaseProduct(it, productItem.product.originalJson)
         }
+    }
+
+    fun onScrimViewClicked() {
+        changeBottomSheetState(BottomSheetBehavior.STATE_HIDDEN)
+    }
+
+    fun toggleBottomSheetState() {
+        when (_bottomSheetState.value) {
+            BottomSheetBehavior.STATE_HIDDEN ->
+                changeBottomSheetState(BottomSheetBehavior.STATE_HALF_EXPANDED)
+            BottomSheetBehavior.STATE_HALF_EXPANDED,
+            BottomSheetBehavior.STATE_EXPANDED,
+            BottomSheetBehavior.STATE_COLLAPSED ->
+                changeBottomSheetState(BottomSheetBehavior.STATE_HIDDEN)
+        }
+    }
+
+    private fun changeBottomSheetState(newState: Int) {
+        viewModelScope.launch { _bottomSheetState.emit(newState) }
     }
 }

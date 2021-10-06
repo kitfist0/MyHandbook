@@ -32,7 +32,7 @@ abstract class BaseFragment<out DB : ViewDataBinding> : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this) {
-            viewModel.navigateBack()
+            viewModel.onBackPressed()
         }
     }
 
