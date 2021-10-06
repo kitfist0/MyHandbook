@@ -1,8 +1,6 @@
 package my.handbook.ui.drawer
 
-import android.content.Intent
 import android.content.res.ColorStateList
-import android.net.Uri
 import android.view.View
 import android.widget.FrameLayout
 import androidx.fragment.app.viewModels
@@ -99,8 +97,7 @@ class DrawerFragment : BaseFragment<FragmentDrawerBinding>(), DrawerAdapter.Draw
     }
 
     override fun onLinkClicked(item: DrawerItem.LinkItem) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.link))
-        startActivity(intent)
+        viewModel.onLinkClicked(item)
     }
 
     override fun onProductClicked(item: DrawerItem.ProductItem) {

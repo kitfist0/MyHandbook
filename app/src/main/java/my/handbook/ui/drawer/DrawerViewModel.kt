@@ -1,6 +1,8 @@
 package my.handbook.ui.drawer
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,7 +13,6 @@ import my.handbook.R
 import my.handbook.common.combineWith
 import my.handbook.data.repository.SectionRepository
 import my.handbook.ui.base.BaseViewModel
-import my.handbook.ui.base.Event
 import simple.billing.core.BillingHandler
 import javax.inject.Inject
 
@@ -82,10 +83,12 @@ class DrawerViewModel @Inject constructor(
     fun onSectionClicked(sectionItem: DrawerItem.SectionItem) =
         viewModelScope.launch { sectionRepository.updateSection(sectionItem.section) }
 
-    fun onProductClicked(
-        activity: Activity?,
-        productItem: DrawerItem.ProductItem,
-    ) {
+    fun onLinkClicked(linkItem: DrawerItem.LinkItem) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(linkItem.link))
+        startActivity(intent)
+    }
+
+    fun onProductClicked(activity: Activity?, productItem: DrawerItem.ProductItem) {
         activity?.let {
             billingHandler.purchaseProduct(it, productItem.product.originalJson)
         }

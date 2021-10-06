@@ -1,5 +1,6 @@
 package my.handbook.ui.base
 
+import android.content.Intent
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,6 +30,10 @@ abstract class BaseViewModel : ViewModel() {
 
     fun showMessage(message: String) {
         offerEvent(TextMessage(message))
+    }
+
+    fun startActivity(intent: Intent) {
+        offerEvent(StartActivity(intent))
     }
 
     open fun onBackPressed() {
