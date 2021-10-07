@@ -22,6 +22,7 @@ class DrawerFragment : BaseFragment<FragmentDrawerBinding>(), DrawerAdapter.Draw
     override val viewModel: DrawerViewModel by viewModels()
 
     override val drawerBehaviorCallback = DrawerBehaviorCallback()
+
     override fun toggleState() {
         viewModel.toggleBottomSheetState()
     }

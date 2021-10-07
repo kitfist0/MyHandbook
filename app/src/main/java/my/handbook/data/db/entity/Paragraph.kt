@@ -9,5 +9,5 @@ data class Paragraph(
     val id: Long,
     val file: String,
     val section: Int,
-    val text: String
+    val text: String,
 )

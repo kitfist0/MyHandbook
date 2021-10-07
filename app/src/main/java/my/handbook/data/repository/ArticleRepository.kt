@@ -7,7 +7,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ArticleRepository @Inject constructor(
-    private val articleDao: ArticleDao
+    private val articleDao: ArticleDao,
 ) {
 
     suspend fun getArticles(sections: List<Int>) = articleDao.getArticles(sections)

@@ -15,10 +15,10 @@ import my.handbook.data.db.entity.Section
         Article::class,
         Paragraph::class,
         ParagraphFts::class,
-        Section::class
+        Section::class,
     ],
     version = 1,
-    exportSchema = false
+    exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
 

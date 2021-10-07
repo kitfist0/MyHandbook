@@ -8,7 +8,7 @@ import javax.inject.Singleton
 
 @Singleton
 class SectionRepository @Inject constructor(
-    private val sectionDao: SectionDao
+    private val sectionDao: SectionDao,
 ) {
 
     fun getSelectedSections(): Flow<List<Int>> = sectionDao.getSelectedSections()
