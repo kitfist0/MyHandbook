@@ -3,19 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/home_recycler_view"
+    <data>
+        <variable
+            name="model"
+            type="my.handbook.ui.base.BaseViewModel"/>
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingTop="@dimen/grid_0_25"
-        android:paddingBottom="@dimen/bottom_app_bar_height"
-        android:transitionGroup="true"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:paddingTopSystemWindowInsets="@{true}"
-        app:paddingBottomSystemWindowInsets="@{true}"
-        tools:listitem="@layout/item_article"
-        tools:itemCount="4"/>
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/home_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/grid_0_25"
+            android:paddingBottom="@dimen/bottom_app_bar_height"
+            android:transitionGroup="true"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:paddingTopSystemWindowInsets="@{true}"
+            app:paddingBottomSystemWindowInsets="@{true}"
+            tools:listitem="@layout/item_article"
+            tools:itemCount="4"/>
+
+        <ProgressBar
+            style="@style/Widget.Handbook.FullscreenProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:goneIf="@{!model.isLoading}"/>
+
+    </FrameLayout>
 
 </layout>

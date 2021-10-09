@@ -20,13 +20,10 @@
             android:visibility="gone"
             app:goneIf="@{model.isLoading}"/>
 
-        <androidx.core.widget.ContentLoadingProgressBar
-            style="?android:attr/progressBarStyleLarge"
+        <ProgressBar
+            style="@style/Widget.Handbook.FullscreenProgressBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="180dp"
-            android:background="?android:colorBackground"
-            android:visibility="visible"
             app:goneIf="@{!model.isLoading}"/>
 
     </FrameLayout>
