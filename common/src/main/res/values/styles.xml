@@ -19,4 +19,13 @@
         <item name="android:checkable">false</item>
     </style>
 
+    <style name="Widget.Handbook.FullscreenProgressBar" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:background">?android:colorBackground</item>
+        <item name="android:padding">@dimen/fullscreen_progress_padding</item>
+        <item name="android:translationZ">@dimen/fullscreen_progress_translation_z</item>
+        <item name="android:elevation">@dimen/fullscreen_progress_elevation</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
 </resources>

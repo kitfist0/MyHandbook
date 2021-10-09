@@ -16,4 +16,10 @@
 
     <dimen name="drawer_item_height">56dp</dimen>
 
+    <!--region FullscreenProgressBar-->
+    <dimen name="fullscreen_progress_elevation">2dp</dimen>
+    <dimen name="fullscreen_progress_padding">180dp</dimen>
+    <dimen name="fullscreen_progress_translation_z">2dp</dimen>
+    <!--endregion-->
+
 </resources>
