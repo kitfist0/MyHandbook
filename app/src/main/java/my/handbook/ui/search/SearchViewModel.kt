@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -18,14 +17,18 @@ class SearchViewModel @Inject constructor(
     private val repository: BaseParagraphRepository,
 ) : BaseViewModel() {
 
+    companion object {
+        private const val DELAY_MILLIS = 300L
+    }
+
     private val _searchResults = MutableLiveData<List<SearchResult>>()
     val searchResults: LiveData<List<SearchResult>> = _searchResults
 
     fun onSearchRequestChanged(searchString: String) {
         viewModelScope.coroutineContext.cancelChildren()
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             isLoading.set(true)
-            delay(300L)
+            delay(DELAY_MILLIS)
             val results = repository.getSearchResults(searchString)
             _searchResults.postValue(results)
             isLoading.set(false)
