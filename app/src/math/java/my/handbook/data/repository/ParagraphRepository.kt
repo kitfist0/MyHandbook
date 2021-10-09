@@ -6,7 +6,7 @@ import my.handbook.data.db.entity.SearchResult
 
 class ParagraphRepository(
     paragraphDao: ParagraphDao,
-    private val stemmer: PorterStemmer
+    private val stemmer: PorterStemmer,
 ) : BaseParagraphRepository(paragraphDao) {
 
     override suspend fun getSearchResults(searchRequest: String): List<SearchResult> {

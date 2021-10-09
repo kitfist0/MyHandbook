@@ -1,6 +1,7 @@
 package my.handbook.data.repository
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import my.handbook.data.db.dao.SectionDao
 import my.handbook.data.db.entity.Section
 import javax.inject.Inject
@@ -11,7 +12,7 @@ class SectionRepository @Inject constructor(
     private val sectionDao: SectionDao,
 ) {
 
-    fun getSelectedSections(): Flow<List<Int>> = sectionDao.getSelectedSections()
+    fun getSelectedSectionIds(): Flow<List<Int>> = sectionDao.getSelectedSectionIds()
 
     fun getSections(): Flow<List<Section>> = sectionDao.getSections()
 

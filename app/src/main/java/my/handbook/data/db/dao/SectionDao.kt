@@ -10,7 +10,7 @@ import my.handbook.data.db.entity.Section
 interface SectionDao {
 
     @Query("SELECT id FROM sections WHERE selected = 1")
-    fun getSelectedSections(): Flow<List<Int>>
+    fun getSelectedSectionIds(): Flow<List<Int>>
 
     @Query("SELECT * FROM sections ORDER BY id")
     fun getSections(): Flow<List<Section>>
