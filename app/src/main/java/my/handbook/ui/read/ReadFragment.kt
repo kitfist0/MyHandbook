@@ -1,5 +1,6 @@
 package my.handbook.ui.read
 
+import android.graphics.Bitmap
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.viewModels
@@ -23,6 +24,9 @@ class ReadFragment : BaseFragment<FragmentReadBinding>() {
                 WebSettingsCompat.setForceDark(settings, WebSettingsCompat.FORCE_DARK_ON)
             }
             webViewClient = object : WebViewClient() {
+                override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                    viewModel.onPageStarted()
+                }
                 override fun onPageFinished(view: WebView, url: String) {
                     viewModel.onPageFinished()
                 }

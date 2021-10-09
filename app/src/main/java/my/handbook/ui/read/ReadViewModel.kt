@@ -13,10 +13,6 @@ class ReadViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel() {
 
-    init {
-        isLoading.set(true)
-    }
-
     val url: LiveData<String> = liveData {
         val fileName = ReadFragmentArgs.fromSavedStateHandle(savedStateHandle).fileName
         emit("file:///android_asset/html/${fileName}")
@@ -24,6 +20,10 @@ class ReadViewModel @Inject constructor(
 
     private val _searchText = MutableLiveData<String>()
     val searchText: LiveData<String> = _searchText
+
+    fun onPageStarted() {
+        isLoading.set(true)
+    }
 
     fun onPageFinished() {
         isLoading.set(false)
