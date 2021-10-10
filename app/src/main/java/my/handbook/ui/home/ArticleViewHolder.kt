@@ -4,7 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import my.handbook.R
-import my.handbook.data.db.entity.Article
+import my.handbook.data.entity.Article
 import my.handbook.databinding.ItemArticleBinding
 import my.handbook.util.ItemSwipeActionDrawable
 import my.handbook.util.ReboundingSwipeActionCallback

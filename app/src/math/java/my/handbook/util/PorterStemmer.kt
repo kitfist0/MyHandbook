@@ -1,12 +1,12 @@
-package my.handbook.data.repository
+package my.handbook.util
 
-import java.util.*
 import java.util.regex.Pattern
+import javax.inject.Inject
 
 /**
  * Porter algorithm implementation for Russian language
  */
-class PorterStemmer {
+class PorterStemmer @Inject constructor() {
 
     companion object {
         private val PERFECTIVEGROUND = Pattern.compile(
@@ -34,7 +34,7 @@ class PorterStemmer {
 
     fun stem(words: String): String {
         var word = words
-        word = word.toLowerCase(Locale.getDefault())
+        word = word.lowercase()
         word = word.replace('ё', 'е')
         val m = RVRE.matcher(word)
 

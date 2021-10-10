@@ -4,7 +4,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import dagger.hilt.android.AndroidEntryPoint
 import my.handbook.R
-import my.handbook.data.db.entity.Article
+import my.handbook.data.entity.Article
 import my.handbook.databinding.FragmentHomeBinding
 import my.handbook.ui.base.BaseFragment
 import my.handbook.util.ReboundingSwipeActionCallback

@@ -12,7 +12,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import my.handbook.R
-import my.handbook.data.db.entity.Section
+import my.handbook.data.entity.Section
 import simple.billing.data.db.Product
 import simple.billing.data.db.Product.Companion.getProductDrawable
 

@@ -2,7 +2,7 @@ package my.handbook.ui.drawer
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import my.handbook.data.db.entity.Section
+import my.handbook.data.entity.Section
 import simple.billing.data.db.Product
 
 /**

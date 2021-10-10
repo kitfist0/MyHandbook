@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import my.handbook.data.db.entity.SearchResult
+import my.handbook.data.entity.SearchResult
 import my.handbook.databinding.ItemSearchResultBinding
 
 class SearchResultAdapter(

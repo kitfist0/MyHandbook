@@ -1,10 +1,10 @@
-package my.handbook.data.db.dao
+package my.handbook.data.dao
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import my.handbook.data.db.entity.Article
+import my.handbook.data.entity.Article
 
 @Dao
 interface ArticleDao {

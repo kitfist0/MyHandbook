@@ -7,7 +7,7 @@
     <data>
         <variable
             name="item"
-            type="my.handbook.data.db.entity.SearchResult"/>
+            type="my.handbook.data.entity.SearchResult"/>
         <variable
             name="listener"
             type="my.handbook.ui.search.SearchResultAdapter.SearchResultAdapterListener"/>

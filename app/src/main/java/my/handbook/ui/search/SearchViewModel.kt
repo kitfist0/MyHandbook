@@ -1,38 +1,34 @@
 package my.handbook.ui.search
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import my.handbook.data.db.entity.SearchResult
-import my.handbook.data.repository.BaseParagraphRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import my.handbook.data.entity.SearchResult
 import my.handbook.ui.base.BaseViewModel
+import my.handbook.usecase.SearchParagraphUseCase
+import my.handbook.usecase.UseCaseResult
+import my.handbook.usecase.updateOnSuccess
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val repository: BaseParagraphRepository,
+    private val searchParagraphUseCase: SearchParagraphUseCase,
 ) : BaseViewModel() {
 
-    companion object {
-        private const val DELAY_MILLIS = 300L
-    }
+    private val _searchResults = MutableStateFlow<List<SearchResult>>(emptyList())
+    val searchResults: LiveData<List<SearchResult>> = _searchResults.asLiveData()
 
-    private val _searchResults = MutableLiveData<List<SearchResult>>()
-    val searchResults: LiveData<List<SearchResult>> = _searchResults
-
-    fun onSearchRequestChanged(searchString: String) {
+    fun onSearchRequestChanged(searchQuery: String) {
         viewModelScope.coroutineContext.cancelChildren()
-        viewModelScope.launch {
-            isLoading.set(true)
-            delay(DELAY_MILLIS)
-            val results = repository.getSearchResults(searchString)
-            _searchResults.postValue(results)
-            isLoading.set(false)
-        }
+        searchParagraphUseCase.execute(searchQuery).onEach { useCaseResult ->
+            isLoading.set(useCaseResult is UseCaseResult.Loading)
+            useCaseResult.updateOnSuccess(_searchResults)
+        }.launchIn(viewModelScope)
     }
 
     fun onSearchResultClicked(file: String, text: String) {

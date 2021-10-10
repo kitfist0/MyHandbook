@@ -1,10 +1,10 @@
-package my.handbook.data.db.dao
+package my.handbook.data.dao
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import my.handbook.data.db.entity.Section
+import my.handbook.data.entity.Section
 
 @Dao
 interface SectionDao {
@@ -13,7 +13,7 @@ interface SectionDao {
     fun getSelectedSectionIds(): Flow<List<Int>>
 
     @Query("SELECT * FROM sections ORDER BY id")
-    fun getSections(): Flow<List<Section>>
+    suspend fun getSections(): List<Section>
 
     @Update
     suspend fun update(section: Section)

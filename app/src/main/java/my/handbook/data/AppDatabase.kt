@@ -1,14 +1,14 @@
-package my.handbook.data.db
+package my.handbook.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import my.handbook.data.db.dao.ArticleDao
-import my.handbook.data.db.dao.ParagraphDao
-import my.handbook.data.db.dao.SectionDao
-import my.handbook.data.db.entity.Article
-import my.handbook.data.db.entity.Paragraph
-import my.handbook.data.db.entity.ParagraphFts
-import my.handbook.data.db.entity.Section
+import my.handbook.data.dao.ArticleDao
+import my.handbook.data.dao.ParagraphDao
+import my.handbook.data.dao.SectionDao
+import my.handbook.data.entity.Article
+import my.handbook.data.entity.Paragraph
+import my.handbook.data.entity.ParagraphFts
+import my.handbook.data.entity.Section
 
 @Database(
     entities = [

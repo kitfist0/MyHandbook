@@ -8,57 +8,25 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import my.handbook.BuildConfig
-import my.handbook.R
-import my.handbook.data.repository.SectionRepository
 import my.handbook.ui.base.BaseViewModel
-import simple.billing.core.BillingHandler
+import my.handbook.usecase.*
 import javax.inject.Inject
 
 @HiltViewModel
 class DrawerViewModel @Inject constructor(
-    private val billingHandler: BillingHandler,
-    private val sectionRepository: SectionRepository,
+    private val changeSectionSelectionUseCase: ChangeSectionSelectionUseCase,
+    getDrawerItemsUseCase: GetDrawerItemsUseCase,
+    private val purchaseProductUseCase: PurchaseProductUseCase,
 ) : BaseViewModel() {
 
-    private val drawerLinkItems = listOf(
-        DrawerItem.LinkItem(
-            link = "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}",
-            titleRes = R.string.rate_app,
-            iconRes = R.drawable.ic_twotone_grade
-        ),
-        DrawerItem.LinkItem(
-            link = BuildConfig.LICENSE,
-            titleRes = R.string.license,
-            iconRes = R.drawable.ic_twotone_copyright
-        ),
-        DrawerItem.LinkItem(
-            link = BuildConfig.GITHUB,
-            titleRes = R.string.github,
-            iconRes = R.drawable.ic_twotone_github
-        ),
-    )
+    private val _drawerItems = MutableStateFlow<List<DrawerItem>>(emptyList())
+    val drawerItems: LiveData<List<DrawerItem>> = _drawerItems.asLiveData()
 
-    private val drawerProductItems = billingHandler.products.mapNotNull {
-        it.map { product -> DrawerItem.ProductItem(product) }
+    init {
+        getDrawerItemsUseCase.execute().onEach { useCaseResult ->
+            useCaseResult.updateOnSuccess(_drawerItems)
+        }.launchIn(viewModelScope)
     }
-
-    val drawerItems = sectionRepository.getSections()
-        .map { sections ->
-            sections.map { DrawerItem.SectionItem(it) }
-                .plus(listOf(DrawerItem.DividerItem(R.string.about)))
-                .plus(drawerLinkItems)
-        }
-        .combine(drawerProductItems) { prevDrawerItems, productItems ->
-            if (productItems.isEmpty()) {
-                prevDrawerItems
-            } else {
-                prevDrawerItems
-                    .plus(listOf(DrawerItem.DividerItem(R.string.coffee_for_developers)))
-                    .plus(productItems)
-            }
-        }
-        .asLiveData()
 
     private val _bottomSheetState = MutableStateFlow(BottomSheetBehavior.STATE_HIDDEN)
     val bottomSheetState = _bottomSheetState.asStateFlow()
@@ -75,8 +43,9 @@ class DrawerViewModel @Inject constructor(
         viewModelScope.launch { _bottomSheetState.emit(newState) }
     }
 
-    fun onSectionClicked(sectionItem: DrawerItem.SectionItem) =
-        viewModelScope.launch { sectionRepository.updateSection(sectionItem.section) }
+    fun onSectionClicked(sectionItem: DrawerItem.SectionItem) {
+        viewModelScope.launch { changeSectionSelectionUseCase.execute(sectionItem.section) }
+    }
 
     fun onLinkClicked(linkItem: DrawerItem.LinkItem) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(linkItem.link))
@@ -84,9 +53,7 @@ class DrawerViewModel @Inject constructor(
     }
 
     fun onProductClicked(activity: Activity?, productItem: DrawerItem.ProductItem) {
-        activity?.let {
-            billingHandler.purchaseProduct(it, productItem.product.originalJson)
-        }
+        purchaseProductUseCase.execute(activity, productItem.product)
     }
 
     fun onScrimViewClicked() {

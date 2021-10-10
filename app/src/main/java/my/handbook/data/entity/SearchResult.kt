@@ -1,4 +1,4 @@
-package my.handbook.data.db.entity
+package my.handbook.data.entity
 
 data class SearchResult(
     val file: String,
