@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class Section(
     @PrimaryKey
     val id: Int,
-    var selected: Boolean,
+    val selected: Boolean,
 )

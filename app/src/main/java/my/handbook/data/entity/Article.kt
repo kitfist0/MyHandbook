@@ -11,5 +11,5 @@ data class Article(
     val file: String,
     val section: Int,
     val summary: String,
-    var favorite: Boolean = false,
+    val favorite: Boolean,
 )
