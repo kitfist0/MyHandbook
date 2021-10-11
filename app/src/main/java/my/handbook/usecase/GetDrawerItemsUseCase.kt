@@ -33,16 +33,14 @@ class GetDrawerItemsUseCase @Inject constructor(
     private val dividerItemAbout = DrawerItem.DividerItem(R.string.about)
     private val dividerItemCoffee = DrawerItem.DividerItem(R.string.coffee_for_developers)
 
-    fun execute(): Flow<UseCaseResult<List<DrawerItem>>> = billingHandler.products
-        .transform { products ->
-            emit(UseCaseResult.Loading)
-            val drawerItems = sectionDao.getSections().asSequence()
-                .map { DrawerItem.SectionItem(it) }
-                .plus(dividerItemAbout)
-                .plus(linkItems)
-                .plus(dividerItemCoffee)
-                .plus(products.map { DrawerItem.ProductItem(it) })
-                .toList()
-            emit(UseCaseResult.Success(drawerItems))
+    fun execute(): Flow<UseCaseResult<List<DrawerItem>>> = sectionDao.getSections()
+        .combine(billingHandler.products) { sections, products ->
+            UseCaseResult.Success(
+                sections.asSequence().map { DrawerItem.SectionItem(it) }
+                    .plus(dividerItemAbout)
+                    .plus(linkItems)
+                    .plus(dividerItemCoffee)
+                    .plus(products.map { DrawerItem.ProductItem(it) }).toList()
+            )
         }
 }

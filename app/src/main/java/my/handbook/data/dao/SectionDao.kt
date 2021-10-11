@@ -13,7 +13,7 @@ interface SectionDao {
     fun getSelectedSectionIds(): Flow<List<Int>>
 
     @Query("SELECT * FROM sections ORDER BY id")
-    suspend fun getSections(): List<Section>
+    fun getSections(): Flow<List<Section>>
 
     @Update
     suspend fun update(section: Section)
