@@ -3,8 +3,8 @@ package my.handbook.usecase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import my.handbook.data.db.dao.ParagraphDao
-import my.handbook.data.db.entity.SearchResult
+import my.handbook.data.dao.ParagraphDao
+import my.handbook.data.entity.SearchResult
 import javax.inject.Inject
 
 class SearchParagraphUseCase @Inject constructor(

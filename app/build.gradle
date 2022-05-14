@@ -8,7 +8,6 @@ plugins {
 
 android {
     compileSdkVersion 31
-    buildToolsVersion '30.0.3'
 
     defaultConfig {
         applicationId "my.handbook"
@@ -81,7 +80,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
 
     // Preference
-    implementation 'androidx.preference:preference-ktx:1.1.1'
+    implementation 'androidx.preference:preference-ktx:1.2.0'
 
     // Room
     implementation "androidx.room:room-runtime:$room_version"
