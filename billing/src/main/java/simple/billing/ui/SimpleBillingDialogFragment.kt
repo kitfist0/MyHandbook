@@ -11,7 +11,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import simple.billing.R
 import simple.billing.data.db.Product
 
-class SimpleBillingDialogFragment : BottomSheetDialogFragment(),
+class SimpleBillingDialogFragment :
+    BottomSheetDialogFragment(),
     SimpleProductAdapter.ProductAdapterListener {
 
     companion object {

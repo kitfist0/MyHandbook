@@ -11,7 +11,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import my.handbook.NavGraphDirections
 import my.handbook.R
 import my.handbook.databinding.ActivityMainBinding
-import my.handbook.ui.drawer.*
+import my.handbook.ui.drawer.DrawerInterface
+import my.handbook.ui.drawer.HalfClockwiseRotateSlideAction
+import my.handbook.ui.drawer.ShowHideFabStateAction
 import my.handbook.util.contentView
 import simple.billing.core.BillingAppCompatActivity
 

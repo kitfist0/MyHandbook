@@ -15,7 +15,7 @@ class ReadViewModel @Inject constructor(
 
     val url: LiveData<String> = liveData {
         val fileName = ReadFragmentArgs.fromSavedStateHandle(savedStateHandle).fileName
-        emit("file:///android_asset/html/${fileName}")
+        emit("file:///android_asset/html/$fileName")
     }
 
     private val _searchText = MutableLiveData<String>()

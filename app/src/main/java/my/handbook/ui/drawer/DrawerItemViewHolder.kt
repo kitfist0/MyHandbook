@@ -11,7 +11,7 @@ sealed class DrawerItemViewHolder<T : DrawerItem>(
     view: View
 ) : RecyclerView.ViewHolder(view) {
 
-    abstract fun bind(item : T)
+    abstract fun bind(item: T)
 
     class SectionViewHolder(
         private val binding: ItemDrawerSectionBinding,

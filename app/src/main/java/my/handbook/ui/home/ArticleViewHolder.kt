@@ -13,7 +13,7 @@ import kotlin.math.abs
 class ArticleViewHolder(
     private val binding: ItemArticleBinding,
     listener: ArticleAdapter.ArticleAdapterListener,
-): RecyclerView.ViewHolder(binding.root), ReboundingSwipeActionCallback.ReboundableViewHolder {
+) : RecyclerView.ViewHolder(binding.root), ReboundingSwipeActionCallback.ReboundableViewHolder {
 
     companion object {
 

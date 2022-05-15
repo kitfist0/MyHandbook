@@ -50,7 +50,7 @@ fun Context.getDrawableOrNull(@DrawableRes id: Int?): Drawable? {
 
 fun Context.isDarkThemeEnabled(): Boolean {
     return resources.configuration.uiMode and
-            Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
+        Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
 }
 
 fun Context.hideKeyboard(view: View) {
@@ -71,4 +71,3 @@ fun <T, K, R> LiveData<T>.combineWith(
     }
     return result
 }
-

@@ -11,7 +11,7 @@ import simple.billing.data.db.Product.Companion.getProductDrawable
 class SimpleProductViewHolder(
     itemView: View,
     listener: SimpleProductAdapter.ProductAdapterListener,
-): RecyclerView.ViewHolder(itemView) {
+) : RecyclerView.ViewHolder(itemView) {
 
     private var product: Product? = null
 

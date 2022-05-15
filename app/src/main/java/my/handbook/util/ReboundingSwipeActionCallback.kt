@@ -125,7 +125,9 @@ class ReboundingSwipeActionCallback : ItemTouchHelper.SimpleCallback(
         // affect to the item.
         val swipeDismissDistanceHorizontal = itemView.width * trueSwipeThreshold
         val dragFraction = ln(
-            (1 + (dX / swipeDismissDistanceHorizontal)).toDouble()) / ln(3.toDouble()
+            (1 + (dX / swipeDismissDistanceHorizontal)).toDouble()
+        ) / ln(
+            3.toDouble()
         )
         val dragTo = dragFraction * swipeDismissDistanceHorizontal *
             swipeReboundingElasticity

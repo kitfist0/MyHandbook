@@ -66,7 +66,7 @@ class ItemSwipeActionDrawable(context: Context) : Drawable() {
     private val interp = context.themeInterpolator(R.attr.motionInterpolatorPersistent)
 
     override fun onBoundsChange(bounds: Rect?) {
-        if (bounds == null)  return
+        if (bounds == null) return
         update()
     }
 
