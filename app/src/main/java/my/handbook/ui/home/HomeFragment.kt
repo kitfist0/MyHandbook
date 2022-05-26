@@ -23,7 +23,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), ArticleAdapter.Article
             itemTouchHelper.attachToRecyclerView(this)
             adapter = articleAdapter
         }
-        binding.homeRecyclerView.adapter = articleAdapter
     }
 
     override fun observeData() {

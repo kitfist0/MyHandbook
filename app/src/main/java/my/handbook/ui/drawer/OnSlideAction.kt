@@ -32,9 +32,8 @@ interface OnSlideAction {
  * and the half expanded state.
  */
 class HalfClockwiseRotateSlideAction(
-    private val view: View
+    private val view: View,
 ) : OnSlideAction {
-
     override fun onSlide(sheet: View, slideOffset: Float) {
         view.rotation = slideOffset.normalize(
             -1F,
@@ -51,9 +50,8 @@ class HalfClockwiseRotateSlideAction(
  * - Removing the foreground sheets rounded corners/edge treatment
  */
 class ForegroundSheetTransformSlideAction(
-    private val foregroundShapeDrawable: MaterialShapeDrawable
+    private val foregroundShapeDrawable: MaterialShapeDrawable,
 ) : OnSlideAction {
-
     override fun onSlide(sheet: View, slideOffset: Float) {
         val progress = slideOffset.normalize(0F, 0.25F, 1F, 0F)
         foregroundShapeDrawable.interpolation = progress
@@ -69,9 +67,8 @@ class ForegroundSheetTransformSlideAction(
  */
 class AlphaSlideAction(
     private val view: View,
-    private val reverse: Boolean = false
+    private val reverse: Boolean = false,
 ) : OnSlideAction {
-
     override fun onSlide(sheet: View, slideOffset: Float) {
         val alpha = slideOffset.normalize(-1F, 0F, 0F, 1F)
         view.alpha = if (!reverse) alpha else 1F - alpha

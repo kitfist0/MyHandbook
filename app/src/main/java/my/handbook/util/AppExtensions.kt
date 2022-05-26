@@ -30,7 +30,6 @@ fun Resources.getSectionNameStringRes(section: Int?): String = section?.sectionN
         } else {
             names[it]
         }
-    }
-    ?: ""
+    }.orEmpty()
 
 private fun Int.sectionNumberToIndex() = this - 1

@@ -17,9 +17,8 @@ interface OnStateChangedAction {
  * when the sheet is not hidden.
  */
 class ShowHideFabStateAction(
-    private val fab: FloatingActionButton
+    private val fab: FloatingActionButton,
 ) : OnStateChangedAction {
-
     override fun onStateChanged(sheet: View, newState: Int) {
         if (newState == BottomSheetBehavior.STATE_HIDDEN) {
             fab.show()
@@ -39,7 +38,7 @@ class ShowHideFabStateAction(
  */
 class VisibilityStateAction(
     private val view: View,
-    private val reverse: Boolean = false
+    private val reverse: Boolean = false,
 ) : OnStateChangedAction {
     override fun onStateChanged(sheet: View, newState: Int) {
         val stateHiddenVisibility = if (!reverse) View.GONE else View.VISIBLE
@@ -58,7 +57,7 @@ class VisibilityStateAction(
  * opened to the half-expanded state, which can happen if the sheet is hidden while scrolled.
  */
 class ScrollToTopStateAction(
-    private val recyclerView: RecyclerView
+    private val recyclerView: RecyclerView,
 ) : OnStateChangedAction {
     override fun onStateChanged(sheet: View, newState: Int) {
         if (newState == BottomSheetBehavior.STATE_HIDDEN) recyclerView.scrollToPosition(0)
