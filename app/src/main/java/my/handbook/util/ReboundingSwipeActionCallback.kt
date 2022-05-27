@@ -13,17 +13,13 @@ class ReboundingSwipeActionCallback : ItemTouchHelper.SimpleCallback(
 ) {
 
     companion object {
-        // Track the view holder currently being swiped.
-        private var currentTargetPosition: Int = -1
-        private var currentTargetHasMetThresholdOnce: Boolean = false
-
         // The intensity at which dX of a swipe should be decreased as we approach the swipe
-        // threshold.
+        // threshold
         private const val swipeReboundingElasticity = 0.8F
 
         // The 'true' percentage of total swipe distance needed to consider a view as 'swiped'. This
         // is used in favor of getSwipeThreshold since that has been overridden to return an impossible
-        // to reach value.
+        // to reach value
         private const val trueSwipeThreshold = 0.4F
     }
 
@@ -57,8 +53,14 @@ class ReboundingSwipeActionCallback : ItemTouchHelper.SimpleCallback(
         fun onRebounded()
     }
 
+    // Track the view holder currently being swiped.
+    private var currentTargetPosition: Int = -1
+    private var currentTargetHasMetThresholdOnce: Boolean = false
+
     // Never dismiss.
-    override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float = Float.MAX_VALUE
+    override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float {
+        return Float.MAX_VALUE
+    }
 
     // Never dismiss.
     override fun getSwipeVelocityThreshold(defaultValue: Float): Float {
@@ -125,9 +127,7 @@ class ReboundingSwipeActionCallback : ItemTouchHelper.SimpleCallback(
         // affect to the item.
         val swipeDismissDistanceHorizontal = itemView.width * trueSwipeThreshold
         val dragFraction = ln(
-            (1 + (dX / swipeDismissDistanceHorizontal)).toDouble()
-        ) / ln(
-            3.toDouble()
+            (1 + (dX / swipeDismissDistanceHorizontal)).toDouble()) / ln(3.toDouble()
         )
         val dragTo = dragFraction * swipeDismissDistanceHorizontal *
             swipeReboundingElasticity
