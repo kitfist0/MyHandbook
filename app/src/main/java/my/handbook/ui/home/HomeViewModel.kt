@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import my.handbook.data.entity.Article
 import my.handbook.ui.base.BaseViewModel
 import my.handbook.usecase.ChangeArticleFavMarkUseCase
-import my.handbook.usecase.GetArticlesUseCase
+import my.handbook.usecase.GetArticlesOfSelectedSectionsUseCase
 import my.handbook.usecase.UseCaseResult
 import my.handbook.usecase.updateOnSuccess
 import javax.inject.Inject
@@ -19,14 +19,14 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val changeArticleFavMarkUseCase: ChangeArticleFavMarkUseCase,
-    getArticlesUseCase: GetArticlesUseCase,
+    getArticlesOfSelectedSectionsUseCase: GetArticlesOfSelectedSectionsUseCase,
 ) : BaseViewModel() {
 
     private val _articles = MutableStateFlow<List<Article>>(emptyList())
     val articles: LiveData<List<Article>> = _articles.asLiveData()
 
     init {
-        getArticlesUseCase.execute()
+        getArticlesOfSelectedSectionsUseCase.execute()
             .onEach { useCaseResult ->
                 isLoading.set(useCaseResult is UseCaseResult.Loading)
                 useCaseResult.updateOnSuccess(_articles)

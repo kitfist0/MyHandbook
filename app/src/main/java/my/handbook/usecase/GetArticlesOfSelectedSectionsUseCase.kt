@@ -8,7 +8,7 @@ import my.handbook.data.dao.SectionDao
 import my.handbook.data.entity.Article
 import javax.inject.Inject
 
-class GetArticlesUseCase @Inject constructor(
+class GetArticlesOfSelectedSectionsUseCase @Inject constructor(
     private val articleDao: ArticleDao,
     private val sectionDao: SectionDao,
 ) {
