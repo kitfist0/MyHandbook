@@ -1,8 +1,12 @@
 package my.handbook.ui.home
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import my.handbook.data.entity.Article
 import my.handbook.ui.base.BaseViewModel
@@ -22,10 +26,12 @@ class HomeViewModel @Inject constructor(
     val articles: LiveData<List<Article>> = _articles.asLiveData()
 
     init {
-        getArticlesUseCase.execute().onEach { useCaseResult ->
-            isLoading.set(useCaseResult is UseCaseResult.Loading)
-            useCaseResult.updateOnSuccess(_articles)
-        }.launchIn(viewModelScope)
+        getArticlesUseCase.execute()
+            .onEach { useCaseResult ->
+                isLoading.set(useCaseResult is UseCaseResult.Loading)
+                useCaseResult.updateOnSuccess(_articles)
+            }
+            .launchIn(viewModelScope)
     }
 
     fun onArticleClicked(file: String) {

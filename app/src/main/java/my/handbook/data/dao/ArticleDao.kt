@@ -13,7 +13,7 @@ interface ArticleDao {
     fun getArticles(): Flow<List<Article>>
 
     @Query("SELECT * FROM articles WHERE section IN (:sectionIds)")
-    suspend fun getArticlesWithSectionIds(sectionIds: List<Int>): List<Article>
+    fun getArticlesWithSectionIds(sectionIds: List<Int>): Flow<List<Article>>
 
     @Update
     suspend fun update(article: Article)
