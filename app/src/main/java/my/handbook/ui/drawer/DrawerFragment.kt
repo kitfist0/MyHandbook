@@ -9,11 +9,10 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.google.android.material.shape.MaterialShapeDrawable
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import my.handbook.R
-import my.handbook.common.themeColor
 import my.handbook.databinding.FragmentDrawerBinding
 import my.handbook.ui.base.BaseFragment
+import my.handbook.util.themeColor
 
 @AndroidEntryPoint
 class DrawerFragment : BaseFragment<FragmentDrawerBinding>(), DrawerAdapter.DrawerAdapterListener, DrawerInterface {

@@ -3,7 +3,7 @@ package my.handbook.ui.drawer
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import my.handbook.data.entity.Section
-import simple.billing.data.db.Product
+import my.handbook.data.entity.Product
 
 /**
  * A sealed class which encapsulates all objects [DrawerAdapter] is able to display.

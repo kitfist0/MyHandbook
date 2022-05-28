@@ -12,8 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.flow.collect
-import my.handbook.common.hideKeyboard
+import my.handbook.util.hideKeyboard
 
 abstract class BaseFragment<out DB : ViewDataBinding> : Fragment() {
 

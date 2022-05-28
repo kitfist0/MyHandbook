@@ -15,11 +15,10 @@ android {
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
         buildConfigField "String", "GITHUB", '"https://github.com/kitfist0/MyHandbook"'
         buildConfigField "String", "LICENSE", '"https://github.com/kitfist0/MyHandbook/blob/master/LICENSE"'
+        buildConfigField "String[]", "PRODUCT_IDS", '{"coffee.espresso", "coffee.cappuccino", "coffee.latte"}'
     }
 
     buildFeatures {
@@ -68,8 +67,8 @@ dependencies {
     implementation "androidx.core:core-ktx:$core_ktx_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
-    implementation project(':billing')
-    implementation project(':common')
+    // Billing
+    implementation 'com.android.billingclient:billing-ktx:4.1.0'
 
     // DI
     implementation "com.google.dagger:hilt-android:$hilt_version"
