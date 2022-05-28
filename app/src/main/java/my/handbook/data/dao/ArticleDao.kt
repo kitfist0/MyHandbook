@@ -12,9 +12,6 @@ interface ArticleDao {
     @Query("SELECT * FROM articles")
     fun getArticles(): Flow<List<Article>>
 
-    @Query("SELECT * FROM articles WHERE section IN (:sectionIds)")
-    fun getArticlesWithSectionIds(sectionIds: List<Int>): Flow<List<Article>>
-
     @Update
     suspend fun update(article: Article)
 }
