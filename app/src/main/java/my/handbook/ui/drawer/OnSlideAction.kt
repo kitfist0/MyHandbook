@@ -4,7 +4,7 @@ import android.view.View
 import androidx.annotation.FloatRange
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.shape.MaterialShapeDrawable
-import my.handbook.common.normalize
+import my.handbook.util.normalize
 
 /**
  * An action to be performed when a bottom sheet's slide offset is changed.

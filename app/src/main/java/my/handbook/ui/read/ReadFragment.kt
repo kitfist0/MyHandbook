@@ -8,9 +8,9 @@ import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import dagger.hilt.android.AndroidEntryPoint
 import my.handbook.R
-import my.handbook.common.isDarkThemeEnabled
 import my.handbook.databinding.FragmentReadBinding
 import my.handbook.ui.base.BaseFragment
+import my.handbook.util.isDarkThemeEnabled
 
 @AndroidEntryPoint
 class ReadFragment : BaseFragment<FragmentReadBinding>() {

@@ -5,7 +5,7 @@ import my.handbook.BuildConfig
 import my.handbook.R
 import my.handbook.data.dao.SectionDao
 import my.handbook.ui.drawer.DrawerItem
-import simple.billing.core.BillingHandler
+import my.handbook.data.BillingHandler
 import javax.inject.Inject
 
 class GetDrawerItemsUseCase @Inject constructor(

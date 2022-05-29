@@ -6,6 +6,7 @@ import androidx.preference.PreferenceManager
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.android.billingclient.api.BillingClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +16,7 @@ import my.handbook.data.dao.ArticleDao
 import my.handbook.data.dao.ParagraphDao
 import my.handbook.data.dao.SectionDao
 import my.handbook.util.dbRecreationRequired
-import simple.billing.core.BillingHandler
+import my.handbook.data.dao.ProductDao
 import javax.inject.Singleton
 
 @Module
@@ -68,13 +69,18 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideProductDao(db: AppDatabase): ProductDao {
+        return db.productDao()
+    }
+
+    @Provides
+    @Singleton
     fun provideSectionDao(db: AppDatabase): SectionDao {
         return db.sectionDao()
     }
 
     @Provides
-    @Singleton
-    fun provideBillingHandler(app: Application): BillingHandler {
-        return BillingHandler.getInstance(app)
+    fun provideBillingClientBuilder(app: Application): BillingClient.Builder {
+        return BillingClient.newBuilder(app)
     }
 }

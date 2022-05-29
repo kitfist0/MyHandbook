@@ -7,19 +7,18 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
 
     defaultConfig {
         applicationId "my.handbook"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
         buildConfigField "String", "GITHUB", '"https://github.com/kitfist0/MyHandbook"'
         buildConfigField "String", "LICENSE", '"https://github.com/kitfist0/MyHandbook/blob/master/LICENSE"'
+        buildConfigField "String[]", "PRODUCT_IDS", '{"coffee.espresso", "coffee.cappuccino", "coffee.latte"}'
     }
 
     buildFeatures {
@@ -61,15 +60,15 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    implementation "androidx.appcompat:appcompat:$appcompat_version"
-    implementation "com.google.android.material:material:$material_version"
-    implementation "androidx.constraintlayout:constraintlayout:$constaraint_version"
-    implementation "androidx.core:core-ktx:$core_ktx_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
+    implementation "androidx.appcompat:appcompat:1.4.1"
+    implementation "com.google.android.material:material:1.6.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+    implementation "androidx.core:core-ktx:1.7.0"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.1"
 
-    implementation project(':billing')
-    implementation project(':common')
+    // Billing
+    implementation 'com.android.billingclient:billing-ktx:5.0.0'
 
     // DI
     implementation "com.google.dagger:hilt-android:$hilt_version"
@@ -83,6 +82,7 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.2.0'
 
     // Room
+    def room_version = '2.4.2'
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"

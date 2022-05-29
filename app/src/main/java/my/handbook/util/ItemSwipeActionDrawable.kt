@@ -12,10 +12,6 @@ import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
 import androidx.appcompat.content.res.AppCompatResources
 import my.handbook.R
-import my.handbook.common.lerp
-import my.handbook.common.lerpArgb
-import my.handbook.common.themeColor
-import my.handbook.common.themeInterpolator
 import kotlin.math.abs
 import kotlin.math.hypot
 import kotlin.math.sin
