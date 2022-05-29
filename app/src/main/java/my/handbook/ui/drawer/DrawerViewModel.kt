@@ -39,10 +39,6 @@ class DrawerViewModel @Inject constructor(
         }
     }
 
-    fun onBottomSheetStateChanged(newState: Int) {
-        viewModelScope.launch { _bottomSheetState.emit(newState) }
-    }
-
     fun onSectionClicked(sectionItem: DrawerItem.SectionItem) {
         viewModelScope.launch { changeSectionSelectionUseCase.execute(sectionItem.section) }
     }
@@ -72,6 +68,6 @@ class DrawerViewModel @Inject constructor(
     }
 
     private fun changeBottomSheetState(newState: Int) {
-        viewModelScope.launch { _bottomSheetState.emit(newState) }
+        _bottomSheetState.value = newState
     }
 }

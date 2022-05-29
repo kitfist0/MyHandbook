@@ -1,7 +1,6 @@
 package my.handbook.ui.drawer
 
 import android.content.res.ColorStateList
-import android.view.View
 import android.widget.FrameLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -65,12 +64,6 @@ class DrawerFragment : BaseFragment<FragmentDrawerBinding>(), DrawerAdapter.Draw
                 addOnSlideAction(ForegroundSheetTransformSlideAction(shapeDrawable))
                 // Recycler transforms
                 addOnStateChangedAction(ScrollToTopStateAction(drawerRecyclerView))
-                // If the drawer is open, pressing the system back button should close the drawer
-                addOnStateChangedAction(object : OnStateChangedAction {
-                    override fun onStateChanged(sheet: View, newState: Int) {
-                        viewModel.onBottomSheetStateChanged(newState)
-                    }
-                })
             }
 
             behavior.addBottomSheetCallback(drawerBehaviorCallback)
