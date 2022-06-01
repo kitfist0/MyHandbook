@@ -57,6 +57,18 @@ class PlayBillingDataSource @Inject constructor(
             ?: PurchasedIdsResponse.Error("Product id not found")
     }
 
+    suspend fun acknowledgePurchases() {
+        queryPurchasesList()
+            .filter { it.purchaseState == Purchase.PurchaseState.PURCHASED && !it.isAcknowledged }
+            .onEach {
+                billingClient.acknowledgePurchase(
+                    AcknowledgePurchaseParams.newBuilder()
+                        .setPurchaseToken(it.purchaseToken)
+                        .build()
+                )
+            }
+    }
+
     suspend fun queryProductDetailsList(): List<ProductDetails> {
         val params = QueryProductDetailsParams.newBuilder()
             .setProductList(
