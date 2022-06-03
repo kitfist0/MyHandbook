@@ -15,8 +15,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.BindingAdapter
 import my.handbook.R
 import my.handbook.data.entity.Section
-import my.handbook.data.entity.Product
-import my.handbook.data.entity.Product.Companion.getProductDrawable
 
 @BindingAdapter("sectionText")
 fun TextView.bindSectionText(section: Int?) {
@@ -150,14 +148,17 @@ private fun recordInitialHeightForView(view: View): Int {
     return view.layoutParams.height
 }
 
-@BindingAdapter("productIcon")
-fun TextView.bindDrawerProductItemIcon(product: Product?) {
-    product?.let {
-        setCompoundDrawablesWithIntrinsicBounds(
-            AppCompatResources.getDrawable(context, it.getProductDrawable()),
-            null, null, null
-        )
+@BindingAdapter("coffeeIcon")
+fun TextView.bindDrawerCoffeeItemIcon(isPurchased: Boolean) {
+    val drawableResId = if (isPurchased) {
+        R.drawable.ic_product_purchased
+    } else {
+        R.drawable.ic_product_default
     }
+    setCompoundDrawablesWithIntrinsicBounds(
+        AppCompatResources.getDrawable(context, drawableResId),
+        null, null, null
+    )
 }
 
 @BindingAdapter(

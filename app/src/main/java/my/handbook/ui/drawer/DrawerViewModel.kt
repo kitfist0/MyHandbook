@@ -23,9 +23,9 @@ class DrawerViewModel @Inject constructor(
     val drawerItems: LiveData<List<DrawerItem>> = _drawerItems.asLiveData()
 
     init {
-        getDrawerItemsUseCase.execute().onEach { useCaseResult ->
-            useCaseResult.updateOnSuccess(_drawerItems)
-        }.launchIn(viewModelScope)
+        getDrawerItemsUseCase.execute()
+            .onEach { useCaseResult -> useCaseResult.updateOnSuccess(_drawerItems) }
+            .launchIn(viewModelScope)
     }
 
     private val _bottomSheetState = MutableStateFlow(BottomSheetBehavior.STATE_HIDDEN)
@@ -48,8 +48,8 @@ class DrawerViewModel @Inject constructor(
         startActivity(intent)
     }
 
-    fun onProductClicked(activity: Activity?, productItem: DrawerItem.ProductItem) {
-        purchaseProductUseCase.execute(activity, productItem.product)
+    fun onCoffeeClicked(activity: Activity?, coffeeItem: DrawerItem.CoffeeItem) {
+//        purchaseProductUseCase.execute(activity, coffeeItem.id)
     }
 
     fun onScrimViewClicked() {

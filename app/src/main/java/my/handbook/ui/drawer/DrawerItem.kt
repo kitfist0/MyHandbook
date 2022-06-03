@@ -2,7 +2,6 @@ package my.handbook.ui.drawer
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import my.handbook.data.entity.Product
 import my.handbook.data.entity.Section
 
 /**
@@ -22,10 +21,6 @@ sealed class DrawerItem {
         val link: String,
         @StringRes val titleRes: Int,
         @DrawableRes val iconRes: Int,
-    ) : DrawerItem()
-
-    data class ProductItem(
-        val product: Product,
     ) : DrawerItem()
 
     data class CoffeeItem(

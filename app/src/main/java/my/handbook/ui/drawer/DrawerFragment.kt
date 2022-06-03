@@ -93,7 +93,7 @@ class DrawerFragment : BaseFragment<FragmentDrawerBinding>(), DrawerAdapter.Draw
         viewModel.onLinkClicked(item)
     }
 
-    override fun onProductClicked(item: DrawerItem.ProductItem) {
-        viewModel.onProductClicked(activity, item)
+    override fun onCoffeeClicked(item: DrawerItem.CoffeeItem) {
+        viewModel.onCoffeeClicked(activity, item)
     }
 }

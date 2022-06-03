@@ -13,8 +13,8 @@ object DrawerItemDiff : DiffUtil.ItemCallback<DrawerItem>() {
                 oldItem.section.id == newItem.section.id
             oldItem is DrawerItem.LinkItem && newItem is DrawerItem.LinkItem ->
                 oldItem.link == newItem.link
-            oldItem is DrawerItem.ProductItem && newItem is DrawerItem.ProductItem ->
-                oldItem.product.sku == newItem.product.sku
+            oldItem is DrawerItem.CoffeeItem && newItem is DrawerItem.CoffeeItem ->
+                oldItem.id == newItem.id
             else -> true
         }
     }
@@ -28,8 +28,8 @@ object DrawerItemDiff : DiffUtil.ItemCallback<DrawerItem>() {
                 oldItem.section == newItem.section
             oldItem is DrawerItem.LinkItem && newItem is DrawerItem.LinkItem ->
                 oldItem == newItem
-            oldItem is DrawerItem.ProductItem && newItem is DrawerItem.ProductItem ->
-                oldItem.product == newItem.product
+            oldItem is DrawerItem.CoffeeItem && newItem is DrawerItem.CoffeeItem ->
+                oldItem.isPurchased == newItem.isPurchased
             else -> true
         }
     }
