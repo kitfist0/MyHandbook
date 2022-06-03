@@ -5,15 +5,17 @@ import my.handbook.BuildConfig
 import my.handbook.R
 import my.handbook.data.dao.SectionDao
 import my.handbook.ui.drawer.DrawerItem
-import my.handbook.data.BillingHandler
+import my.handbook.data.remote.PlayBillingDataSource
+import my.handbook.data.remote.onSuccess
 import javax.inject.Inject
 
 class GetDrawerItemsUseCase @Inject constructor(
-    private val billingHandler: BillingHandler,
+    private val playBillingDataSource: PlayBillingDataSource,
     private val sectionDao: SectionDao,
 ) {
 
-    private val linkItems = listOf(
+    private val immutableItems = listOf(
+        DrawerItem.DividerItem(R.string.about),
         DrawerItem.LinkItem(
             link = "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}",
             titleRes = R.string.rate_app,
@@ -30,17 +32,42 @@ class GetDrawerItemsUseCase @Inject constructor(
             iconRes = R.drawable.ic_twotone_github
         ),
     )
-    private val dividerItemAbout = DrawerItem.DividerItem(R.string.about)
-    private val dividerItemCoffee = DrawerItem.DividerItem(R.string.coffee_for_developers)
 
-    fun execute(): Flow<UseCaseResult<List<DrawerItem>>> = sectionDao.getSections()
-        .combine(billingHandler.products) { sections, products ->
-            UseCaseResult.Success(
-                sections.asSequence().map { DrawerItem.SectionItem(it) }
-                    .plus(dividerItemAbout)
-                    .plus(linkItems)
-                    .plus(dividerItemCoffee)
-                    .plus(products.map { DrawerItem.ProductItem(it) }).toList()
-            )
+    fun execute(): Flow<UseCaseResult<List<DrawerItem>>> {
+        return getCoffeeItems()
+            .onStart { UseCaseResult.Loading }
+            .combine(sectionDao.getSections()) { coffeeItems, sections ->
+                val sectionItems = sections.asSequence()
+                    .map { DrawerItem.SectionItem(it) }
+                UseCaseResult.Success(
+                    sectionItems
+                        .plus(immutableItems)
+                        .plus(coffeeItems)
+                        .toList()
+                )
+            }
+    }
+
+    private fun getCoffeeItems(): Flow<List<DrawerItem>> = flow {
+        val coffeeItems = mutableListOf<DrawerItem>()
+        playBillingDataSource.getProductsInfo().onSuccess { productsInfo ->
+            playBillingDataSource.getIdsOfPurchasedProducts().onSuccess { purchasedIds ->
+                productsInfo.onEach { productInfo ->
+                    coffeeItems.add(
+                        DrawerItem.CoffeeItem(
+                            id = productInfo.id,
+                            name = productInfo.name,
+                            isPurchased = purchasedIds.contains(productInfo.id),
+                        )
+                    )
+                }
+            }
         }
+        if (coffeeItems.isNotEmpty()) {
+            val dividerItemCoffee = DrawerItem.DividerItem(R.string.coffee_for_developers)
+            emit(listOf(dividerItemCoffee).plus(coffeeItems))
+        } else {
+            emit(coffeeItems)
+        }
+    }
 }
