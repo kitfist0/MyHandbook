@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DrawerViewModel @Inject constructor(
     private val changeSectionSelectionUseCase: ChangeSectionSelectionUseCase,
-    getDrawerItemsUseCase: GetDrawerItemsUseCase,
+    private val getDrawerItemsUseCase: GetDrawerItemsUseCase,
     private val purchaseProductUseCase: PurchaseProductUseCase,
 ) : BaseViewModel() {
 
@@ -23,9 +23,7 @@ class DrawerViewModel @Inject constructor(
     val drawerItems: LiveData<List<DrawerItem>> = _drawerItems.asLiveData()
 
     init {
-        getDrawerItemsUseCase.execute()
-            .onEach { useCaseResult -> useCaseResult.updateOnSuccess(_drawerItems) }
-            .launchIn(viewModelScope)
+        executeGetDrawerItemsUseCase()
     }
 
     private val _bottomSheetState = MutableStateFlow(BottomSheetBehavior.STATE_HIDDEN)
@@ -49,7 +47,15 @@ class DrawerViewModel @Inject constructor(
     }
 
     fun onCoffeeClicked(activity: Activity?, coffeeItem: DrawerItem.CoffeeItem) {
-//        purchaseProductUseCase.execute(activity, coffeeItem.id)
+        activity ?: return
+        viewModelScope.launch {
+            when (val useCaseResult = purchaseProductUseCase.execute(activity, coffeeItem.id)) {
+                is UseCaseResult.Success -> executeGetDrawerItemsUseCase()
+                is UseCaseResult.Error -> showMessage(useCaseResult.message)
+                is UseCaseResult.Loading -> {
+                }
+            }
+        }
     }
 
     fun onScrimViewClicked() {
@@ -65,6 +71,12 @@ class DrawerViewModel @Inject constructor(
             BottomSheetBehavior.STATE_COLLAPSED ->
                 changeBottomSheetState(BottomSheetBehavior.STATE_HIDDEN)
         }
+    }
+
+    private fun executeGetDrawerItemsUseCase() {
+        getDrawerItemsUseCase.execute()
+            .onEach { useCaseResult -> useCaseResult.updateOnSuccess(_drawerItems) }
+            .launchIn(viewModelScope)
     }
 
     private fun changeBottomSheetState(newState: Int) {
