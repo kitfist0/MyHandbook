@@ -11,19 +11,14 @@ import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import my.handbook.NavGraphDirections
 import my.handbook.R
-import my.handbook.data.BillingHandler
 import my.handbook.databinding.ActivityMainBinding
 import my.handbook.ui.drawer.DrawerInterface
 import my.handbook.ui.drawer.HalfClockwiseRotateSlideAction
 import my.handbook.ui.drawer.ShowHideFabStateAction
 import my.handbook.util.contentView
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
-
-    @Inject
-    lateinit var billingHandler: BillingHandler
 
     private val binding: ActivityMainBinding by contentView(R.layout.activity_main)
 
@@ -34,7 +29,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setUpBottomNavigationAndFab()
-        billingHandler.initBilling(lifecycle)
     }
 
     override fun onDestinationChanged(
