@@ -16,7 +16,6 @@ import my.handbook.data.dao.ArticleDao
 import my.handbook.data.dao.ParagraphDao
 import my.handbook.data.dao.SectionDao
 import my.handbook.util.dbRecreationRequired
-import my.handbook.data.dao.ProductDao
 import javax.inject.Singleton
 
 @Module
@@ -65,12 +64,6 @@ object AppModule {
     @Singleton
     fun provideParagraphDao(db: AppDatabase): ParagraphDao {
         return db.paragraphDao()
-    }
-
-    @Provides
-    @Singleton
-    fun provideProductDao(db: AppDatabase): ProductDao {
-        return db.productDao()
     }
 
     @Provides
