@@ -53,6 +53,7 @@ class PlayBillingDataSource @Inject constructor(
     }
 
     suspend fun acknowledgePurchasedProducts() {
+        billingClient.ensureReady()
         queryNonConsumablePurchases().purchasesList
             .filter { it.purchaseState == Purchase.PurchaseState.PURCHASED && !it.isAcknowledged }
             .onEach {
@@ -79,6 +80,7 @@ class PlayBillingDataSource @Inject constructor(
     }
 
     suspend fun getIdsOfPurchasedProducts(): PurchasedIdsResponse {
+        billingClient.ensureReady()
         return queryNonConsumablePurchases().toPurchasedIdsResponse()
     }
 
