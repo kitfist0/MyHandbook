@@ -17,7 +17,7 @@ class PlayBillingDataSource @Inject constructor(
     billingClientBuilder: BillingClient.Builder,
 ) {
 
-    private val purchasesUpdatesChannel: Channel<PurchasedIdsResponse> = Channel(Channel.UNLIMITED)
+    private val purchasesUpdatesChannel: Channel<PlayBillingResponse<List<String>>> = Channel(Channel.UNLIMITED)
 
     private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
         val response = PurchasesResult(billingResult, purchases.orEmpty()).toPurchasedIdsResponse()
@@ -31,7 +31,7 @@ class PlayBillingDataSource @Inject constructor(
 
     private val billingConnectionMutex = Mutex()
 
-    suspend fun purchaseProduct(activity: Activity, productId: String): PurchasedIdsResponse {
+    suspend fun purchaseProduct(activity: Activity, productId: String): PlayBillingResponse<List<String>> {
         billingClient.ensureReady()
         val productDetailsResult = queryNonConsumableProductDetails()
         return productDetailsResult.productDetailsList
@@ -47,25 +47,16 @@ class PlayBillingDataSource @Inject constructor(
                     )
                     .build()
                 billingClient.launchBillingFlow(activity, billingFlowParams)
-                purchasesUpdatesChannel.receive()
+                purchasesUpdatesChannel.receive().also { response ->
+                    response.onSuccess {
+                        acknowledgePurchasedProducts()
+                    }
+                }
             }
-            ?: PurchasedIdsResponse.Error(productDetailsResult.billingResult.getErrorMessage())
+            ?: PlayBillingResponse.Error(productDetailsResult.billingResult.getErrorMessage())
     }
 
-    suspend fun acknowledgePurchasedProducts() {
-        billingClient.ensureReady()
-        queryNonConsumablePurchases().purchasesList
-            .filter { it.purchaseState == Purchase.PurchaseState.PURCHASED && !it.isAcknowledged }
-            .onEach {
-                billingClient.acknowledgePurchase(
-                    AcknowledgePurchaseParams.newBuilder()
-                        .setPurchaseToken(it.purchaseToken)
-                        .build()
-                )
-            }
-    }
-
-    suspend fun getProductsInfo(): ProductsInfoResponse {
+    suspend fun getProductsInfo(): PlayBillingResponse<List<ProductInfo>> {
         billingClient.ensureReady()
         val productDetailsResult = queryNonConsumableProductDetails()
         return productDetailsResult.productDetailsList
@@ -75,11 +66,11 @@ class PlayBillingDataSource @Inject constructor(
                     name = productDetails.name,
                 )
             }
-            ?.let { productsInfo -> ProductsInfoResponse.Success(productsInfo) }
-            ?: ProductsInfoResponse.Error(productDetailsResult.billingResult.getErrorMessage())
+            ?.let { productsInfo -> PlayBillingResponse.Success(productsInfo) }
+            ?: PlayBillingResponse.Error(productDetailsResult.billingResult.getErrorMessage())
     }
 
-    suspend fun getIdsOfPurchasedProducts(): PurchasedIdsResponse {
+    suspend fun getIdsOfPurchasedProducts(): PlayBillingResponse<List<String>> {
         billingClient.ensureReady()
         return queryNonConsumablePurchases().toPurchasedIdsResponse()
     }
@@ -103,6 +94,18 @@ class PlayBillingDataSource @Inject constructor(
             .setProductType(BillingClient.ProductType.INAPP)
             .build()
         return billingClient.queryPurchasesAsync(queryPurchasesParams)
+    }
+
+    private suspend fun acknowledgePurchasedProducts() {
+        queryNonConsumablePurchases().purchasesList
+            .filter { it.purchaseState == Purchase.PurchaseState.PURCHASED && !it.isAcknowledged }
+            .onEach {
+                billingClient.acknowledgePurchase(
+                    AcknowledgePurchaseParams.newBuilder()
+                        .setPurchaseToken(it.purchaseToken)
+                        .build()
+                )
+            }
     }
 
     /**
@@ -147,9 +150,9 @@ class PlayBillingDataSource @Inject constructor(
             val purchasedIds = purchasesList
                 .filter { purchase -> purchase.purchaseState == Purchase.PurchaseState.PURCHASED }
                 .flatMap { purchase -> purchase.products }
-            PurchasedIdsResponse.Success(purchasedIds)
+            PlayBillingResponse.Success(purchasedIds)
         } else {
-            PurchasedIdsResponse.Error(billingResult.getErrorMessage())
+            PlayBillingResponse.Error(billingResult.getErrorMessage())
         }
 
     private fun BillingResult.getErrorMessage() = when (responseCode) {
