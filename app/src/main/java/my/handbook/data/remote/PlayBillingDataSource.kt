@@ -17,6 +17,10 @@ class PlayBillingDataSource @Inject constructor(
     billingClientBuilder: BillingClient.Builder,
 ) {
 
+    companion object {
+        private const val UNKNOWN_ERROR = "Unknown error"
+    }
+
     private val purchasesUpdatesChannel: Channel<PlayBillingResponse<List<String>>> = Channel(Channel.UNLIMITED)
 
     private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
@@ -32,7 +36,9 @@ class PlayBillingDataSource @Inject constructor(
     private val billingConnectionMutex = Mutex()
 
     suspend fun purchaseProduct(activity: Activity, productId: String): PlayBillingResponse<List<String>> {
-        billingClient.ensureReady()
+        billingClient.ensureReady().exceptionOrNull()?.let { exception ->
+            return PlayBillingResponse.Error(exception.message ?: UNKNOWN_ERROR)
+        }
         val productDetailsResult = queryNonConsumableProductDetails()
         return productDetailsResult.productDetailsList
             ?.find { it.productId == productId }
@@ -57,7 +63,9 @@ class PlayBillingDataSource @Inject constructor(
     }
 
     suspend fun getProductsInfo(): PlayBillingResponse<List<ProductInfo>> {
-        billingClient.ensureReady()
+        billingClient.ensureReady().exceptionOrNull()?.let { exception ->
+            return PlayBillingResponse.Error(exception.message ?: UNKNOWN_ERROR)
+        }
         val productDetailsResult = queryNonConsumableProductDetails()
         return productDetailsResult.productDetailsList
             ?.map { productDetails ->
@@ -71,8 +79,9 @@ class PlayBillingDataSource @Inject constructor(
     }
 
     suspend fun getIdsOfPurchasedProducts(): PlayBillingResponse<List<String>> {
-        billingClient.ensureReady()
-        return queryNonConsumablePurchases().toPurchasedIdsResponse()
+        return billingClient.ensureReady().exceptionOrNull()
+            ?.let { exception -> PlayBillingResponse.Error(exception.message ?: UNKNOWN_ERROR) }
+            ?: queryNonConsumablePurchases().toPurchasedIdsResponse()
     }
 
     private suspend fun queryNonConsumableProductDetails(): ProductDetailsResult {
@@ -114,13 +123,15 @@ class PlayBillingDataSource @Inject constructor(
      * If a connection is already in the process of being established, this
      * method just suspends until the billing client is ready
      */
-    private suspend fun BillingClient.ensureReady() = billingConnectionMutex.withLock {
-        // Avoid suspension if another coroutine already connected
-        if (isReady) {
-            return
+    private suspend fun BillingClient.ensureReady(): Result<Boolean> =
+        billingConnectionMutex.withLock {
+            return try {
+                takeIf { !isReady }?.connectOrThrow()
+                Result.success(true)
+            } catch (e: RuntimeException) {
+                Result.failure(e)
+            }
         }
-        connectOrThrow()
-    }
 
     private suspend fun BillingClient.connectOrThrow() = suspendCoroutine<Unit> { continuation ->
         startConnection(
@@ -129,9 +140,7 @@ class PlayBillingDataSource @Inject constructor(
                     if (result.isOk()) {
                         continuation.resume(Unit)
                     } else {
-                        continuation.resumeWithException(
-                            RuntimeException("Billing conn failed: ${result.debugMessage}")
-                        )
+                        continuation.resumeWithException(RuntimeException(result.getErrorMessage()))
                     }
                 }
 
@@ -164,6 +173,6 @@ class PlayBillingDataSource @Inject constructor(
         BillingClient.BillingResponseCode.ITEM_UNAVAILABLE -> "Item unavailable"
         BillingClient.BillingResponseCode.DEVELOPER_ERROR -> "Developer error"
         BillingClient.BillingResponseCode.ERROR -> "Error"
-        else -> "Unknown error"
+        else -> UNKNOWN_ERROR
     }
 }
