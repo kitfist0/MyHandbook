@@ -69,7 +69,9 @@ abstract class BaseFragment<out DB : ViewDataBinding> : Fragment() {
 
     private fun handleEvent(event: Event) {
         when (event) {
-            is TextMessage -> Snackbar.make(requireView(), event.message, Snackbar.LENGTH_LONG).show()
+            is TextMessage -> activity?.let {
+                Snackbar.make(it.window.decorView, event.message, Snackbar.LENGTH_LONG).show()
+            }
             is StartActivity -> startActivity(event.intent)
             is Navigate -> findNavController().navigate(event.direction)
             is NavigateUp -> findNavController().navigateUp()
