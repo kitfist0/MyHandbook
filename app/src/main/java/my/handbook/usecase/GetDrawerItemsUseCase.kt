@@ -34,9 +34,9 @@ class GetDrawerItemsUseCase @Inject constructor(
     )
 
     fun execute(): Flow<UseCaseResult<List<DrawerItem>>> {
-        return getCoffeeItems()
+        return sectionDao.getSections()
             .onStart { UseCaseResult.Loading }
-            .combine(sectionDao.getSections()) { coffeeItems, sections ->
+            .combine(getCoffeeItems()) { sections, coffeeItems ->
                 val sectionItems = sections.asSequence()
                     .map { DrawerItem.SectionItem(it) }
                 UseCaseResult.Success(
@@ -49,6 +49,7 @@ class GetDrawerItemsUseCase @Inject constructor(
     }
 
     private fun getCoffeeItems(): Flow<List<DrawerItem>> = flow {
+        emit(emptyList())
         val coffeeItems = mutableListOf<DrawerItem>()
         playBillingDataSource.getProductsInfo().onSuccess { productsInfo ->
             playBillingDataSource.getIdsOfPurchasedProducts().onSuccess { purchasedIds ->
