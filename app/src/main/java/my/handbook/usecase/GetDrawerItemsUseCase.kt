@@ -4,9 +4,9 @@ import kotlinx.coroutines.flow.*
 import my.handbook.BuildConfig
 import my.handbook.R
 import my.handbook.data.dao.SectionDao
-import my.handbook.ui.drawer.DrawerItem
 import my.handbook.data.remote.PlayBillingDataSource
 import my.handbook.data.remote.onSuccess
+import my.handbook.ui.drawer.DrawerItem
 import javax.inject.Inject
 
 class GetDrawerItemsUseCase @Inject constructor(
