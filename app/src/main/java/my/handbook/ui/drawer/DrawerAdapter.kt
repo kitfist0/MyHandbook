@@ -3,9 +3,9 @@ package my.handbook.ui.drawer
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
+import my.handbook.databinding.ItemDrawerCoffeeBinding
 import my.handbook.databinding.ItemDrawerDividerBinding
 import my.handbook.databinding.ItemDrawerLinkBinding
-import my.handbook.databinding.ItemDrawerProductBinding
 import my.handbook.databinding.ItemDrawerSectionBinding
 
 class DrawerAdapter(
@@ -22,7 +22,7 @@ class DrawerAdapter(
     interface DrawerAdapterListener {
         fun onSectionClicked(item: DrawerItem.SectionItem)
         fun onLinkClicked(item: DrawerItem.LinkItem)
-        fun onProductClicked(item: DrawerItem.ProductItem)
+        fun onCoffeeClicked(item: DrawerItem.CoffeeItem)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -30,7 +30,7 @@ class DrawerAdapter(
             is DrawerItem.SectionItem -> VIEW_TYPE_SECTION
             is DrawerItem.DividerItem -> VIEW_TYPE_DIVIDER
             is DrawerItem.LinkItem -> VIEW_TYPE_LINK
-            is DrawerItem.ProductItem -> VIEW_TYPE_PRODUCT
+            is DrawerItem.CoffeeItem -> VIEW_TYPE_PRODUCT
             else -> throw RuntimeException("Unsupported ItemViewType for obj ${getItem(position)}")
         }
     }
@@ -65,7 +65,7 @@ class DrawerAdapter(
                 listener
             )
             VIEW_TYPE_PRODUCT -> DrawerItemViewHolder.ProductViewHolder(
-                ItemDrawerProductBinding.inflate(
+                ItemDrawerCoffeeBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false

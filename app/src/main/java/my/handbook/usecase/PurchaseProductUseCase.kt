@@ -1,16 +1,17 @@
 package my.handbook.usecase
 
 import android.app.Activity
-import my.handbook.data.BillingHandler
-import my.handbook.data.entity.Product
+import my.handbook.data.remote.PlayBillingDataSource
+import my.handbook.data.remote.PlayBillingResponse
 import javax.inject.Inject
 
 class PurchaseProductUseCase @Inject constructor(
-    private val billingHandler: BillingHandler,
+    private val playBillingDataSource: PlayBillingDataSource,
 ) {
-    fun execute(activity: Activity?, product: Product) {
-        activity?.let {
-            billingHandler.purchaseProduct(it, product.originalJson)
+    suspend fun execute(activity: Activity, productId: String): UseCaseResult<List<String>> {
+        return when (val response = playBillingDataSource.purchaseProduct(activity, productId)) {
+            is PlayBillingResponse.Success -> UseCaseResult.Success(response.data)
+            is PlayBillingResponse.Error -> UseCaseResult.Error(response.message)
         }
     }
 }

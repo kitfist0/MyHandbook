@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
  */
 sealed class UseCaseResult<out R> {
     data class Success<out T>(val data: T) : UseCaseResult<T>()
+    data class Error(val message: String) : UseCaseResult<Nothing>()
     object Loading : UseCaseResult<Nothing>()
 }
 

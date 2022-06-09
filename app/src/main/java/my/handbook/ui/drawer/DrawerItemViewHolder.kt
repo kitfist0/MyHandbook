@@ -2,9 +2,9 @@ package my.handbook.ui.drawer
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import my.handbook.databinding.ItemDrawerCoffeeBinding
 import my.handbook.databinding.ItemDrawerDividerBinding
 import my.handbook.databinding.ItemDrawerLinkBinding
-import my.handbook.databinding.ItemDrawerProductBinding
 import my.handbook.databinding.ItemDrawerSectionBinding
 
 sealed class DrawerItemViewHolder<T : DrawerItem>(
@@ -52,13 +52,13 @@ sealed class DrawerItemViewHolder<T : DrawerItem>(
     }
 
     class ProductViewHolder(
-        private val binding: ItemDrawerProductBinding,
+        private val binding: ItemDrawerCoffeeBinding,
         private val adapterListener: DrawerAdapter.DrawerAdapterListener
-    ) : DrawerItemViewHolder<DrawerItem.ProductItem>(binding.root) {
+    ) : DrawerItemViewHolder<DrawerItem.CoffeeItem>(binding.root) {
 
-        override fun bind(item: DrawerItem.ProductItem) {
+        override fun bind(item: DrawerItem.CoffeeItem) {
             binding.run {
-                productItem = item
+                coffeeItem = item
                 listener = adapterListener
                 executePendingBindings()
             }

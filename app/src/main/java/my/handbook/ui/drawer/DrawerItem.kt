@@ -3,7 +3,6 @@ package my.handbook.ui.drawer
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import my.handbook.data.entity.Section
-import my.handbook.data.entity.Product
 
 /**
  * A sealed class which encapsulates all objects [DrawerAdapter] is able to display.
@@ -24,7 +23,9 @@ sealed class DrawerItem {
         @DrawableRes val iconRes: Int,
     ) : DrawerItem()
 
-    data class ProductItem(
-        val product: Product,
+    data class CoffeeItem(
+        val id: String,
+        val name: String,
+        val isPurchased: Boolean,
     ) : DrawerItem()
 }

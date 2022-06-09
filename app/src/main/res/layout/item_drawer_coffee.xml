@@ -6,8 +6,8 @@
 
     <data>
         <variable
-            name="productItem"
-            type="my.handbook.ui.drawer.DrawerItem.ProductItem"/>
+            name="coffeeItem"
+            type="my.handbook.ui.drawer.DrawerItem.CoffeeItem"/>
         <variable
             name="listener"
             type="my.handbook.ui.drawer.DrawerAdapter.DrawerAdapterListener"/>
@@ -21,14 +21,14 @@
         android:paddingRight="@dimen/grid_4"
         android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical|start"
-        android:onClick="@{() -> listener.onProductClicked(productItem)}"
+        android:onClick="@{() -> listener.onCoffeeClicked(coffeeItem)}"
         android:ellipsize="end"
         android:lines="1"
-        android:text="@{productItem.product.title}"
+        android:text="@{coffeeItem.name}"
         android:textColor="@color/color_on_primary_surface_emphasis_medium"
         android:textAppearance="?attr/textAppearanceSubtitle1"
         android:drawablePadding="@dimen/grid_4"
-        app:productIcon="@{productItem.product}"
+        app:coffeeIcon="@{coffeeItem.isPurchased}"
         app:drawableTint="@color/color_on_primary_surface_emphasis_medium"
         tools:text="Link text"/>
 
