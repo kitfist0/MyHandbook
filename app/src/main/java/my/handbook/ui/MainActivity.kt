@@ -2,6 +2,7 @@ package my.handbook.ui
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setFullScreen()
         setUpBottomNavigationAndFab()
     }
 
@@ -98,6 +100,15 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     isCanceled = true
                 }
             })
+        }
+    }
+
+    private fun setFullScreen() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(false)
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         }
     }
 }
