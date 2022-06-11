@@ -1,13 +1,11 @@
 <resources>
-
     <string name="app_name">MathHelper</string>
+    <string name="home_empty_list_message">Тут пусто!\nПроверьте выбранные параметры фильтра</string>
     <string name="search">Поиск</string>
     <string name="fab_search_content_description">Поиск в приложении</string>
-
     <string name="about">О приложении</string>
     <string name="github">ГитХаб</string>
     <string name="license">Лицензия</string>
     <string name="rate_app">Оценить</string>
     <string name="coffee_for_developers">Кофе для разработчиков</string>
-
 </resources>

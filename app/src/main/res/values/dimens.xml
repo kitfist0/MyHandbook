@@ -22,4 +22,9 @@
     <dimen name="fullscreen_progress_translation_z">2dp</dimen>
     <!--endregion-->
 
+    <!--region Home-->
+    <dimen name="home_empty_list_text_max_width">200dp</dimen>
+    <dimen name="home_empty_list_icon_padding">8dp</dimen>
+    <!--endregion-->
+
 </resources>

@@ -1,13 +1,11 @@
 <resources>
-
     <string name="app_name">MyHandbook</string>
+    <string name="home_empty_list_message">It\'s empty!\nCheck selected filter options</string>
     <string name="search">Search</string>
     <string name="fab_search_content_description">Search paragraph</string>
-
     <string name="about">About</string>
     <string name="github">GitHub</string>
     <string name="license">License</string>
     <string name="rate_app">Rate app</string>
     <string name="coffee_for_developers">Coffee for developers</string>
-
 </resources>

@@ -23,7 +23,9 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val _articles = MutableStateFlow<List<Article>>(emptyList())
-    val articles: LiveData<List<Article>> = _articles.asLiveData()
+    val articles: LiveData<List<Article>> = _articles
+        .onEach { list -> isEmpty.set(list.isEmpty()) }
+        .asLiveData()
 
     init {
         getArticlesOfSelectedSectionsUseCase.execute()

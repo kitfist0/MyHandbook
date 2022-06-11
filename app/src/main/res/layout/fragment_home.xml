@@ -1,17 +1,32 @@
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="model"
-            type="my.handbook.ui.base.BaseViewModel"/>
+            type="my.handbook.ui.base.BaseViewModel" />
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/home_empty_list_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawablePadding="@dimen/home_empty_list_icon_padding"
+            android:gravity="center"
+            android:maxWidth="@dimen/home_empty_list_text_max_width"
+            android:text="@string/home_empty_list_message"
+            android:textAppearance="?textAppearanceBody2"
+            android:textColor="?colorOnBackground"
+            app:drawableTopCompat="@drawable/ic_twotone_error"
+            app:goneIf="@{!model.isEmpty}"
+            app:drawableTint="?colorOnBackground" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/home_recycler_view"
@@ -23,16 +38,16 @@
             android:transitionGroup="true"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:paddingTopSystemWindowInsets="@{true}"
             app:paddingBottomSystemWindowInsets="@{true}"
-            tools:listitem="@layout/item_article"
-            tools:itemCount="4"/>
+            app:paddingTopSystemWindowInsets="@{true}"
+            tools:itemCount="4"
+            tools:listitem="@layout/item_article" />
 
         <ProgressBar
             style="@style/Widget.Handbook.FullscreenProgressBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:goneIf="@{!model.isLoading}"/>
+            app:goneIf="@{!model.isLoading}" />
 
     </FrameLayout>
 
