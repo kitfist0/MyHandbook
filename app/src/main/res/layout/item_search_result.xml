@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="item"
-            type="my.handbook.data.entity.SearchResult"/>
+            type="my.handbook.data.local.model.SearchResult" />
+
         <variable
             name="listener"
-            type="my.handbook.ui.search.SearchResultAdapter.SearchResultAdapterListener"/>
+            type="my.handbook.ui.search.SearchResultAdapter.SearchResultAdapterListener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="@dimen/plane_00"
-        android:layout_marginVertical="@dimen/grid_0_25"
         android:layout_marginHorizontal="@dimen/grid_0_5"
+        android:layout_marginVertical="@dimen/grid_0_25"
+        android:elevation="@dimen/plane_00"
         android:onClick="@{() -> listener.onSearchResultClicked(item.file, item.text)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,20 +30,20 @@
             android:paddingBottom="@dimen/grid_2">
 
             <TextView
-                android:textAppearance="?attr/textAppearanceBody2"
                 android:id="@+id/section_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/grid_1"
                 android:layout_marginStart="@dimen/grid_2"
+                android:layout_marginTop="@dimen/grid_1"
                 android:layout_marginEnd="@dimen/grid_2"
                 android:maxLines="1"
+                android:textAppearance="?textAppearanceBody2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:sectionText="@{item.section}"
                 app:sectionTextColor="@{item.section}"
                 tools:text="@string/section_1"
-                tools:textColor="?attr/colorPrimary"/>
+                tools:textColor="?colorPrimary" />
 
             <TextView
                 android:id="@+id/title_text_view"
@@ -53,13 +54,13 @@
                 android:layout_marginEnd="@dimen/grid_2"
                 android:ellipsize="end"
                 android:maxLines="3"
-                android:textAppearance="?attr/textAppearanceBody1"
+                android:textAppearance="?textAppearanceBody1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/section_text_view"
+                app:layout_constraintTop_toBottomOf="@id/section_text_view"
                 app:layout_goneMarginEnd="@dimen/grid_2"
                 app:textSnippet="@{item.text}"
-                tools:text="Continuous Random Variables Random Continuous Random Variables"/>
+                tools:text="Continuous Random Variables Random Continuous Random Variables" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

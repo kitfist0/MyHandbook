@@ -1,8 +1,8 @@
-package my.handbook.data.dao
+package my.handbook.data.local.source
 
 import androidx.room.Dao
 import androidx.room.Query
-import my.handbook.data.entity.SearchResult
+import my.handbook.data.local.model.SearchResult
 
 @Dao
 interface ParagraphDao {

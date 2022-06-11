@@ -2,7 +2,7 @@ package my.handbook.ui.drawer
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import my.handbook.data.entity.Section
+import my.handbook.data.local.model.Section
 
 /**
  * A sealed class which encapsulates all objects [DrawerAdapter] is able to display.

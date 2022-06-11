@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import my.handbook.data.entity.Article
+import my.handbook.data.local.model.Article
 import my.handbook.databinding.ItemArticleBinding
 
 class ArticleAdapter(

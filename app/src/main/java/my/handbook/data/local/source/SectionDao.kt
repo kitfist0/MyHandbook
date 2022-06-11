@@ -1,10 +1,10 @@
-package my.handbook.data.dao
+package my.handbook.data.local.source
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import my.handbook.data.entity.Section
+import my.handbook.data.local.model.Section
 
 @Dao
 interface SectionDao {

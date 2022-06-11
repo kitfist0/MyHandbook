@@ -11,10 +11,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import my.handbook.data.AppDatabase
-import my.handbook.data.dao.ArticleDao
-import my.handbook.data.dao.ParagraphDao
-import my.handbook.data.dao.SectionDao
+import my.handbook.data.local.source.AppDatabase
+import my.handbook.data.local.source.ArticleDao
+import my.handbook.data.local.source.ParagraphDao
+import my.handbook.data.local.source.SectionDao
 import my.handbook.util.dbRecreationRequired
 import javax.inject.Singleton
 

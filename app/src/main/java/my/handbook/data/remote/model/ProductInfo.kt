@@ -1,4 +1,4 @@
-package my.handbook.data.remote
+package my.handbook.data.remote.model
 
 data class ProductInfo(
     val id: String,

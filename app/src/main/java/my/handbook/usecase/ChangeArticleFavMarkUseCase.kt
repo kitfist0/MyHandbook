@@ -1,7 +1,7 @@
 package my.handbook.usecase
 
-import my.handbook.data.dao.ArticleDao
-import my.handbook.data.entity.Article
+import my.handbook.data.local.source.ArticleDao
+import my.handbook.data.local.model.Article
 import javax.inject.Inject
 
 class ChangeArticleFavMarkUseCase @Inject constructor(

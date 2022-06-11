@@ -1,8 +1,8 @@
 package my.handbook.usecase
 
 import android.app.Activity
-import my.handbook.data.remote.PlayBillingDataSource
-import my.handbook.data.remote.PlayBillingResponse
+import my.handbook.data.remote.source.PlayBillingDataSource
+import my.handbook.data.remote.model.PlayBillingResponse
 import javax.inject.Inject
 
 class PurchaseProductUseCase @Inject constructor(

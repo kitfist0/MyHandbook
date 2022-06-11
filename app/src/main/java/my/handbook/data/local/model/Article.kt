@@ -1,4 +1,4 @@
-package my.handbook.data.entity
+package my.handbook.data.local.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

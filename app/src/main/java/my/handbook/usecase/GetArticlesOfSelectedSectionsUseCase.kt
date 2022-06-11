@@ -3,9 +3,9 @@ package my.handbook.usecase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
-import my.handbook.data.dao.ArticleDao
-import my.handbook.data.dao.SectionDao
-import my.handbook.data.entity.Article
+import my.handbook.data.local.source.ArticleDao
+import my.handbook.data.local.source.SectionDao
+import my.handbook.data.local.model.Article
 import javax.inject.Inject
 
 class GetArticlesOfSelectedSectionsUseCase @Inject constructor(

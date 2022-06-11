@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.BindingAdapter
 import my.handbook.R
-import my.handbook.data.entity.Section
+import my.handbook.data.local.model.Section
 
 @BindingAdapter("sectionText")
 fun TextView.bindSectionText(section: Int?) {

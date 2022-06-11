@@ -1,35 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="item"
-            type="my.handbook.data.entity.Article"/>
+            type="my.handbook.data.local.model.Article" />
+
         <variable
             name="listener"
-            type="my.handbook.ui.home.ArticleAdapter.ArticleAdapterListener"/>
+            type="my.handbook.ui.home.ArticleAdapter.ArticleAdapterListener" />
     </data>
 
     <FrameLayout
         android:id="@+id/article_layout"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_marginVertical="@dimen/grid_0_25"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/grid_0_5"
+        android:layout_marginVertical="@dimen/grid_0_25"
         android:background="?colorSecondary">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/article_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="@dimen/plane_00"
             android:clickable="true"
+            android:elevation="@dimen/plane_00"
             android:focusable="true"
-            app:cardPreventCornerOverlap="false"
-            android:onClick="@{() -> listener.onArticleClicked(item.file)}">
+            android:onClick="@{() -> listener.onArticleClicked(item.file)}"
+            app:cardPreventCornerOverlap="false">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -41,63 +42,63 @@
                     android:id="@+id/article_text_section"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/grid_1"
                     android:layout_marginStart="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_1"
                     android:layout_marginEnd="@dimen/grid_2"
-                    android:textAppearance="?textAppearanceBody2"
                     android:maxLines="1"
+                    android:textAppearance="?textAppearanceBody2"
                     app:layout_constraintEnd_toStartOf="@id/article_image"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:sectionText="@{item.section}"
                     app:sectionTextColor="@{item.section}"
                     tools:text="@string/section_2"
-                    tools:textColor="?colorPrimary"/>
+                    tools:textColor="?colorPrimary" />
 
                 <TextView
                     android:id="@+id/article_text_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/grid_2"
                     android:layout_marginTop="@dimen/grid_1"
                     android:layout_marginEnd="@dimen/grid_2"
-                    android:layout_marginStart="@dimen/grid_2"
-                    android:textAppearance="?textAppearanceHeadline6"
-                    android:maxLines="2"
                     android:ellipsize="end"
+                    android:maxLines="2"
                     android:text="@{item.title}"
-                    tools:text="Continuous Random Variables"
-                    app:layout_goneMarginEnd="@dimen/grid_2"
+                    android:textAppearance="?textAppearanceHeadline6"
                     app:layout_constraintEnd_toStartOf="@id/article_image"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/article_text_section"/>
+                    app:layout_constraintTop_toBottomOf="@id/article_text_section"
+                    app:layout_goneMarginEnd="@dimen/grid_2"
+                    tools:text="Continuous Random Variables" />
 
                 <TextView
                     android:id="@+id/article_text_paragraphs"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/grid_1"
                     android:layout_marginStart="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_1"
                     android:layout_marginEnd="@dimen/grid_2"
+                    android:ellipsize="end"
+                    android:maxLines="2"
                     android:text="@{item.summary}"
                     android:textAppearance="?textAppearanceBody1"
-                    android:maxLines="2"
-                    android:ellipsize="end"
-                    tools:text="Definition, Properties, Normal Random Variables, Probability Density Function PDF, Examples"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/article_text_title"/>
+                    app:layout_constraintTop_toBottomOf="@id/article_text_title"
+                    tools:text="Definition, Properties, Normal Random Variables, Probability Density Function PDF, Examples" />
 
                 <ImageView
                     android:id="@+id/article_image"
                     android:layout_width="@dimen/label_image_size"
                     android:layout_height="@dimen/label_image_size"
-                    android:src="@drawable/ic_twotone_book"
-                    android:layout_marginTop="@dimen/grid_1"
                     android:layout_marginStart="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_1"
                     android:layout_marginEnd="@dimen/grid_2"
-                    app:tint="?colorPrimary"
+                    android:src="@drawable/ic_twotone_book"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="?colorPrimary" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -3,9 +3,9 @@ package my.handbook.usecase
 import kotlinx.coroutines.flow.*
 import my.handbook.BuildConfig
 import my.handbook.R
-import my.handbook.data.dao.SectionDao
-import my.handbook.data.remote.PlayBillingDataSource
-import my.handbook.data.remote.onSuccess
+import my.handbook.data.local.source.SectionDao
+import my.handbook.data.remote.model.onSuccess
+import my.handbook.data.remote.source.PlayBillingDataSource
 import my.handbook.ui.drawer.DrawerItem
 import javax.inject.Inject
 

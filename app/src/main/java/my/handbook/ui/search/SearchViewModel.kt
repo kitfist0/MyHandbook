@@ -8,7 +8,7 @@ import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import my.handbook.data.entity.SearchResult
+import my.handbook.data.local.model.SearchResult
 import my.handbook.ui.base.BaseViewModel
 import my.handbook.usecase.SearchParagraphUseCase
 import my.handbook.usecase.UseCaseResult

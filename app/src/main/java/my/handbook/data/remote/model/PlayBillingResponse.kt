@@ -1,4 +1,4 @@
-package my.handbook.data.remote
+package my.handbook.data.remote.model
 
 sealed class PlayBillingResponse<out R> {
     data class Success<out T>(val data: T) : PlayBillingResponse<T>()

@@ -1,4 +1,4 @@
-package my.handbook.data.remote
+package my.handbook.data.remote.source
 
 import android.app.Activity
 import com.android.billingclient.api.*
@@ -6,6 +6,9 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import my.handbook.BuildConfig
+import my.handbook.data.remote.model.PlayBillingResponse
+import my.handbook.data.remote.model.ProductInfo
+import my.handbook.data.remote.model.onSuccess
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.resume

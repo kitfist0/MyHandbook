@@ -1,7 +1,7 @@
 package my.handbook.usecase
 
-import my.handbook.data.dao.SectionDao
-import my.handbook.data.entity.Section
+import my.handbook.data.local.source.SectionDao
+import my.handbook.data.local.model.Section
 import javax.inject.Inject
 
 class ChangeSectionSelectionUseCase @Inject constructor(
