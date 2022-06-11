@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 
 abstract class BaseViewModel : ViewModel() {
 
+    val isEmpty = ObservableBoolean(false)
     val isLoading = ObservableBoolean(false)
 
     private val _event = MutableSharedFlow<Event>()
