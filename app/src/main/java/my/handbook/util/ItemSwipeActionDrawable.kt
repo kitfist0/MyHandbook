@@ -144,6 +144,9 @@ class ItemSwipeActionDrawable(context: Context) : Drawable() {
         circlePaint.alpha = alpha
     }
 
+    @Deprecated("Deprecated in Java",
+        ReplaceWith("PixelFormat.TRANSLUCENT", "android.graphics.PixelFormat")
+    )
     override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
 
     override fun setColorFilter(filter: ColorFilter?) {
