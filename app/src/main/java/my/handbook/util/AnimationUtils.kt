@@ -10,7 +10,7 @@ import com.google.android.material.animation.ArgbEvaluatorCompat
 fun lerp(
     startValue: Float,
     endValue: Float,
-    @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float
+    @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float,
 ): Float {
     return startValue + fraction * (endValue - startValue)
 }
@@ -22,23 +22,19 @@ fun lerp(
 fun lerpArgb(
     @ColorInt startColor: Int,
     @ColorInt endColor: Int,
-    @FloatRange(
-        from = 0.0,
-        fromInclusive = true,
-        to = 1.0,
-        toInclusive = false
-    ) startFraction: Float,
+    @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = false) startFraction: Float,
     @FloatRange(from = 0.0, fromInclusive = false, to = 1.0, toInclusive = true) endFraction: Float,
-    @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float
+    @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float,
 ): Int {
-    if (fraction < startFraction) return startColor
-    if (fraction > endFraction) return endColor
-
-    return ArgbEvaluatorCompat.getInstance().evaluate(
-        (fraction - startFraction) / (endFraction - startFraction),
-        startColor,
-        endColor
-    )
+    return when {
+        fraction < startFraction -> startColor
+        fraction > endFraction -> endColor
+        else -> ArgbEvaluatorCompat.getInstance().evaluate(
+            (fraction - startFraction) / (endFraction - startFraction),
+            startColor,
+            endColor
+        )
+    }
 }
 
 /**
@@ -52,14 +48,12 @@ fun Float.normalize(
     inputMin: Float,
     inputMax: Float,
     outputMin: Float,
-    outputMax: Float
+    outputMax: Float,
 ): Float {
-    if (this < inputMin) {
-        return outputMin
-    } else if (this > inputMax) {
-        return outputMax
+    return when {
+        this < inputMin -> outputMin
+        this > inputMax -> outputMax
+        else -> outputMin * (1 - (this - inputMin) / (inputMax - inputMin)) +
+                outputMax * ((this - inputMin) / (inputMax - inputMin))
     }
-
-    return outputMin * (1 - (this - inputMin) / (inputMax - inputMin)) +
-        outputMax * ((this - inputMin) / (inputMax - inputMin))
 }
