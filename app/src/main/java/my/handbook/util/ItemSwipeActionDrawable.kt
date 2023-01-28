@@ -61,8 +61,7 @@ class ItemSwipeActionDrawable(context: Context) : Drawable() {
     private val dur = context.resources.getInteger(R.integer.handbook_motion_duration_medium)
     private val interp = context.themeInterpolator(R.attr.motionInterpolatorPersistent)
 
-    override fun onBoundsChange(bounds: Rect?) {
-        if (bounds == null) return
+    override fun onBoundsChange(bounds: Rect) {
         update()
     }
 
@@ -86,13 +85,9 @@ class ItemSwipeActionDrawable(context: Context) : Drawable() {
 
     override fun isStateful(): Boolean = true
 
-    override fun onStateChange(state: IntArray?): Boolean {
+    override fun onStateChange(state: IntArray): Boolean {
         val initialProgress = progress
-        val newProgress = if (state?.contains(android.R.attr.state_activated) == true) {
-            1F
-        } else {
-            0F
-        }
+        val newProgress = if (state.contains(android.R.attr.state_activated)) 1F else 0F
         progressAnim?.cancel()
         progressAnim = ValueAnimator.ofFloat(initialProgress, newProgress).apply {
             addUpdateListener {

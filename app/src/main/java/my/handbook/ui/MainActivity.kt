@@ -89,14 +89,14 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                 var isCanceled = false
 
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     if (isCanceled) return
                     // Hide the BottomAppBar to avoid it showing above the keyboard
                     bottomAppBar.visibility = View.GONE
                     fab.visibility = View.INVISIBLE
                 }
 
-                override fun onAnimationCancel(animation: Animator?) {
+                override fun onAnimationCancel(animation: Animator) {
                     isCanceled = true
                 }
             })
