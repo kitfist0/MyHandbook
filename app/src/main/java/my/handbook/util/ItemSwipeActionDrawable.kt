@@ -25,6 +25,11 @@ import kotlin.math.sin
  */
 class ItemSwipeActionDrawable(context: Context) : Drawable() {
 
+    private companion object {
+        // Amount that we should 'overshoot' the icon's scale by when animating.
+        private const val ICON_MAX_SCALE_ADDITION = 0.5F
+    }
+
     private val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = context.themeColor(R.attr.colorSecondary)
         style = Paint.Style.FILL
@@ -35,19 +40,17 @@ class ItemSwipeActionDrawable(context: Context) : Drawable() {
     private var cx = 0F
     private var cr = 0F
 
-    private val icon = AppCompatResources.getDrawable(
-        context,
-        R.drawable.ic_twotone_star_on_background
-    )!!
+    private val icon = AppCompatResources
+        .getDrawable(context, R.drawable.ic_twotone_star_on_background)!!
     private val iconMargin = context.resources.getDimension(R.dimen.grid_4)
     private val iconIntrinsicWidth = icon.intrinsicWidth
     private val iconIntrinsicHeight = icon.intrinsicHeight
 
-    @ColorInt private val iconTint = context.themeColor(R.attr.colorOnBackground)
-    @ColorInt private val iconTintActive = context.themeColor(R.attr.colorOnSecondary)
+    @ColorInt
+    private val iconTint = context.themeColor(R.attr.colorOnBackground)
 
-    // Amount that we should 'overshoot' the icon's scale by when animating.
-    private val iconMaxScaleAddition = 0.5F
+    @ColorInt
+    private val iconTintActive = context.themeColor(R.attr.colorOnSecondary)
 
     private var progress = 0F
         set(value) {
@@ -102,22 +105,14 @@ class ItemSwipeActionDrawable(context: Context) : Drawable() {
 
     override fun draw(canvas: Canvas) {
         // Draw the circular reveal background.
-        canvas.drawCircle(
-            cx,
-            circle.centerY(),
-            cr * progress,
-            circlePaint
-        )
+        canvas.drawCircle(cx, circle.centerY(), cr * progress, circlePaint)
 
         // Map our progress range from 0-1 to 0-PI
-        val range = lerp(
-            0F,
-            Math.PI.toFloat(),
-            progress
-        )
+        val range = lerp(0F, Math.PI.toFloat(), progress)
+
         // Take the sin of our ranged progress * our maxScaleAddition as what we should
         // increase the icon's scale by.
-        val additive = (sin(range.toDouble()) * iconMaxScaleAddition).coerceIn(0.0, 1.0)
+        val additive = (sin(range.toDouble()) * ICON_MAX_SCALE_ADDITION).coerceIn(0.0, 1.0)
         val scaleFactor = 1 + additive
         icon.setBounds(
             (cx - (iconIntrinsicWidth / 2F) * scaleFactor).toInt(),
@@ -127,9 +122,7 @@ class ItemSwipeActionDrawable(context: Context) : Drawable() {
         )
 
         // Draw/animate the color of the icon
-        icon.setTint(
-            lerpArgb(iconTint, iconTintActive, 0F, 0.15F, progress)
-        )
+        icon.setTint(lerpArgb(iconTint, iconTintActive, 0F, 0.15F, progress))
 
         // Draw the icon
         icon.draw(canvas)
@@ -139,7 +132,8 @@ class ItemSwipeActionDrawable(context: Context) : Drawable() {
         circlePaint.alpha = alpha
     }
 
-    @Deprecated("Deprecated in Java",
+    @Deprecated(
+        "Deprecated in Java",
         ReplaceWith("PixelFormat.TRANSLUCENT", "android.graphics.PixelFormat")
     )
     override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
