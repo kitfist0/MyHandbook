@@ -1,5 +1,4 @@
 <resources>
-
     <string-array name="section_colors">
         <item>#009688</item>
         <item>#2196F3</item>
@@ -11,6 +10,5 @@
         <item>#8A8A8A</item>
     </string-array>
 
-    <string-array name="section_names"/>
-
+    <string-array name="section_names" />
 </resources>

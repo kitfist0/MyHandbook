@@ -1,9 +1,7 @@
 <resources>
-
     <string-array name="section_names">
         <item>Basics</item>
         <item>Classes and Objects</item>
         <item>Functions and Lambdas</item>
     </string-array>
-
 </resources>

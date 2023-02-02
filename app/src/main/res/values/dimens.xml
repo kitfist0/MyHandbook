@@ -1,9 +1,7 @@
 <resources>
-
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="min_touch_target_size">48dp</dimen>
-    <dimen name="min_icon_target_padding">12dp</dimen>
 
     <dimen name="bottom_app_bar_height">56dp</dimen>
     <dimen name="bottom_app_bar_height_2x">112dp</dimen>
