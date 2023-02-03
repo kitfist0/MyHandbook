@@ -1,12 +1,12 @@
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="model"
-            type="my.handbook.ui.base.BaseViewModel"/>
+            type="my.handbook.ui.base.BaseViewModel" />
     </data>
 
     <LinearLayout
@@ -14,6 +14,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:transitionGroup="true"
+        app:paddingBottomSystemWindowInsets="@{true}"
         app:paddingTopSystemWindowInsets="@{true}">
 
         <androidx.appcompat.widget.Toolbar
@@ -37,12 +38,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
+                    android:drawableEnd="@drawable/progress_drawable"
                     android:hint="@string/search"
                     android:imeOptions="flagNoExtractUi|actionSearch"
-                    android:inputType="textNoSuggestions"
-                    android:drawableEnd="@drawable/progress_drawable"
                     android:importantForAutofill="no"
-                    app:loadingAnimation="@{model.isLoading}"/>
+                    android:inputType="textNoSuggestions"
+                    app:loadingAnimation="@{model.isLoading}" />
 
             </FrameLayout>
 
@@ -52,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/white"
-            android:backgroundTint="@color/material_on_surface_stroke"/>
+            android:backgroundTint="@color/material_on_surface_stroke" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/search_recycler_view"
@@ -60,8 +61,8 @@
             android:layout_height="match_parent"
             android:paddingTop="@dimen/grid_0_25"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_search_result"
-            tools:itemCount="6"/>
+            tools:itemCount="6"
+            tools:listitem="@layout/item_search_result" />
 
     </LinearLayout>
 

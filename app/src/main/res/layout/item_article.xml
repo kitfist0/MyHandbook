@@ -52,7 +52,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:sectionText="@{item.section}"
                     app:sectionTextColor="@{item.section}"
-                    tools:text="@string/section_2"
+                    tools:text="Probability theory"
                     tools:textColor="?colorPrimary" />
 
                 <TextView

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="model"
-            type="my.handbook.ui.base.BaseViewModel"/>
+            type="my.handbook.ui.base.BaseViewModel" />
     </data>
 
     <FrameLayout
@@ -18,13 +18,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
-            app:goneIf="@{model.isLoading}"/>
+            app:goneIf="@{model.isLoading}" />
 
         <ProgressBar
             style="@style/Widget.Handbook.FullscreenProgressBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:goneIf="@{!model.isLoading}"/>
+            app:goneIf="@{!model.isLoading}" />
 
     </FrameLayout>
 

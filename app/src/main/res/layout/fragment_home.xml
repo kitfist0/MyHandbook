@@ -24,9 +24,9 @@
             android:text="@string/home_empty_list_message"
             android:textAppearance="?textAppearanceBody2"
             android:textColor="?colorOnBackground"
+            app:drawableTint="?colorOnBackground"
             app:drawableTopCompat="@drawable/ic_twotone_error"
-            app:goneIf="@{!model.isEmpty}"
-            app:drawableTint="?colorOnBackground" />
+            app:goneIf="@{!model.isEmpty}" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/home_recycler_view"

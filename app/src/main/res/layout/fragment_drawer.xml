@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -11,28 +10,28 @@
             android:id="@+id/drawer_scrim_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
             android:alpha="0"
-            android:background="?attr/scrimBackground"/>
+            android:background="?attr/scrimBackground"
+            android:visibility="gone" />
 
         <FrameLayout
             android:id="@+id/drawer_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/bottom_sheet_behavior"
+            app:behavior_halfExpandedRatio="0.5"
             app:behavior_hideable="true"
             app:behavior_skipCollapsed="true"
-            app:behavior_halfExpandedRatio="0.5">
+            app:layout_behavior="@string/bottom_sheet_behavior">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/drawer_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="@dimen/grid_3"
-                android:paddingBottom="@dimen/bottom_app_bar_height_2x"
                 android:clipToPadding="false"
                 android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                android:paddingTop="@dimen/grid_3"
+                android:paddingBottom="@dimen/bottom_app_bar_height_2x"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         </FrameLayout>
 
