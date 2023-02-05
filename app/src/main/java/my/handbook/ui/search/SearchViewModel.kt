@@ -31,8 +31,12 @@ class SearchViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+    fun onToolbarNavigationIconClicked() {
+        navigateBack()
+    }
+
     fun onSearchResultClicked(file: String, text: String) {
-        val searchResultText = text.replace("<b>", "").replace("</b>", "")
-        navigateTo(SearchFragmentDirections.actionSearchFragmentToReadFragment(file, searchResultText))
+        val resultText = text.replace("<b>", "").replace("</b>", "")
+        navigateTo(SearchFragmentDirections.actionSearchFragmentToReadFragment(file, resultText))
     }
 }

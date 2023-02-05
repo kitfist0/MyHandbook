@@ -44,11 +44,5 @@ fun Context.getDrawableOrNull(@DrawableRes id: Int?): Drawable? {
 }
 
 fun Context.isDarkThemeEnabled(): Boolean {
-    return resources.configuration.uiMode and
-        Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
-}
-
-fun Context.hideKeyboard(view: View) {
-    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    return resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
 }
