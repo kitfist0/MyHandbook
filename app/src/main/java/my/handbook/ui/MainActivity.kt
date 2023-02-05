@@ -6,6 +6,8 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -40,11 +42,12 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     ) {
         when (destination.id) {
             R.id.home_fragment -> binding.run {
-                bottomAppBar.visibility = View.VISIBLE
+                bottomAppBar.isVisible = true
                 bottomAppBar.performShow()
                 fab.show()
             }
-            R.id.read_fragment, R.id.search_fragment ->
+            R.id.read_fragment,
+            R.id.search_fragment ->
                 hideBottomAppBar().also { binding.fab.hide() }
         }
     }
@@ -85,21 +88,23 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             bottomAppBar.performHide()
             // Get a handle on the animator that hides the bottom app bar so we can wait to hide
             // the fab and bottom app bar until after it's exit animation finishes
-            bottomAppBar.animate().setListener(object : AnimatorListenerAdapter() {
+            bottomAppBar.animate().setListener(
+                object : AnimatorListenerAdapter() {
 
-                var isCanceled = false
+                    var isCanceled = false
 
-                override fun onAnimationEnd(animation: Animator) {
-                    if (isCanceled) return
-                    // Hide the BottomAppBar to avoid it showing above the keyboard
-                    bottomAppBar.visibility = View.GONE
-                    fab.visibility = View.INVISIBLE
+                    override fun onAnimationEnd(animation: Animator) {
+                        if (isCanceled) return
+                        // Hide the BottomAppBar to avoid it showing above the keyboard
+                        bottomAppBar.isVisible = false
+                        fab.isInvisible = true
+                    }
+
+                    override fun onAnimationCancel(animation: Animator) {
+                        isCanceled = true
+                    }
                 }
-
-                override fun onAnimationCancel(animation: Animator) {
-                    isCanceled = true
-                }
-            })
+            )
         }
     }
 
