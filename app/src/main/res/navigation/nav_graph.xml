@@ -3,53 +3,51 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/home_fragment">
 
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/home_fragment"
         android:name="my.handbook.ui.home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home">
 
         <action
-            android:id="@+id/action_HomeFragment_to_ReadFragment"
-            app:destination="@id/readFragment"/>
-        <action
-            android:id="@+id/action_homeFragment_to_searchFragment"
-            app:destination="@id/searchFragment"/>
+            android:id="@+id/from_home_to_read"
+            app:destination="@id/read_fragment" />
 
     </fragment>
 
     <fragment
-        android:id="@+id/readFragment"
+        android:id="@+id/read_fragment"
         android:name="my.handbook.ui.read.ReadFragment"
         android:label="Read"
         tools:layout="@layout/fragment_read">
 
         <argument
-            app:argType="string"
-            android:name="file_name"/>
+            android:name="file_name"
+            app:argType="string" />
+
         <argument
-            app:argType="string"
+            android:name="search_result"
             android:defaultValue=""
-            android:name="search_result"/>
+            app:argType="string" />
 
     </fragment>
 
     <fragment
-        android:id="@+id/searchFragment"
+        android:id="@+id/search_fragment"
         android:name="my.handbook.ui.search.SearchFragment"
         android:label="Search"
         tools:layout="@layout/fragment_search">
 
         <action
-            android:id="@+id/action_searchFragment_to_readFragment"
-            app:destination="@id/readFragment"/>
+            android:id="@+id/from_search_to_read"
+            app:destination="@id/read_fragment" />
 
     </fragment>
 
     <action
-        android:id="@+id/action_global_searchFragment"
-        app:destination="@+id/searchFragment"/>
+        android:id="@+id/from_anywhere_to_search"
+        app:destination="@id/search_fragment" />
 
 </navigation>

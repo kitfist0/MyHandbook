@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -17,14 +18,14 @@
             android:id="@+id/read_web_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
             app:goneIf="@{model.isLoading}" />
 
         <ProgressBar
             style="@style/Widget.Handbook.FullscreenProgressBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:goneIf="@{!model.isLoading}" />
+            app:goneIf="@{!model.isLoading}"
+            tools:visibility="gone" />
 
     </FrameLayout>
 

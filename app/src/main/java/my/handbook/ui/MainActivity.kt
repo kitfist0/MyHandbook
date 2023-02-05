@@ -39,12 +39,12 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         arguments: Bundle?
     ) {
         when (destination.id) {
-            R.id.homeFragment -> binding.run {
+            R.id.home_fragment -> binding.run {
                 bottomAppBar.visibility = View.VISIBLE
                 bottomAppBar.performShow()
                 fab.show()
             }
-            R.id.readFragment, R.id.searchFragment ->
+            R.id.read_fragment, R.id.search_fragment ->
                 hideBottomAppBar().also { binding.fab.hide() }
         }
     }
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             setHideMotionSpecResource(R.animator.fab_hide)
             setOnClickListener {
                 findNavController(R.id.nav_host_fragment).navigate(
-                    NavGraphDirections.actionGlobalSearchFragment()
+                    NavGraphDirections.fromAnywhereToSearch()
                 )
             }
         }

@@ -37,6 +37,6 @@ class SearchViewModel @Inject constructor(
 
     fun onSearchResultClicked(file: String, text: String) {
         val resultText = text.replace("<b>", "").replace("</b>", "")
-        navigateTo(SearchFragmentDirections.actionSearchFragmentToReadFragment(file, resultText))
+        navigateTo(SearchFragmentDirections.fromSearchToRead(file, resultText))
     }
 }

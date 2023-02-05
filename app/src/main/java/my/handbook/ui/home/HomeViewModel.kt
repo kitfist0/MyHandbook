@@ -37,7 +37,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onArticleClicked(file: String) {
-        navigateTo(HomeFragmentDirections.actionHomeFragmentToReadFragment(file))
+        navigateTo(HomeFragmentDirections.fromHomeToRead(file))
     }
 
     fun onFavoriteChanged(article: Article) {
