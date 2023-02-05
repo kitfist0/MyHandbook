@@ -1,12 +1,11 @@
 package my.handbook.ui.base
 
-import android.content.Intent
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel : ViewModel() {
@@ -14,34 +13,32 @@ abstract class BaseViewModel : ViewModel() {
     val isEmpty = ObservableBoolean(false)
     val isLoading = ObservableBoolean(false)
 
-    private val _event = MutableSharedFlow<Event>()
-    val event = _event.asSharedFlow()
-
-    fun navigateTo(direction: NavDirections) {
-        offerEvent(Navigate(direction))
-    }
-
-    fun navigateUp() {
-        offerEvent(NavigateUp)
-    }
-
-    fun navigateBack() {
-        offerEvent(NavigateBack)
-    }
-
-    fun showMessage(message: String) {
-        offerEvent(TextMessage(message))
-    }
-
-    fun startActivity(intent: Intent) {
-        offerEvent(StartActivity(intent))
-    }
+    private val eventChannel = Channel<BaseEvent>()
+    val baseEvents = eventChannel.receiveAsFlow()
 
     open fun onBackPressed() {
         navigateBack()
     }
 
-    private fun offerEvent(event: Event) {
-        viewModelScope.launch { _event.emit(event) }
+    protected fun navigateTo(direction: NavDirections) {
+        offerEvent(BaseEvent.NavigateTo(direction))
+    }
+
+    protected fun navigateBack() {
+        offerEvent(BaseEvent.NavigateBack)
+    }
+
+    protected fun openWebPage(address: String) {
+        offerEvent(BaseEvent.OpenWebPage(address))
+    }
+
+    protected fun showTextMessage(message: String) {
+        offerEvent(BaseEvent.ShowTextMessage(message))
+    }
+
+    private fun offerEvent(event: BaseEvent) {
+        viewModelScope.launch {
+            eventChannel.send(event)
+        }
     }
 }

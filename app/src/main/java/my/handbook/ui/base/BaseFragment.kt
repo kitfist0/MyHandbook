@@ -1,5 +1,7 @@
 package my.handbook.ui.base
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -50,7 +52,7 @@ abstract class BaseFragment<out DB : ViewDataBinding> : Fragment() {
         binding.setVariable(BR.model, viewModel)
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.event.collect { handleEvent(it) }
+            viewModel.baseEvents.collect { handleEvent(it) }
         }
 
         observeData()
@@ -61,15 +63,16 @@ abstract class BaseFragment<out DB : ViewDataBinding> : Fragment() {
         _binding = null
     }
 
-    private fun handleEvent(event: Event) {
+    private fun handleEvent(event: BaseEvent) {
         when (event) {
-            is TextMessage -> activity?.let {
-                Snackbar.make(it.window.decorView, event.message, Snackbar.LENGTH_LONG).show()
-            }
-            is StartActivity -> startActivity(event.intent)
-            is Navigate -> findNavController().navigate(event.direction)
-            is NavigateUp -> findNavController().navigateUp()
-            is NavigateBack -> if (!findNavController().popBackStack()) activity?.finish()
+            BaseEvent.NavigateBack ->
+                if (!findNavController().popBackStack()) activity?.finish()
+            is BaseEvent.NavigateTo ->
+                findNavController().navigate(event.direction)
+            is BaseEvent.OpenWebPage ->
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(event.address)))
+            is BaseEvent.ShowTextMessage ->
+                Snackbar.make(requireView(), event.message, Snackbar.LENGTH_LONG).show()
         }
     }
 }

@@ -1,8 +1,6 @@
 package my.handbook.ui.drawer
 
 import android.app.Activity
-import android.content.Intent
-import android.net.Uri
 import androidx.lifecycle.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,8 +40,7 @@ class DrawerViewModel @Inject constructor(
     }
 
     fun onLinkClicked(linkItem: DrawerItem.LinkItem) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(linkItem.link))
-        startActivity(intent)
+        openWebPage(linkItem.link)
     }
 
     fun onCoffeeClicked(activity: Activity?, coffeeItem: DrawerItem.CoffeeItem) {
@@ -51,7 +48,7 @@ class DrawerViewModel @Inject constructor(
         viewModelScope.launch {
             when (val useCaseResult = purchaseProductUseCase.execute(activity, coffeeItem.id)) {
                 is UseCaseResult.Success -> executeGetDrawerItemsUseCase()
-                is UseCaseResult.Error -> showMessage(useCaseResult.message)
+                is UseCaseResult.Error -> showTextMessage(useCaseResult.message)
                 is UseCaseResult.Loading -> {
                 }
             }
