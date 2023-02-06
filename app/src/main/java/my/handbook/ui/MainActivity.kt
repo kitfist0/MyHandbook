@@ -62,14 +62,9 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
 
         // Set a custom animation for showing and hiding the FAB
-        binding.fab.apply {
-            setShowMotionSpecResource(R.animator.fab_show)
-            setHideMotionSpecResource(R.animator.fab_hide)
-            setOnClickListener {
-                findNavController(R.id.nav_host_fragment).navigate(
-                    NavGraphDirections.fromAnywhereToSearch()
-                )
-            }
+        binding.fab.setOnClickListener {
+            findNavController(R.id.nav_host_fragment)
+                .navigate(NavGraphDirections.fromAnywhereToSearch())
         }
 
         drawerInterface.drawerBehaviorCallback.apply {
