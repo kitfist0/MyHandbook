@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "my.handbook"
@@ -32,7 +32,7 @@ android {
         }
     }
 
-    flavorDimensions "version"
+    flavorDimensions = ["version"]
 
     productFlavors {
         demo {
@@ -56,41 +56,57 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    namespace 'my.handbook'
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
-    implementation "androidx.appcompat:appcompat:1.6.0"
-    implementation "com.google.android.material:material:1.8.0"
-    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
-    implementation "androidx.core:core-ktx:1.9.0"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.3'
 
     // Billing
-    implementation 'com.android.billingclient:billing-ktx:5.1.0'
+    // mvnrepository.com/artifact/com.android.billingclient/billing-ktx
+    implementation 'com.android.billingclient:billing-ktx:6.2.1'
+
+    // ConstraintLayout
+    // mvnrepository.com/artifact/androidx.constraintlayout/constraintlayout
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // DI
+    // mvnrepository.com/artifact/com.google.dagger/hilt-android
+    // mvnrepository.com/artifact/com.google.dagger/hilt-android-compiler
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
+    // Material
+    // mvnrepository.com/artifact/com.google.android.material/material
+    implementation 'com.google.android.material:material:1.12.0'
+
     // Navigation
+    // mvnrepository.com/artifact/androidx.navigation/navigation-fragment-ktx
+    // mvnrepository.com/artifact/androidx.navigation/navigation-ui-ktx
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
 
     // Preference
-    implementation 'androidx.preference:preference-ktx:1.2.0'
+    // mvnrepository.com/artifact/androidx.preference/preference-ktx
+    implementation 'androidx.preference:preference-ktx:1.2.1'
 
     // Room
-    def room_version = '2.4.3'
+    // mvnrepository.com/artifact/androidx.room/room-runtime
+    // mvnrepository.com/artifact/androidx.room/room-ktx
+    // mvnrepository.com/artifact/androidx.room/room-compiler
+    def room_version = '2.6.1'
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
     // Webkit
+    // mvnrepository.com/artifact/androidx.webkit/webkit
     implementation 'androidx.webkit:webkit:1.6.0'
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 }
